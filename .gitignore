@@ -1,0 +1,7 @@
+*.exe
+lib
+obj
+proj
+*.sln
+*.sdf
+*.suo
