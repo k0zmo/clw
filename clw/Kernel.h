@@ -2,7 +2,10 @@
 
 #include "Prerequisites.h"
 #include "NDRange.h"
-#include "MemoryObject.h"
+
+#include "Buffer.h"
+#include "Image.h"
+#include "Sampler.h"
 
 namespace clw
 {
@@ -60,9 +63,11 @@ namespace clw
 		void setGlobalWorkOffset(size_t width, size_t height);
 		void setGlobalWorkOffset(size_t width, size_t height, size_t depth);
 
-		void setArg(unsigned index, cl_int value);
-		void setArg(unsigned index, cl_float value);
-		void setArg(unsigned index, const MemoryObject& memObj);
+		template<typename Value> void setArg(unsigned index, const Value& value);
+		template<> void setArg(unsigned index, const Buffer& memObj);
+		template<> void setArg(unsigned index, const Image2D& memObj);
+		template<> void setArg(unsigned index, const Image3D& memObj);
+		template<> void setArg(unsigned index, const Sampler& memObj);
 		void setArg(unsigned index, const void* data, size_t size);
 
 	private:
@@ -74,25 +79,38 @@ namespace clw
 		NDRange lclWorkSize;
 	};
 
-	inline void Kernel::setArg(unsigned index, cl_int value)
+	template<typename Value> inline void Kernel::setArg(unsigned index, const Value& value)
 	{
-		clSetKernelArg(id, index, sizeof(cl_int), &value);
+		clSetKernelArg(id, index, sizeof(Value), &value);
 	}
 
-	inline void Kernel::setArg(unsigned index, cl_float value)
+	template<> inline void Kernel::setArg(unsigned index, const Buffer& buffer)
 	{
-		clSetKernelArg(id, index, sizeof(cl_float), &value);
+		cl_mem mem = buffer.memoryId();
+		clSetKernelArg(id, index, sizeof(cl_mem), &mem);
+	}
+
+	template<> inline void Kernel::setArg(unsigned index, const Image2D& image2d)
+	{
+		cl_mem mem = image2d.memoryId();
+		clSetKernelArg(id, index, sizeof(cl_mem), &mem);
+	}
+
+	template<> inline void Kernel::setArg(unsigned index, const Image3D& image3d)
+	{
+		cl_mem mem = image3d.memoryId();
+		clSetKernelArg(id, index, sizeof(cl_mem), &mem);
+	}
+
+	template<> inline void Kernel::setArg(unsigned index, const Sampler& sampler)
+	{
+		cl_sampler samplerId = sampler.samplerId();
+		clSetKernelArg(id, index, sizeof(cl_sampler), samplerId);
 	}
 
 	inline void Kernel::setArg(unsigned index, const void* data, size_t size)
 	{
 		clSetKernelArg(id, index, size, data);
-	}
-
-	inline void Kernel::setArg(unsigned index, const MemoryObject& memObj)
-	{
-		cl_mem mem = memObj.memoryId();
-		clSetKernelArg(id, index, sizeof(cl_mem), &mem);
 	}
 
 	inline NDRange Kernel::globalWorkSize() const

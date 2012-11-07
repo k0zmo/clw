@@ -107,7 +107,7 @@ namespace clw
 		bool runKernel(const Kernel& kernel);
 		Event asyncRunKernel(
 			const Kernel& kernel,
-			const EventList& after);
+			const EventList& after = EventList());
 
 		//bool runTask();
 		//Event asyncRunTask();

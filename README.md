@@ -8,10 +8,10 @@ To build type
 
 `premake4 --clincdir=PATH generator`
 
-where PATH points to a directory with a CL/cl.h file and generator is one of following:
+where `PATH` points to a directory with a CL/cl.h file and `generator` is one of following:
 
-- vs20xx for Visual Studio
-- gmake for G++
+- `vs20xx` for Visual Studio
+- `gmake` for G++
 
 ## License (MIT)
 
