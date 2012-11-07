@@ -211,9 +211,9 @@ namespace clw
 
 	bool CommandQueue::runKernel(const Kernel& kernel)
 	{
-		NDRange& offset = kernel.globalWorkOffset();
-		NDRange& global = kernel.globalWorkSize();		
-		NDRange& local = kernel.localWorkSize();
+		const NDRange& offset = kernel.globalWorkOffset();
+		const NDRange& global = kernel.globalWorkSize();		
+		const NDRange& local = kernel.localWorkSize();
 		size_t dims = global.dimensions();
 		const size_t* l = local;
 		if(local.width() == 0)
@@ -241,9 +241,9 @@ namespace clw
 		const Kernel& kernel,
 		const EventList& after)
 	{
-		NDRange& offset = kernel.globalWorkOffset();
-		NDRange& global = kernel.globalWorkSize();		
-		NDRange& local = kernel.localWorkSize();
+		const NDRange& offset = kernel.globalWorkOffset();
+		const NDRange& global = kernel.globalWorkSize();		
+		const NDRange& local = kernel.localWorkSize();
 		size_t dims = global.dimensions();
 		const size_t* l = local;
 		if(local.width() == 0)
