@@ -96,6 +96,11 @@ namespace clw
 		return detail::platformInfo(id, CL_PLATFORM_ICD_SUFFIX_KHR);
 	}
 
+	string Platform::profile() const
+	{
+		return detail::platformInfo(id, CL_PLATFORM_PROFILE);
+	}
+
 	vector<string> Platform::extensions() const
 	{
 		string exts = detail::platformInfo(id, CL_PLATFORM_EXTENSIONS);
