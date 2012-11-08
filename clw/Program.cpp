@@ -48,7 +48,7 @@ namespace clw
 	}
 
 	Program::Program(const Program& other)
-		: ctx(other.ctx), id(other.id)
+		: ctx(other.ctx), id(other.id), blt(other.blt)
 	{
 		if(id)
 			clRetainProgram(id);
@@ -57,6 +57,7 @@ namespace clw
 	Program& Program::operator=(const Program& other)
 	{
 		ctx = other.ctx;
+		blt = other.blt;
 		if(other.id)
 			clRetainProgram(other.id);
 		if(id)
@@ -74,7 +75,8 @@ namespace clw
 		                              options.c_str(), 
 		                              &detail::buildNotify, nullptr);
 		detail::reportError("Program::build(): ", error);
-		return error == CL_SUCCESS;
+		blt = error == CL_SUCCESS;
+		return blt;
 	}
 
 	string Program::log() const

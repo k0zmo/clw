@@ -170,7 +170,7 @@ namespace clw
 			detail::reportError("CommandQueue::asyncMapBuffer() ", error);
 			return Event();
 		}
-		return Event();
+		return Event(event);
 	}
 
 	bool CommandQueue::unmap(MemoryObject& obj, void* ptr)

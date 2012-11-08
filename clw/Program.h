@@ -9,9 +9,9 @@ namespace clw
 	class Program
 	{
 	public:
-		Program() : ctx(nullptr), id(0) {}
+		Program() : ctx(nullptr), id(0), blt(false) {}
 		Program(Context* ctx, cl_program id)
-			: ctx(ctx), id(id) {}
+			: ctx(ctx), id(id), blt(false) {}
 		~Program();
 		
 		Program(const Program& other);
@@ -22,6 +22,7 @@ namespace clw
 		Context* context() const { return ctx; }
 		cl_program programId() const { return id; }
 		
+		bool built() const { return blt; }
 		bool build(const string& options = string());
 		//bool build(const vector<Device> devices, const string& options = string());
 		
@@ -38,5 +39,6 @@ namespace clw
 	private:
 		Context* ctx;
 		cl_program id;
+		bool blt;
 	};
 }
