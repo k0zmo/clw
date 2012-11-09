@@ -1,5 +1,9 @@
 #include "MemoryObject.h"
 
+#if !defined(CL_MEM_USE_PERSISTENT_MEM_AMD)
+#define CL_MEM_USE_PERSISTENT_MEM_AMD 0x40
+#endif
+
 namespace clw
 {
 	namespace detail
@@ -31,6 +35,15 @@ namespace clw
 			(CL_MEM_READ_WRITE |
 			 CL_MEM_WRITE_ONLY |
 			 CL_MEM_READ_ONLY)
+		);
+	}
+
+	EMemoryLocation MemoryObject::memoryLocation() const
+	{
+		return EMemoryLocation(flags() & 
+			(CL_MEM_USE_HOST_PTR |
+			 CL_MEM_ALLOC_HOST_PTR |
+			 CL_MEM_USE_PERSISTENT_MEM_AMD)
 		);
 	}
 

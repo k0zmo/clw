@@ -6,9 +6,18 @@ namespace clw
 {
 	enum EAccess
 	{
-		Access_ReadWrite    = (1 << 0),
-		Access_WriteOnly    = (1 << 1),
-		Access_ReadOnly     = (1 << 2)                        
+		Access_ReadWrite          = 0x01,
+		Access_WriteOnly          = 0x02,
+		Access_ReadOnly           = 0x04,
+	};
+
+	enum EMemoryLocation
+	{
+		Location_Device             = 0x00,
+		Location_UseHostMemory      = 0x08,
+		Location_AllocHostMemory    = 0x10,
+		// AMD Only - alloc from GPU's CPU visible heap
+		Location_UsePinnedMemory    = 0x40 
 	};
 
 	enum EObjectType
@@ -30,6 +39,7 @@ namespace clw
 		Context* context() const { return ctx; }
 
 		EAccess access() const;
+		EMemoryLocation memoryLocation() const;
 		EObjectType type() const;
 		cl_mem_flags flags() const;
 		void* hostPointer() const;
