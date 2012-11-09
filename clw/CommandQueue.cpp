@@ -137,6 +137,29 @@ namespace clw
 		return Event(event);
 	}
 
+	Event CommandQueue::asyncReadImage2D(const clw::Image2D& image,
+	                                     void* data,
+	                                     int x,
+	                                     int y,
+	                                     int width,
+	                                     int height,
+	                                     int bytesPerLine,
+	                                     const EventList& after)
+	{
+		cl_event event;
+		cl_int error;
+		size_t origin[3] = { x, y, 0 };
+		size_t region[3] = { width, height, 1 };
+		if((error = clEnqueueReadImage(id, image.memoryId(),
+		        CL_FALSE, origin, region, bytesPerLine, 0, 
+		        data, after.size(), after, &event)) != CL_SUCCESS)
+		{
+			detail::reportError("CommandQueue::asyncReadSubImage2D() ", error);
+			return Event(event);
+		}
+		return Event(event);
+	}
+
 	void* CommandQueue::mapBuffer(Buffer& buffer, 
 		                          size_t offset, 
 		                          size_t size,

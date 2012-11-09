@@ -66,7 +66,14 @@ namespace clw
 		// clEnqueueFillBuffer
 
 		//bool readImage();
-		//Event asyncReadImage();
+		Event asyncReadImage2D(const clw::Image2D& image,
+		                          void* data,
+		                          int x,
+		                          int y,
+		                          int width,
+		                          int height,
+		                          int bytesPerLine = 0,
+		                          const EventList& after = EventList());
 
 		//bool writeImage();
 		//Event asyncWriteImage();
