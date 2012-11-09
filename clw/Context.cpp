@@ -2,6 +2,7 @@
 #include "Platform.h"
 #include "CommandQueue.h"
 #include "Program.h"
+#include "Buffer.h"
 #include "Image.h"
 
 #include <iostream>
@@ -185,7 +186,8 @@ namespace clw
 			dids[i] = devices[i].deviceId();
 		cl_platform_id pid = devices[0].platform().platformId();
 		cl_context_properties props[] = {
-			CL_CONTEXT_PLATFORM, cl_context_properties(pid),
+			CL_CONTEXT_PLATFORM, 
+			cl_context_properties(pid),
 			0, 0
 		};
 		if((id = clCreateContext(props, dids.size(), dids.data(), 
@@ -225,6 +227,46 @@ namespace clw
 		return cid ? CommandQueue(this, cid) : CommandQueue();
 	}
 
+	Buffer Context::createBuffer(EAccess access,
+	                             EMemoryLocation location,
+	                             size_t size,
+	                             const void* data)
+	{
+		cl_mem_flags mem_flags = cl_mem_flags(access);
+		if(data && location != Location_UseHostMemory)
+			mem_flags |= CL_MEM_COPY_HOST_PTR;
+		else
+			data = nullptr;
+		mem_flags |= cl_mem_flags(location);
+		cl_mem bid = clCreateBuffer
+			(id, mem_flags, size, const_cast<void*>(data), &eid);
+		detail::reportError("Context::createBuffer(): ", eid);
+		return bid ? Buffer(this, bid) : Buffer();
+	}
+
+	Image2D Context::createImage2D(EAccess access, 
+	                               EMemoryLocation location,
+	                               const ImageFormat& format,
+	                               size_t width, 
+	                               size_t height,
+	                               const void* data)
+	{
+		cl_image_format image_format;
+		image_format.image_channel_order = cl_channel_order(format.order);
+		image_format.image_channel_data_type = cl_channel_type(format.type);
+		cl_mem_flags mem_flags = cl_mem_flags(access);
+		if(data && location != Location_UseHostMemory)
+			mem_flags |= CL_MEM_COPY_HOST_PTR;
+		else
+			data = nullptr;
+		mem_flags |= cl_mem_flags(location);
+		cl_mem iid = clCreateImage2D
+			(id, mem_flags, &image_format, 
+			 width, height, 0, const_cast<void*>(data), &eid);
+		detail::reportError("Context::createImage2D(): ", eid);
+		return iid ? Image2D(this, iid) : Image2D();
+	}
+
 	Sampler Context::createSampler(bool normalizedCoords, 
 		                           EAddressingMode addressingMode, 
 		                           EFilterMode filterMode)
@@ -232,8 +274,8 @@ namespace clw
 		cl_int error;
 		cl_sampler sampler = clCreateSampler
 			(id, normalizedCoords ? CL_TRUE : CL_FALSE, 
-			cl_addressing_mode(addressingMode), 
-			cl_filter_mode(filterMode), &error);
+			 cl_addressing_mode(addressingMode), 
+			 cl_filter_mode(filterMode), &error);
 		detail::reportError("Context::createSampler() ", error);
 		return sampler ? Sampler(this, sampler) : Sampler();
 	}
@@ -265,18 +307,20 @@ namespace clw
 		return createProgramFromSourceCode(sourceCode);
 	}
 
-	Program Context::buildProgramFromSourceCode(const string& sourceCode)
+	Program Context::buildProgramFromSourceCode(const string& sourceCode,
+		                                        const string& options)
 	{
 		Program program = createProgramFromSourceCode(sourceCode);
-		if(program.isNull() || program.build())
+		if(program.isNull() || program.build(options))
 			return program;
 		return Program();
 	}
 
-	Program Context::buildProgramFromSourceFile(const string& fileName)
+	Program Context::buildProgramFromSourceFile(const string& fileName,
+		                                        const string& options)
 	{
 		Program program = createProgramFromSourceFile(fileName);
-		if(program.isNull() || program.build())
+		if(program.isNull() || program.build(options))
 			return program;
 		return Program();
 	}

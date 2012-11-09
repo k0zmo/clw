@@ -3,6 +3,7 @@
 #include "Prerequisites.h"
 #include "Device.h"
 #include "Sampler.h"
+#include "MemoryObject.h"
 
 namespace clw
 {
@@ -22,6 +23,18 @@ namespace clw
 		CommandQueue createCommandQueue(cl_command_queue_properties properties,
 		                                const Device& device);
 
+		Buffer createBuffer(EAccess access,
+		                    EMemoryLocation location,
+		                    size_t size,
+		                    const void* data = nullptr);
+
+		Image2D createImage2D(EAccess access, 
+		                      EMemoryLocation location,
+		                      const ImageFormat& format,
+		                      size_t width, 
+		                      size_t height,
+		                      const void* data = nullptr);
+
 		Sampler createSampler(bool normalizedCoords, 
 		                      EAddressingMode addressingMode, 
 		                      EFilterMode filterMode);
@@ -36,8 +49,10 @@ namespace clw
 		Program createProgramFromSourceCode(const string& sourceCode);
 		Program createProgramFromSourceFile(const string& fileName);
 
-		Program buildProgramFromSourceCode(const string& sourceCode);
-		Program buildProgramFromSourceFile(const string& fileName);
+		Program buildProgramFromSourceCode(const string& sourceCode,
+			                               const string& options = string());
+		Program buildProgramFromSourceFile(const string& fileName, 
+		                                   const string& options = string());
 
 	private:
 		cl_context id;
