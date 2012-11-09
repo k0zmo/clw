@@ -7,6 +7,10 @@
 
 #include <iostream>
 
+#if !defined(CL_CONTEXT_OFFLINE_DEVICES_AMD)
+#define CL_CONTEXT_OFFLINE_DEVICES_AMD 0x403F
+#endif
+
 namespace clw
 {
 	namespace detail
@@ -157,8 +161,9 @@ namespace clw
 			{
 				cl_device_id did = devices[j].deviceId();
 				cl_context_properties props[] = {
-					CL_CONTEXT_PLATFORM, cl_context_properties(pls[i].platformId()),
-					0, 0
+					CL_CONTEXT_PLATFORM,
+					cl_context_properties(pls[i].platformId()),
+					0
 				};
 				if((id = clCreateContext(props, 1, &did, 
 					    &detail::contextNotify, nullptr, &eid)) != 0)
@@ -188,7 +193,7 @@ namespace clw
 		cl_context_properties props[] = {
 			CL_CONTEXT_PLATFORM, 
 			cl_context_properties(pid),
-			0, 0
+			0
 		};
 		if((id = clCreateContext(props, dids.size(), dids.data(), 
 		        &detail::contextNotify, nullptr, &eid)) != 0)
@@ -204,6 +209,43 @@ namespace clw
 			}			
 		}
 		detail::reportError("Context::create(devices): ", eid);
+		return false;
+	}
+
+	bool Context::createOffline(const Platform& platform)
+	{
+		if(isCreated)
+			return true;
+		cl_platform_id plid = platform.platformId();
+		if(plid == 0)
+			plid = clw::defaultPlatform().platformId();
+		cl_context_properties props[] = {
+			CL_CONTEXT_PLATFORM, 
+			cl_context_properties(plid),
+			CL_CONTEXT_OFFLINE_DEVICES_AMD,
+			cl_context_properties(1),
+			0
+		};
+		id = clCreateContextFromType
+			(props, CL_DEVICE_TYPE_ALL, nullptr, nullptr, &eid);
+		detail::reportError("Context::createOffline(devices): ", eid);
+		if(eid == CL_SUCCESS)
+		{
+			size_t size;
+			if((eid = clGetContextInfo(id, CL_CONTEXT_DEVICES, 0,
+			        nullptr, &size)) == CL_SUCCESS)
+			{
+				int numDevices = size / sizeof(cl_device_id);
+				vector<cl_device_id> devices_id(numDevices);
+				clGetContextInfo(id, CL_CONTEXT_DEVICES, size,
+					devices_id.data(), nullptr);
+				devs.clear();
+				for(int i = 0; i < numDevices; ++i)
+					devs.push_back(Device(devices_id[i]));
+				isCreated = true;
+				return true;
+			}
+		}	
 		return false;
 	}
 

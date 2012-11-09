@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Prerequisites.h"
+#include "Platform.h"
 #include "Device.h"
 #include "Sampler.h"
 #include "MemoryObject.h"
@@ -15,6 +16,7 @@ namespace clw
 
 		bool create(EDeviceType type = EDeviceType::Default);
 		bool create(const vector<Device>& devices);
+		bool createOffline(const Platform& platform = Platform());
 		void release();
 
 		cl_int lastError() const { return eid; }
