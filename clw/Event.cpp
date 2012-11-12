@@ -31,6 +31,14 @@ namespace clw
 			}
 			return value;
 		}
+
+		void CL_CALLBACK callback_priv(cl_event event, 
+		                               cl_int event_command_exec_status,
+		                               void *user_data)
+		{
+			EventCallback* pfn = static_cast<EventCallback*>(user_data);
+			(*pfn)(EEventStatus(event_command_exec_status));
+		}
 	}
 
 	Event::~Event()
@@ -66,6 +74,13 @@ namespace clw
 	{
 		return ECommandType(detail::eventInfo<cl_command_type>
 			(id, CL_EVENT_COMMAND_TYPE));
+	}
+
+	void Event::setCallback(EEventStatus status, EventCallback cb)
+	{
+		callback = cb;
+		clSetEventCallback(id, cl_int(status), 
+			&detail::callback_priv, &callback);
 	}
 
 	void Event::waitForFinished()

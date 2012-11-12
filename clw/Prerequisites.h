@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <functional>
 
 #ifdef _MSC_VER
 // nonstandard extension used: enum used in qualified name
@@ -21,6 +22,7 @@ namespace clw
 {
 	using std::vector;
 	using std::string;
+	using std::function;
 
 	class Platform;
 	class Device;

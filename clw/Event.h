@@ -44,6 +44,8 @@ namespace clw
 		Command_FillImage             = 0x1208
 	};
 
+	typedef function<void(EEventStatus status)> EventCallback;
+
 	class Event
 	{
 	public:
@@ -61,6 +63,7 @@ namespace clw
 		EEventStatus status() const;
 		ECommandType commandType() const;
 
+		void setCallback(EEventStatus status, EventCallback cb);
 		void waitForFinished();
 
 		uint64_t queueTime() const;
@@ -70,6 +73,7 @@ namespace clw
 
 	private:
 		cl_event id;
+		EventCallback callback;
 	};
 
 	class EventList
