@@ -37,6 +37,7 @@ namespace clw
 	class Image3D;
 	class NDRange;
 	class Event;
+	class UserEvent;
 	class EventList;
 	class Sampler;
 

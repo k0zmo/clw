@@ -117,6 +117,37 @@ namespace clw
 			(id, CL_PROFILING_COMMAND_END));
 	}
 
+	UserEvent::UserEvent(const UserEvent& other)
+		: Event(other.id)
+	{
+		if(id)
+			clRetainEvent(id);
+	}
+
+	UserEvent& UserEvent::operator=(const UserEvent& other)
+	{
+		if(other.id)
+			clRetainEvent(other.id);
+		if(id)
+			clReleaseEvent(id);
+		id = other.id;
+		return *this;
+	}
+
+	void UserEvent::setStatus(EEventStatus status)
+	{
+#if defined(HAVE_OPENCL_1_1)
+		cl_int error = CL_SUCCESS;
+		if(!id || ((error = 
+		        clSetUserEventStatus(id, cl_int(status))) != CL_SUCCESS))
+		{
+			detail::reportError("UserEvent::setStatus(): ", error);
+		}
+#else
+		(void)status;
+#endif
+	}
+
 	EventList::EventList(const Event& event)
 	{
 		append(event);

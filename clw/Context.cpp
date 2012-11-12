@@ -313,13 +313,24 @@ namespace clw
 		                           EAddressingMode addressingMode, 
 		                           EFilterMode filterMode)
 	{
-		cl_int error;
 		cl_sampler sampler = clCreateSampler
 			(id, normalizedCoords ? CL_TRUE : CL_FALSE, 
 			 cl_addressing_mode(addressingMode), 
-			 cl_filter_mode(filterMode), &error);
-		detail::reportError("Context::createSampler() ", error);
+			 cl_filter_mode(filterMode), &eid);
+		detail::reportError("Context::createSampler() ", eid);
 		return sampler ? Sampler(this, sampler) : Sampler();
+	}
+
+
+	clw::UserEvent Context::createUserEvent()
+	{
+#if defined(HAVE_OPENCL_1_1)
+		cl_event event = clCreateUserEvent(id, &eid);
+		detail::reportError("Context::createUserEvent() ", eid);
+		return UserEvent(event);
+#else
+		return UserEvent();
+#endif
 	}
 
 	vector<ImageFormat> Context::supportedImage2DFormats() const

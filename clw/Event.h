@@ -71,9 +71,22 @@ namespace clw
 		uint64_t startTime() const;
 		uint64_t finishTime() const;
 
-	private:
+	protected:
 		cl_event id;
 		EventCallback callback;
+	};
+
+	class UserEvent : public Event
+	{
+	public:
+		UserEvent() : Event() {}
+		UserEvent(cl_event id) : Event(id) {}
+		~UserEvent() {}
+
+		UserEvent(const UserEvent& other);
+		UserEvent& operator=(const UserEvent& other);
+
+		void setStatus(EEventStatus status);
 	};
 
 	class EventList

@@ -41,6 +41,8 @@ namespace clw
 		                      EAddressingMode addressingMode, 
 		                      EFilterMode filterMode);
 
+		UserEvent createUserEvent();
+
 		vector<ImageFormat> supportedImage2DFormats() const;
 		vector<ImageFormat> supportedImage3DFormats() const;
 
