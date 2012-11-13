@@ -186,7 +186,7 @@ namespace clw
 	void* CommandQueue::mapBuffer(Buffer& buffer, 
 	                              size_t offset, 
 	                              size_t size,
-	                              EAccess access)
+	                              EMapAccess access)
 	{
 		cl_int error;
 		void* data = clEnqueueMapBuffer(id, buffer.memoryId(), CL_TRUE,
@@ -195,7 +195,7 @@ namespace clw
 		return data;
 	}
 
-	void* CommandQueue::mapBuffer(Buffer& buffer, EAccess access)
+	void* CommandQueue::mapBuffer(Buffer& buffer, EMapAccess access)
 	{
 		return mapBuffer(buffer, 0, buffer.size(), access);
 	}
@@ -204,7 +204,7 @@ namespace clw
 	                                   void** data,
 	                                   size_t offset, 
 	                                   size_t size, 
-	                                   EAccess access, 
+	                                   EMapAccess access, 
 	                                   const EventList& after)
 	{
 		cl_int error;

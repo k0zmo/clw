@@ -12,6 +12,15 @@ namespace clw
 		Property_ProfilingEnabled            = (1 << 1)
 	};
 
+	enum EMapAccess
+	{
+		MapAccess_Read                      = 1 << 0,
+		MapAccess_Write                     = 1 << 1,
+#if defined(HAVE_OPENCL_1_2)
+		MapAccess_InvalidateRegion          = 1 << 2
+#endif
+	};
+
 	class CommandQueue
 	{
 	public:
@@ -100,13 +109,14 @@ namespace clw
 		void* mapBuffer(Buffer& buffer, 
 		                size_t offset, 
 		                size_t size,
-		                EAccess access);
-		void* mapBuffer(Buffer& buffer, EAccess access);
+		                EMapAccess access);
+		void* mapBuffer(Buffer& buffer, EMapAccess access);
+
 		Event asyncMapBuffer(Buffer& buffer, 
 		                     void** data,
 		                     size_t offset, 
 		                     size_t size, 
-		                     EAccess access, 
+		                     EMapAccess access, 
 		                     const EventList& after = EventList());
 
 		//void* mapImage();
