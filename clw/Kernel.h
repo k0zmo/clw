@@ -195,16 +195,16 @@ namespace clw
 
 	inline void Kernel::setGlobalWorkOffset(size_t width)
 	{
-		setGlobalWorkOffset(width);
+		setGlobalWorkOffset(NDRange(width));
 	}
 
 	inline void Kernel::setGlobalWorkOffset(size_t width, size_t height)
 	{
-		setGlobalWorkOffset(width, height);
+		setGlobalWorkOffset(NDRange(width, height));
 	}
 
 	inline void Kernel::setGlobalWorkOffset(size_t width, size_t height, size_t depth)
 	{
-		setGlobalWorkOffset(width, height, depth);
+		setGlobalWorkOffset(NDRange(width, height, depth));
 	}
 }
