@@ -31,22 +31,22 @@ namespace clw
 		void flush();
 
 		bool readBuffer(const Buffer& buffer,
-			            size_t offset, 
-			            void* data, 
-			            size_t size);
+		                void* data, 
+		                size_t offset, 
+		                size_t size);
 		Event asyncReadBuffer(const Buffer& buffer,
-		                      size_t offset, 
-		                      void* data, 
+		                      void* data,
+		                      size_t offset,
 		                      size_t size,
 		                      const EventList& after = EventList());
 
 		bool writeBuffer(Buffer& buffer,
-		                 size_t offset, 
 		                 const void* data, 
+		                 size_t offset, 
 		                 size_t size);
 		Event asyncWriteBuffer(Buffer& buffer,
+		                       const void* data,
 		                       size_t offset, 
-		                       const void* data, 
 		                       size_t size,
 		                       const EventList& after = EventList());
 
@@ -67,16 +67,23 @@ namespace clw
 
 		//bool readImage();
 		Event asyncReadImage2D(const clw::Image2D& image,
-		                          void* data,
-		                          int x,
-		                          int y,
-		                          int width,
-		                          int height,
-		                          int bytesPerLine = 0,
-		                          const EventList& after = EventList());
+		                       void* data,
+		                       int x,
+		                       int y,
+		                       int width,
+		                       int height,
+		                       int bytesPerLine = 0,
+		                       const EventList& after = EventList());
 
 		//bool writeImage();
-		//Event asyncWriteImage();
+		Event asyncWriteImage2D(clw::Image2D& image,
+		                        const void* data,
+		                        int x,
+		                        int y,
+		                        int width,
+		                        int height,
+		                        int bytesPerLine = 0,
+		                        const EventList& after = EventList());
 
 		//bool copyImage();
 		//Event asyncCopyImage();
@@ -106,10 +113,10 @@ namespace clw
 		//Event asyncMapImage();
 
 		bool unmap(MemoryObject& obj,
-			       void* ptr);
+		           void* ptr);
 		Event asyncUnmap(MemoryObject& obj,
-			             void* ptr,
-			             const EventList& after = EventList());
+		                 void* ptr,
+		                 const EventList& after = EventList());
 
 		bool runKernel(const Kernel& kernel);
 		Event asyncRunKernel(

@@ -70,9 +70,9 @@ namespace clw
 	}
 
 	bool CommandQueue::readBuffer(const Buffer& buffer,
-		                          size_t offset,
-		                          void* data,
-		                          size_t size)
+	                              void* data,
+	                              size_t offset,
+	                              size_t size)
 	{
 		cl_int error;
 		if((error = clEnqueueReadBuffer(id, buffer.memoryId(), 
@@ -86,8 +86,8 @@ namespace clw
 	}
 
 	Event CommandQueue::asyncReadBuffer(const Buffer& buffer,
-	                                    size_t offset,
 	                                    void* data,
+	                                    size_t offset,
 	                                    size_t size,
 	                                    const EventList& after)
 	{
@@ -104,8 +104,8 @@ namespace clw
 	}
 
 	bool CommandQueue::writeBuffer(Buffer& buffer,
-	                               size_t offset, 
 	                               const void* data, 
+	                               size_t offset, 
 	                               size_t size)
 	{
 		cl_int error;
@@ -120,8 +120,8 @@ namespace clw
 	}
 
 	Event CommandQueue::asyncWriteBuffer(Buffer& buffer,
-	                                    size_t offset, 
 	                                    const void* data, 
+	                                    size_t offset, 
 	                                    size_t size,
 	                                    const EventList& after)
 	{
@@ -154,16 +154,39 @@ namespace clw
 		        CL_FALSE, origin, region, bytesPerLine, 0, 
 		        data, after.size(), after, &event)) != CL_SUCCESS)
 		{
-			detail::reportError("CommandQueue::asyncReadSubImage2D() ", error);
+			detail::reportError("CommandQueue::asyncReadImage2D() ", error);
+			return Event(event);
+		}
+		return Event(event);
+	}
+
+	clw::Event CommandQueue::asyncWriteImage2D(clw::Image2D& image,
+	                                           const void* data,
+	                                           int x,
+	                                           int y,
+	                                           int width,
+	                                           int height, 
+	                                           int bytesPerLine,
+	                                           const EventList& after)
+	{
+		cl_event event;
+		cl_int error;
+		size_t origin[3] = { x, y, 0 };
+		size_t region[3] = { width, height, 1 };
+		if((error = clEnqueueWriteImage(id, image.memoryId(),
+			CL_FALSE, origin, region, bytesPerLine, 0, 
+			data, after.size(), after, &event)) != CL_SUCCESS)
+		{
+			detail::reportError("CommandQueue::asyncWriteImage2D() ", error);
 			return Event(event);
 		}
 		return Event(event);
 	}
 
 	void* CommandQueue::mapBuffer(Buffer& buffer, 
-		                          size_t offset, 
-		                          size_t size,
-		                          EAccess access)
+	                              size_t offset, 
+	                              size_t size,
+	                              EAccess access)
 	{
 		cl_int error;
 		void* data = clEnqueueMapBuffer(id, buffer.memoryId(), CL_TRUE,
