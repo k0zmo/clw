@@ -148,8 +148,8 @@ namespace clw
 	{
 		cl_event event;
 		cl_int error;
-		size_t origin[3] = { x, y, 0 };
-		size_t region[3] = { width, height, 1 };
+		size_t origin[3] = { size_t(x), size_t(y), 0 };
+		size_t region[3] = { size_t(width), size_t(height), 1 };
 		if((error = clEnqueueReadImage(id, image.memoryId(),
 		        CL_FALSE, origin, region, bytesPerLine, 0, 
 		        data, after.size(), after, &event)) != CL_SUCCESS)
@@ -171,8 +171,8 @@ namespace clw
 	{
 		cl_event event;
 		cl_int error;
-		size_t origin[3] = { x, y, 0 };
-		size_t region[3] = { width, height, 1 };
+		size_t origin[3] = { size_t(x), size_t(y), 0 };
+		size_t region[3] = { size_t(width), size_t(height), 1 };
 		if((error = clEnqueueWriteImage(id, image.memoryId(),
 			CL_FALSE, origin, region, bytesPerLine, 0, 
 			data, after.size(), after, &event)) != CL_SUCCESS)
