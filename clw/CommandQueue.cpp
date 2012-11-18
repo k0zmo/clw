@@ -219,6 +219,50 @@ namespace clw
 		return Event(event);
 	}
 
+	void* CommandQueue::mapImage2D(Image2D& image,
+	                               int x, 
+	                               int y,
+	                               int width,
+	                               int height,
+	                               EMapAccess access,
+	                               const EventList& after)
+	{
+		cl_int error;
+		size_t origin[3] = { size_t(x), size_t(y), 0 };
+		size_t region[3] = { size_t(width), size_t(height), 1 };
+		size_t pitch;
+		void* data = clEnqueueMapImage(id, image.memoryId(), CL_TRUE,
+			access, origin, region, &pitch, nullptr,
+			0, nullptr, nullptr, &error);
+		detail::reportError("CommandQueue::mapImage2D() ", error);
+		return data;
+	}
+
+	Event CommandQueue::asyncMapImage2D(Image2D& image,
+	                                    void** data,
+	                                    int x, 
+	                                    int y,
+	                                    int width,
+	                                    int height,
+	                                    EMapAccess access,
+	                                    const EventList& after)
+	{
+		cl_int error;
+		cl_event event;
+		size_t origin[3] = { size_t(x), size_t(y), 0 };
+		size_t region[3] = { size_t(width), size_t(height), 1 };
+		size_t pitch;
+		*data = clEnqueueMapImage(id, image.memoryId(), CL_FALSE,
+			access, origin, region, &pitch, nullptr,
+			after.size(), after, &event, &error);
+		if(error != CL_SUCCESS)
+		{
+			detail::reportError("CommandQueue::asyncMapImage2D() ", error);
+			return Event();
+		}
+		return Event(event);
+	}
+
 	bool CommandQueue::unmap(MemoryObject& obj, void* ptr)
 	{
 		cl_event event;

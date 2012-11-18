@@ -119,8 +119,22 @@ namespace clw
 		                     EMapAccess access, 
 		                     const EventList& after = EventList());
 
-		//void* mapImage();
-		//Event asyncMapImage();
+		void* mapImage2D(Image2D& image,
+		                 int x, 
+		                 int y,
+		                 int width,
+		                 int height,
+		                 EMapAccess access,
+		                 const EventList& after = EventList());
+
+		Event asyncMapImage2D(Image2D& image,
+		                      void** data,
+		                      int x, 
+		                      int y,
+		                      int width,
+		                      int height,
+		                      EMapAccess access,
+		                      const EventList& after = EventList());
 
 		bool unmap(MemoryObject& obj,
 		           void* ptr);
