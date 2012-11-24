@@ -149,6 +149,27 @@ namespace clw
 			clReleaseContext(id);
 	}
 
+	Context::Context(const Context& other)
+		: id(other.id), isCreated(other.isCreated),
+		eid(other.eid), devs(other.devs)
+	{
+		if(id)
+			clRetainContext(id);
+	}
+
+	Context& Context::operator=(const Context& other)
+	{
+		if(other.id)
+			clRetainContext(other.id);
+		if(id)
+			clReleaseContext(id);
+		id = other.id;
+		isCreated = other.isCreated;
+		eid = other.eid;
+		devs = other.devs;
+		return *this;
+	}
+
 	bool Context::create(EDeviceType type)
 	{
 		if(isCreated)
