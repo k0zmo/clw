@@ -8,37 +8,6 @@ namespace clw
 {
 	namespace detail
 	{
-		bool supportsExtension(const string& list, const char* ext)
-		{
-			const char* it = list.data();
-			size_t listLen = list.length();
-			size_t extLen = strlen(ext);
-			while(listLen > 0)
-			{
-				if(*it == '\0')
-				{
-					break;
-				}
-				else if(*it == ' ')
-				{
-					++it;
-					--listLen;
-					continue;
-				}
-
-				size_t tempLen = 0;
-				while(tempLen < listLen &&
-					it[tempLen] != ' ' && it[tempLen] != '\0')
-					++tempLen;
-				if(extLen == tempLen && !strncmp(ext, it, tempLen))
-					return true;
-				it += tempLen;
-				listLen -= tempLen;
-			}
-
-			return false;
-		}
-
 		vector<string> tokenize(const string& str, char delim, char group)
 		{
 			vector<string> tokens;

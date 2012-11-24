@@ -61,7 +61,7 @@ namespace clw
 	bool Device::supportsExtension(const char* ext) const
 	{
 		string list = detail::deviceInfo<string>(id, CL_DEVICE_EXTENSIONS);
-		return detail::supportsExtension(list, ext);
+		return list.find(std::string(ext)) != std::string::npos;
 	}
 
 	bool Device::supportsDouble() const
