@@ -73,7 +73,8 @@ namespace clw
 			return false;
 		cl_int error = clBuildProgram(id, 0, nullptr, 
 		                              options.c_str(), 
-		                              &detail::buildNotify, nullptr);
+		                              // OpenCL SDK don't allow for pfn_notify
+		                              nullptr, nullptr);
 		detail::reportError("Program::build(): ", error);
 		blt = error == CL_SUCCESS;
 		return blt;
