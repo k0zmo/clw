@@ -4,13 +4,13 @@
 
 namespace clw
 {
-	class NDRange
+	class Grid
 	{
 	public:
-		NDRange();
-		NDRange(size_t width);
-		NDRange(size_t width, size_t height);
-		NDRange(size_t width, size_t height, size_t depth);
+		Grid();
+		Grid(size_t width);
+		Grid(size_t width, size_t height);
+		Grid(size_t width, size_t height, size_t depth);
 
 		cl_uint dimensions() const { return dims; }
 		size_t width() const { return sizes[0]; }
@@ -19,27 +19,27 @@ namespace clw
 
 		operator const size_t*() const { return sizes; }
 
-		NDRange roundTo(const NDRange& range) const;
+		Grid roundTo(const Grid& range) const;
 
 	private:
 		cl_uint dims;
 		size_t sizes[3];
 	};
 
-	inline NDRange::NDRange()
+	inline Grid::Grid()
 		: dims(1)
 	{
 		sizes[0] = sizes[1] = sizes[2] = 1;
 	}
 
-	inline NDRange::NDRange(size_t width)
+	inline Grid::Grid(size_t width)
 		: dims(1)
 	{
 		sizes[0] = width;
 		sizes[1] = sizes[2] = 0;
 	}
 
-	inline NDRange::NDRange(size_t width, size_t height)
+	inline Grid::Grid(size_t width, size_t height)
 		: dims(2)
 	{
 		sizes[0] = width;
@@ -47,7 +47,7 @@ namespace clw
 		sizes[2] = 0;
 	}
 
-	inline NDRange::NDRange(size_t width, size_t height, size_t depth)
+	inline Grid::Grid(size_t width, size_t height, size_t depth)
 		: dims(3)
 	{
 		sizes[0] = width;

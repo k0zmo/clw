@@ -2,7 +2,7 @@
 #include "Buffer.h"
 #include "Image.h"
 #include "Kernel.h"
-#include "NDRange.h"
+#include "Grid.h"
 
 namespace clw
 {
@@ -301,9 +301,9 @@ namespace clw
 
 	bool CommandQueue::runKernel(const Kernel& kernel)
 	{
-		const NDRange& offset = kernel.globalWorkOffset();
-		const NDRange& global = kernel.globalWorkSize();		
-		const NDRange& local = kernel.localWorkSize();
+		const Grid& offset = kernel.globalWorkOffset();
+		const Grid& global = kernel.globalWorkSize();		
+		const Grid& local = kernel.localWorkSize();
 		size_t dims = global.dimensions();
 		const size_t* l = local;
 		if(local.width() == 0)
@@ -331,9 +331,9 @@ namespace clw
 		const Kernel& kernel,
 		const EventList& after)
 	{
-		const NDRange& offset = kernel.globalWorkOffset();
-		const NDRange& global = kernel.globalWorkSize();		
-		const NDRange& local = kernel.localWorkSize();
+		const Grid& offset = kernel.globalWorkOffset();
+		const Grid& global = kernel.globalWorkSize();		
+		const Grid& local = kernel.localWorkSize();
 		size_t dims = global.dimensions();
 		const size_t* l = local;
 		if(local.width() == 0)

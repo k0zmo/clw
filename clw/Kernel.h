@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Prerequisites.h"
-#include "NDRange.h"
+#include "Grid.h"
 
 #include "Buffer.h"
 #include "Image.h"
@@ -40,25 +40,25 @@ namespace clw
 		string name() const;
 		int argCount() const;
 
-		NDRange globalWorkSize() const;
-		void setGlobalWorkSize(const NDRange& range);
+		Grid globalWorkSize() const;
+		void setGlobalWorkSize(const Grid& range);
 		void setGlobalWorkSize(size_t width);
 		void setGlobalWorkSize(size_t width, size_t height);
 		void setGlobalWorkSize(size_t width, size_t height, size_t depth);
 
-		void setRoundedGlobalWorkSize(const NDRange& range);
+		void setRoundedGlobalWorkSize(const Grid& range);
 		void setRoundedGlobalWorkSize(size_t width);
 		void setRoundedGlobalWorkSize(size_t width, size_t height);
 		void setRoundedGlobalWorkSize(size_t width, size_t height, size_t depth);
 
-		NDRange localWorkSize() const;
-		void setLocalWorkSize(const NDRange& range);
+		Grid localWorkSize() const;
+		void setLocalWorkSize(const Grid& range);
 		void setLocalWorkSize(size_t width);
 		void setLocalWorkSize(size_t width, size_t height);
 		void setLocalWorkSize(size_t width, size_t height, size_t depth);
 
-		NDRange globalWorkOffset() const;
-		void setGlobalWorkOffset(const NDRange& range);
+		Grid globalWorkOffset() const;
+		void setGlobalWorkOffset(const Grid& range);
 		void setGlobalWorkOffset(size_t width);
 		void setGlobalWorkOffset(size_t width, size_t height);
 		void setGlobalWorkOffset(size_t width, size_t height, size_t depth);
@@ -70,9 +70,9 @@ namespace clw
 		Context* ctx;
 		cl_kernel id;
 
-		NDRange gblWorkOffset;
-		NDRange gblWorkSize;
-		NDRange lclWorkSize;
+		Grid gblWorkOffset;
+		Grid gblWorkSize;
+		Grid lclWorkSize;
 	};
 
 	template<typename Value> inline void Kernel::setArg(unsigned index, const Value& value)
@@ -109,98 +109,98 @@ namespace clw
 		clSetKernelArg(id, index, size, data);
 	}
 
-	inline NDRange Kernel::globalWorkSize() const
+	inline Grid Kernel::globalWorkSize() const
 	{
 		return gblWorkSize;
 	}
 
-	inline void Kernel::setGlobalWorkSize(const NDRange& range)
+	inline void Kernel::setGlobalWorkSize(const Grid& range)
 	{ 
 		gblWorkSize = range;
 	}
 
 	inline void Kernel::setGlobalWorkSize(size_t width)
 	{
-		setGlobalWorkSize(NDRange(width));
+		setGlobalWorkSize(Grid(width));
 	}
 
 	inline void Kernel::setGlobalWorkSize(size_t width, size_t height) 
 	{ 
-		setGlobalWorkSize(NDRange(width, height));
+		setGlobalWorkSize(Grid(width, height));
 	}
 
 	inline void Kernel::setGlobalWorkSize(size_t width, size_t height, size_t depth)
 	{
-		setGlobalWorkSize(NDRange(width, height, depth));
+		setGlobalWorkSize(Grid(width, height, depth));
 	}
 
-	inline void Kernel::setRoundedGlobalWorkSize(const NDRange& range)
+	inline void Kernel::setRoundedGlobalWorkSize(const Grid& range)
 	{
 		setGlobalWorkSize(range.roundTo(localWorkSize()));
 	}
 
 	inline void Kernel::setRoundedGlobalWorkSize(size_t width)
 	{
-		setRoundedGlobalWorkSize(NDRange(width));
+		setRoundedGlobalWorkSize(Grid(width));
 	}
 
 	inline void Kernel::setRoundedGlobalWorkSize(size_t width, size_t height)
 	{
-		setRoundedGlobalWorkSize(NDRange(width, height));
+		setRoundedGlobalWorkSize(Grid(width, height));
 	}
 
 	inline void Kernel::setRoundedGlobalWorkSize(size_t width, size_t height, size_t depth)
 	{
-		setRoundedGlobalWorkSize(NDRange(width, height, depth));
+		setRoundedGlobalWorkSize(Grid(width, height, depth));
 	}
 
-	inline NDRange Kernel::localWorkSize() const
+	inline Grid Kernel::localWorkSize() const
 	{
 		return lclWorkSize;
 	}
 
-	inline void Kernel::setLocalWorkSize(const NDRange& range)
+	inline void Kernel::setLocalWorkSize(const Grid& range)
 	{ 
 		lclWorkSize = range;
 	}
 
 	inline void Kernel::setLocalWorkSize(size_t width)
 	{
-		setLocalWorkSize(NDRange(width));
+		setLocalWorkSize(Grid(width));
 	}
 
 	inline void Kernel::setLocalWorkSize(size_t width, size_t height)
 	{
-		setLocalWorkSize(NDRange(width, height));
+		setLocalWorkSize(Grid(width, height));
 	}
 
 	inline void Kernel::setLocalWorkSize(size_t width, size_t height, size_t depth)
 	{
-		setLocalWorkSize(NDRange(width, height, depth));
+		setLocalWorkSize(Grid(width, height, depth));
 	}
 
-	inline NDRange Kernel::globalWorkOffset() const
+	inline Grid Kernel::globalWorkOffset() const
 	{
 		return gblWorkOffset;
 	}
 
-	inline void Kernel::setGlobalWorkOffset(const NDRange& range)
+	inline void Kernel::setGlobalWorkOffset(const Grid& range)
 	{ 
 		gblWorkOffset = range;
 	}
 
 	inline void Kernel::setGlobalWorkOffset(size_t width)
 	{
-		setGlobalWorkOffset(NDRange(width));
+		setGlobalWorkOffset(Grid(width));
 	}
 
 	inline void Kernel::setGlobalWorkOffset(size_t width, size_t height)
 	{
-		setGlobalWorkOffset(NDRange(width, height));
+		setGlobalWorkOffset(Grid(width, height));
 	}
 
 	inline void Kernel::setGlobalWorkOffset(size_t width, size_t height, size_t depth)
 	{
-		setGlobalWorkOffset(NDRange(width, height, depth));
+		setGlobalWorkOffset(Grid(width, height, depth));
 	}
 }

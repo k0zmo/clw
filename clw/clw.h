@@ -10,6 +10,6 @@
 #include "MemoryObject.h"
 #include "Buffer.h"
 #include "Image.h"
-#include "NDRange.h"
+#include "Grid.h"
 #include "Event.h"
 #include "Sampler.h"
