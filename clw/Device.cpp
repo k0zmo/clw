@@ -29,20 +29,32 @@ namespace clw
 			return value != 0;
 		}
 
-		template<>
-		string deviceInfo(cl_device_id id, cl_device_info info)
+		template<typename Value>
+		vector<Value> deviceInfoVector(cl_device_id id, cl_device_info info)
 		{
 			size_t size;
 			cl_int error = CL_SUCCESS;
-			if(!id || (error = clGetDeviceInfo(id, info, 0, 0, &size))
+			if(!id || (error = clGetDeviceInfo(id, info, 0, nullptr, &size))
 			        != CL_SUCCESS)
 			{
-				reportError("deviceInfo(): ", error);
-				return string();
+				reportError("deviceInfoVector(): ", error);
+				return vector<Value>();
 			}
-			vector<char> buf(size);
-			clGetDeviceInfo(id, info, size, buf.data(), &size);
-			return string(buf.data());
+			size_t num(size / sizeof(Value));
+			vector<Value> buf(num);
+			if((error = clGetDeviceInfo(id, info, size, buf.data(), nullptr))
+			        != CL_SUCCESS)
+			{
+				reportError("deviceInfoVector(): ", error);	
+				return vector<Value>();
+			}
+			return buf;
+		}
+
+		template<>
+		string deviceInfo(cl_device_id id, cl_device_info info)
+		{
+			return string(deviceInfoVector<char>(id, info).data());
 		}
 	}
 
@@ -148,5 +160,159 @@ namespace clw
 		for(size_t i = 0; i < buf.size(); ++i)
 			devs[i] = Device(buf[i]);
 		return devs;
+	}
+
+#if !defined(CL_DEVICE_PROFILING_TIMER_OFFSET_AMD)
+#  define CL_DEVICE_PROFILING_TIMER_OFFSET_AMD        0x4036
+#endif
+#if !defined(CL_DEVICE_BOARD_NAME_AMD)
+#  define CL_DEVICE_BOARD_NAME_AMD                    0x4038
+#endif
+#if !defined(CL_DEVICE_GLOBAL_FREE_MEMORY_AMD)
+#  define CL_DEVICE_GLOBAL_FREE_MEMORY_AMD            0x4039
+#endif
+#if !defined(CL_DEVICE_SIMD_PER_COMPUTE_UNIT_AMD)
+#  define CL_DEVICE_SIMD_PER_COMPUTE_UNIT_AMD         0x4040
+#endif
+#if !defined(CL_DEVICE_SIMD_WIDTH_AMD)
+#  define CL_DEVICE_SIMD_WIDTH_AMD                    0x4041
+#endif
+#if !defined(CL_DEVICE_SIMD_INSTRUCTION_WIDTH_AMD)
+#  define CL_DEVICE_SIMD_INSTRUCTION_WIDTH_AMD        0x4042
+#endif
+#if !defined(CL_DEVICE_WAVEFRONT_WIDTH_AMD)
+#  define CL_DEVICE_WAVEFRONT_WIDTH_AMD               0x4043
+#endif
+#if !defined(CL_DEVICE_GLOBAL_MEM_CHANNELS_AMD)
+#  define CL_DEVICE_GLOBAL_MEM_CHANNELS_AMD           0x4044
+#endif
+#if !defined(CL_DEVICE_GLOBAL_MEM_CHANNEL_BANKS_AMD)
+#  define CL_DEVICE_GLOBAL_MEM_CHANNEL_BANKS_AMD      0x4045
+#endif
+#if !defined(CL_DEVICE_GLOBAL_MEM_CHANNEL_BANK_WIDTH_AMD)
+#  define CL_DEVICE_GLOBAL_MEM_CHANNEL_BANK_WIDTH_AMD 0x4046
+#endif
+#if !defined(CL_DEVICE_LOCAL_MEM_SIZE_PER_COMPUTE_UNIT_AMD)
+#  define CL_DEVICE_LOCAL_MEM_SIZE_PER_COMPUTE_UNIT_AMD   0x4047
+#endif
+#if !defined(CL_DEVICE_LOCAL_MEM_BANKS_AMD)
+#  define CL_DEVICE_LOCAL_MEM_BANKS_AMD               0x4048
+#endif
+
+	cl_ulong Device::profilingTimerOffset() const
+	{
+		return detail::deviceInfo<cl_ulong>(id, CL_DEVICE_PROFILING_TIMER_OFFSET_AMD);
+	}
+
+	string Device::boardName() const
+	{
+		return detail::deviceInfo<string>(id, CL_DEVICE_BOARD_NAME_AMD);
+	}
+
+	vector<size_t> Device::globalFreeMemory() const
+	{
+		return detail::deviceInfoVector<size_t>(id, CL_DEVICE_GLOBAL_FREE_MEMORY_AMD);
+	}
+
+	cl_uint Device::simdPerComputeUnit() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_SIMD_PER_COMPUTE_UNIT_AMD);
+	}
+
+	cl_uint Device::simdWidth() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_SIMD_WIDTH_AMD);
+	}
+
+	cl_uint Device::simdInstructionWidth() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_SIMD_INSTRUCTION_WIDTH_AMD);
+	}
+
+	cl_uint Device::wavefrontWidth() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_WAVEFRONT_WIDTH_AMD);
+	}
+
+	cl_uint Device::globalMemoryChannels() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_GLOBAL_MEM_CHANNELS_AMD);
+	}
+
+	cl_uint Device::globalMemoryChannelBanks() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_GLOBAL_MEM_CHANNEL_BANKS_AMD);
+	}
+
+	cl_uint Device::globalMemoryChannelBankWidth() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_GLOBAL_MEM_CHANNEL_BANK_WIDTH_AMD);
+	}
+
+	cl_uint Device::localMemorySizePerComputeUnit() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_LOCAL_MEM_SIZE_PER_COMPUTE_UNIT_AMD);
+	}
+
+	cl_uint Device::localMemoryBanks() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_LOCAL_MEM_BANKS_AMD);
+	}
+
+#if !defined(CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV)
+#  define CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV       0x4000
+#endif
+#if !defined(CL_DEVICE_COMPUTE_CAPABILITY_MINOR_NV)
+#  define CL_DEVICE_COMPUTE_CAPABILITY_MINOR_NV       0x4001
+#endif
+#if !defined(CL_DEVICE_REGISTERS_PER_BLOCK_NV)
+#  define CL_DEVICE_REGISTERS_PER_BLOCK_NV            0x4002
+#endif
+#if !defined(CL_DEVICE_WARP_SIZE_NV)
+#  define CL_DEVICE_WARP_SIZE_NV                      0x4003
+#endif
+#if !defined(CL_DEVICE_GPU_OVERLAP_NV)
+#  define CL_DEVICE_GPU_OVERLAP_NV                    0x4004
+#endif
+#if !defined(CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV)
+#  define CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV            0x4005
+#endif
+#if !defined(CL_DEVICE_INTEGRATED_MEMORY_NV)
+#  define CL_DEVICE_INTEGRATED_MEMORY_NV              0x4006
+#endif
+
+	cl_uint Device::computeCapabilityMajor() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV);
+	}
+
+	cl_uint Device::computeCapabilityMinor() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_COMPUTE_CAPABILITY_MINOR_NV);
+	}
+
+	cl_uint Device::registersPerBlock() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_REGISTERS_PER_BLOCK_NV);
+	}
+
+	cl_uint Device::warpSize() const
+	{
+		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_WARP_SIZE_NV);
+	}
+
+	bool Device::gpuOverlap() const
+	{
+		return detail::deviceInfo<bool>(id, CL_DEVICE_GPU_OVERLAP_NV);
+	}
+
+	bool Device::kernelExecutionTimeout() const
+	{
+		return detail::deviceInfo<bool>(id, CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV);
+	}
+
+	bool Device::integratedMemory() const
+	{
+		return detail::deviceInfo<bool>(id, CL_DEVICE_INTEGRATED_MEMORY_NV);
 	}
 }

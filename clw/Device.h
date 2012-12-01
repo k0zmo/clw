@@ -35,6 +35,29 @@ namespace clw
 		bool supportsDouble() const;
 		bool supportsHalf() const;
 
+		// AMD only
+		cl_ulong profilingTimerOffset() const;
+		string boardName() const;
+		vector<size_t> globalFreeMemory() const;
+		cl_uint simdPerComputeUnit() const;
+		cl_uint simdWidth() const;
+		cl_uint simdInstructionWidth() const;
+		cl_uint wavefrontWidth() const;
+		cl_uint globalMemoryChannels() const;
+		cl_uint globalMemoryChannelBanks() const;
+		cl_uint globalMemoryChannelBankWidth() const;
+		cl_uint localMemorySizePerComputeUnit() const;
+		cl_uint localMemoryBanks() const;
+
+		// NVIDIA only
+		cl_uint computeCapabilityMajor() const;
+		cl_uint computeCapabilityMinor() const;
+		cl_uint registersPerBlock() const;
+		cl_uint warpSize() const;
+		bool gpuOverlap() const;
+		bool kernelExecutionTimeout() const;
+		bool integratedMemory() const;
+
 		cl_device_id deviceId() const { return id; }
 
 		//! TODO: Device fission (OpenCL 1.2 or 1.1 with extensions)
