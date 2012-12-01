@@ -10,7 +10,14 @@ newoption {
    description = "Set path to a directory that contains CL/cl.h"
 }
 
+newoption {
+   trigger     = "cllibdir",
+   value       = "PATH",
+   description = "Set path to a directory that contains OpenCL.lib or libOpenCL.so"
+}
+
 _OPTIONS["clincdir"] = _OPTIONS["clincdir"] or "$(AMDAPPSDKROOT)/include"
+_OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "$(AMDAPPSDKROOT)/lib/x86"
 
 solution "clw"
 	configurations { "Debug", "Release" }
@@ -21,9 +28,7 @@ solution "clw"
 		targetdir "lib"
 		objdir "obj"
 		defines "CL_USE_DEPRECATED_OPENCL_1_1_APIS"
-		
 		includedirs { _OPTIONS["clincdir"] }
-     	
     	files { "clw/*.cpp", "clw/*.h" }
 
 	configuration "Debug"
@@ -36,4 +41,28 @@ solution "clw"
 		flags { "OptimizeSpeed", "NoEditAndContinue", "NoFramePointer" }
 	
 	configuration { "linux", "gmake" }
-		buildoptions { "-std=c++0x" }    
+		buildoptions "-std=c++0x" 
+		
+	project "clwinfo"
+		language "C++"
+		location "proj"
+		kind "ConsoleApp"
+		targetdir "bin"
+		objdir "obj"
+		defines "CL_USE_DEPRECATED_OPENCL_1_1_APIS"
+		includedirs { _OPTIONS["clincdir"], "." }
+		libdirs  { _OPTIONS["cllibdir"] }
+		files "clwinfo/main.cpp"
+		links { "clw", "OpenCL" }
+		
+	configuration "Debug"
+		targetsuffix "_d"
+		defines { "DEBUG", "_DEBUG", }
+		flags "Symbols"
+		
+	configuration "Release"
+		defines "NDEBUG"	
+		flags { "OptimizeSpeed", "NoEditAndContinue", "NoFramePointer" }
+	
+	configuration { "linux", "gmake" }
+		buildoptions  "-std=c++0x"   

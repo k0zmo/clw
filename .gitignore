@@ -5,3 +5,7 @@ proj
 *.sln
 *.sdf
 *.suo
+ipch
+*.opensdf
+*.ilk
+*.pdb
