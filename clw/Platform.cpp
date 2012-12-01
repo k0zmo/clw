@@ -8,13 +8,19 @@ namespace clw
 		{
 			cl_uint num;
 			cl_int error;
-			if((error = clGetPlatformIDs(0, nullptr, &num)) != CL_SUCCESS)
+			if((error = clGetPlatformIDs(0, 
+			        nullptr, &num)) != CL_SUCCESS)
 			{
 				reportError("platformIDs(): ", error);
 				return vector<cl_platform_id>();
 			}
 			vector<cl_platform_id> pids(num);
-			clGetPlatformIDs(num, pids.data(), nullptr);
+			if((error = clGetPlatformIDs(num, 
+			        pids.data(), nullptr)) != CL_SUCCESS)
+			{
+				reportError("platformIDs(): ", error);
+				return vector<cl_platform_id>();
+			}
 			return pids;
 		}
 
@@ -29,7 +35,12 @@ namespace clw
 				return string();
 			}
 			vector<char> infoBuf(size);
-			clGetPlatformInfo(id, name, size, infoBuf.data(), &size);
+			if((error = clGetPlatformInfo(id, name, size, 
+			        infoBuf.data(), &size)) != CL_SUCCESS)
+			{
+				reportError("platfromInfo(): ", error);
+				return string();
+			}
 			return string(infoBuf.data());
 		}
 	}
