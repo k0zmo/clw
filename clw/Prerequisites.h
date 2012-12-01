@@ -14,7 +14,6 @@
 #pragma warning(disable:4482)
 #endif
 
-#define HAVE_OPENCL_1_0
 #define HAVE_OPENCL_1_1
 //#define HAVE_OPENCL_1_2
 
@@ -40,6 +39,17 @@ namespace clw
 	class UserEvent;
 	class EventList;
 	class Sampler;
+
+	inline int compiledOpenCLVersion()
+	{
+#if defined(HAVE_OPENCL_1_2)
+		return 120;
+#elif defined(HAVE_OPENCL_1_1)
+		return 110;
+#else
+		return 100;
+#endif
+	}
 
 	namespace detail
 	{
