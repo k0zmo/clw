@@ -40,16 +40,7 @@ namespace clw
 	class EventList;
 	class Sampler;
 
-	inline int compiledOpenCLVersion()
-	{
-#if defined(HAVE_OPENCL_1_2)
-		return 120;
-#elif defined(HAVE_OPENCL_1_1)
-		return 110;
-#else
-		return 100;
-#endif
-	}
+	int compiledOpenCLVersion();
 
 	namespace detail
 	{

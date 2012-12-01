@@ -6,6 +6,17 @@
 
 namespace clw
 {
+	int compiledOpenCLVersion()
+	{
+#if defined(HAVE_OPENCL_1_2)
+		return 120;
+#elif defined(HAVE_OPENCL_1_1)
+		return 110;
+#else
+		return 100;
+#endif
+	}
+
 	namespace detail
 	{
 		vector<string> tokenize(const string& str, char delim, char group)
