@@ -36,24 +36,24 @@ namespace clw
 		bool supportsHalf() const;
 
 		// AMD only
-		cl_ulong profilingTimerOffset() const;
+		uint64_t profilingTimerOffset() const;
 		string boardName() const;
 		vector<size_t> globalFreeMemory() const;
-		cl_uint simdPerComputeUnit() const;
-		cl_uint simdWidth() const;
-		cl_uint simdInstructionWidth() const;
-		cl_uint wavefrontWidth() const;
-		cl_uint globalMemoryChannels() const;
-		cl_uint globalMemoryChannelBanks() const;
-		cl_uint globalMemoryChannelBankWidth() const;
-		cl_uint localMemorySizePerComputeUnit() const;
-		cl_uint localMemoryBanks() const;
+		int simdPerComputeUnit() const;
+		int simdWidth() const;
+		int simdInstructionWidth() const;
+		int wavefrontWidth() const;
+		int globalMemoryChannels() const;
+		int globalMemoryChannelBanks() const;
+		int globalMemoryChannelBankWidth() const;
+		int localMemorySizePerComputeUnit() const;
+		int localMemoryBanks() const;
 
 		// NVIDIA only
-		cl_uint computeCapabilityMajor() const;
-		cl_uint computeCapabilityMinor() const;
-		cl_uint registersPerBlock() const;
-		cl_uint warpSize() const;
+		int computeCapabilityMajor() const;
+		int computeCapabilityMinor() const;
+		int registersPerBlock() const;
+		int warpSize() const;
 		bool gpuOverlap() const;
 		bool kernelExecutionTimeout() const;
 		bool integratedMemory() const;

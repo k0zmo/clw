@@ -199,9 +199,9 @@ namespace clw
 #  define CL_DEVICE_LOCAL_MEM_BANKS_AMD               0x4048
 #endif
 
-	cl_ulong Device::profilingTimerOffset() const
+	uint64_t Device::profilingTimerOffset() const
 	{
-		return detail::deviceInfo<cl_ulong>(id, CL_DEVICE_PROFILING_TIMER_OFFSET_AMD);
+		return uint64_t(detail::deviceInfo<cl_ulong>(id, CL_DEVICE_PROFILING_TIMER_OFFSET_AMD));
 	}
 
 	string Device::boardName() const
@@ -214,49 +214,49 @@ namespace clw
 		return detail::deviceInfoVector<size_t>(id, CL_DEVICE_GLOBAL_FREE_MEMORY_AMD);
 	}
 
-	cl_uint Device::simdPerComputeUnit() const
+	int Device::simdPerComputeUnit() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_SIMD_PER_COMPUTE_UNIT_AMD);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_SIMD_PER_COMPUTE_UNIT_AMD));
 	}
 
-	cl_uint Device::simdWidth() const
+	int Device::simdWidth() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_SIMD_WIDTH_AMD);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_SIMD_WIDTH_AMD));
 	}
 
-	cl_uint Device::simdInstructionWidth() const
+	int Device::simdInstructionWidth() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_SIMD_INSTRUCTION_WIDTH_AMD);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_SIMD_INSTRUCTION_WIDTH_AMD));
 	}
 
-	cl_uint Device::wavefrontWidth() const
+	int Device::wavefrontWidth() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_WAVEFRONT_WIDTH_AMD);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_WAVEFRONT_WIDTH_AMD));
 	}
 
-	cl_uint Device::globalMemoryChannels() const
+	int Device::globalMemoryChannels() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_GLOBAL_MEM_CHANNELS_AMD);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_GLOBAL_MEM_CHANNELS_AMD));
 	}
 
-	cl_uint Device::globalMemoryChannelBanks() const
+	int Device::globalMemoryChannelBanks() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_GLOBAL_MEM_CHANNEL_BANKS_AMD);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_GLOBAL_MEM_CHANNEL_BANKS_AMD));
 	}
 
-	cl_uint Device::globalMemoryChannelBankWidth() const
+	int Device::globalMemoryChannelBankWidth() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_GLOBAL_MEM_CHANNEL_BANK_WIDTH_AMD);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_GLOBAL_MEM_CHANNEL_BANK_WIDTH_AMD));
 	}
 
-	cl_uint Device::localMemorySizePerComputeUnit() const
+	int Device::localMemorySizePerComputeUnit() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_LOCAL_MEM_SIZE_PER_COMPUTE_UNIT_AMD);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_LOCAL_MEM_SIZE_PER_COMPUTE_UNIT_AMD));
 	}
 
-	cl_uint Device::localMemoryBanks() const
+	int Device::localMemoryBanks() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_LOCAL_MEM_BANKS_AMD);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_LOCAL_MEM_BANKS_AMD));
 	}
 
 #if !defined(CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV)
@@ -281,24 +281,24 @@ namespace clw
 #  define CL_DEVICE_INTEGRATED_MEMORY_NV              0x4006
 #endif
 
-	cl_uint Device::computeCapabilityMajor() const
+	int Device::computeCapabilityMajor() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV));
 	}
 
-	cl_uint Device::computeCapabilityMinor() const
+	int Device::computeCapabilityMinor() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_COMPUTE_CAPABILITY_MINOR_NV);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_COMPUTE_CAPABILITY_MINOR_NV));
 	}
 
-	cl_uint Device::registersPerBlock() const
+	int Device::registersPerBlock() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_REGISTERS_PER_BLOCK_NV);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_REGISTERS_PER_BLOCK_NV));
 	}
 
-	cl_uint Device::warpSize() const
+	int Device::warpSize() const
 	{
-		return detail::deviceInfo<cl_uint>(id, CL_DEVICE_WARP_SIZE_NV);
+		return int(detail::deviceInfo<cl_uint>(id, CL_DEVICE_WARP_SIZE_NV));
 	}
 
 	bool Device::gpuOverlap() const
