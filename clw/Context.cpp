@@ -298,8 +298,6 @@ namespace clw
 		cl_mem_flags mem_flags = cl_mem_flags(access);
 		if(data && location != Location_UseHostMemory)
 			mem_flags |= CL_MEM_COPY_HOST_PTR;
-		else
-			data = nullptr;
 		mem_flags |= cl_mem_flags(location);
 		cl_mem bid = clCreateBuffer
 			(id, mem_flags, size, const_cast<void*>(data), &eid);
@@ -320,8 +318,6 @@ namespace clw
 		cl_mem_flags mem_flags = cl_mem_flags(access);
 		if(data && location != Location_UseHostMemory)
 			mem_flags |= CL_MEM_COPY_HOST_PTR;
-		else
-			data = nullptr;
 		mem_flags |= cl_mem_flags(location);
 		cl_mem iid = clCreateImage2D
 			(id, mem_flags, &image_format, 

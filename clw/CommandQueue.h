@@ -74,7 +74,13 @@ namespace clw
 		// !TODO OpenCL 1.2
 		// clEnqueueFillBuffer
 
-		//bool readImage();
+		bool readImage2D(const clw::Image2D& image,
+		                 void* data,
+                         int x,
+		                 int y,
+		                 int width,
+		                 int height,
+		                 int bytesPerLine = 0);
 		Event asyncReadImage2D(const clw::Image2D& image,
 		                       void* data,
 		                       int x,
