@@ -61,9 +61,7 @@ int main()
 			std::cout << "    Vendor                  : " << device.vendor() << std::endl;
 			std::cout << "    Device type             : " << deviceTypeName(device.deviceType()) << std::endl;											  
 			std::cout << "    Driver version          : " << device.driverVersion() << std::endl;
-			std::cout << "    Language Version        : " << device.languageVersion() << 
-std::endl;
-
+			std::cout << "    Language Version        : " << device.languageVersion() << std::endl;
 			std::cout << "    Supports Double         : " << boolName(device.supportsDouble()) << std::endl;
 			std::cout << "    Supports Half Float     : " << boolName(device.supportsHalf()) << std::endl;
 

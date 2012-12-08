@@ -90,7 +90,13 @@ namespace clw
 		                       int bytesPerLine = 0,
 		                       const EventList& after = EventList());
 
-		//bool writeImage();
+		bool writeImage2D(clw::Image2D& image,
+		                  const void* data,
+		                  int x, 
+		                  int y,
+		                  int width, 
+		                  int height,
+		                  int bytesPerLine = 0);
 		Event asyncWriteImage2D(clw::Image2D& image,
 		                        const void* data,
 		                        int x,

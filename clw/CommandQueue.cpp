@@ -181,6 +181,27 @@ namespace clw
 		return Event(event);
 	}
 
+	bool CommandQueue::writeImage2D(clw::Image2D& image,
+	                                const void* data,
+	                                int x, 
+	                                int y,
+	                                int width, 
+	                                int height,
+	                                int bytesPerLine)
+	{
+		cl_int error;
+		size_t origin[3] = { size_t(x), size_t(y), 0 };
+		size_t region[3] = { size_t(width), size_t(height), 1 };
+		if((error = clEnqueueWriteImage(id, image.memoryId(),
+		        CL_TRUE, origin, region, bytesPerLine, 0, 
+		        data, 0, nullptr, nullptr)) != CL_SUCCESS)
+		{
+			detail::reportError("CommandQueue::writeImage2D() ", error);
+			return false;
+		}
+		return true;
+	}
+
 	clw::Event CommandQueue::asyncWriteImage2D(clw::Image2D& image,
 	                                           const void* data,
 	                                           int x,
