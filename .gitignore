@@ -2,6 +2,8 @@
 lib
 obj
 proj
+bin
+*Makefile
 *.sln
 *.sdf
 *.suo

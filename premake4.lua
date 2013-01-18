@@ -63,7 +63,7 @@ solution "clw"
 		includedirs { _OPTIONS["clincdir"], "." }
 		libdirs  { _OPTIONS["cllibdir"] }
 		files "clwinfo/main.cpp"
-		links { "clw", "OpenCL" }
+		links { "clw", "OpenCL", "stdc++" }
 		
 	configuration "Debug"
 		targetsuffix "_d"
