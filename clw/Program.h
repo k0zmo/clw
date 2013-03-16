@@ -4,42 +4,42 @@
 
 namespace clw
 {
-	typedef vector<unsigned char> ByteCode;
+    typedef vector<unsigned char> ByteCode;
 
-	class Program
-	{
-	public:
-		Program() : ctx(nullptr), id(0), blt(false) {}
-		Program(Context* ctx, cl_program id)
-			: ctx(ctx), id(id), blt(false) {}
-		~Program();
-		
-		Program(const Program& other);
-		Program& operator=(const Program& other);
-		
-		bool isNull() const { return id == 0; }
-		
-		Context* context() const { return ctx; }
-		cl_program programId() const { return id; }
-		
-		bool isBuilt() const { return blt; }
-		bool build(const string& options = string());
-		// !TODO:
-		//bool build(const vector<Device> devices, const string& options = string());
-		
-		string log() const;
-		
-		vector<Device> devices() const;
-		string sourceCode() const;
-		vector<ByteCode> binaries() const;
+    class Program
+    {
+    public:
+        Program() : _ctx(nullptr), _id(0), _blt(false) {}
+        Program(Context* ctx, cl_program id)
+            : _ctx(ctx), _id(id), _blt(false) {}
+        ~Program();
+        
+        Program(const Program& other);
+        Program& operator=(const Program& other);
+        
+        bool isNull() const { return _id == 0; }
+        
+        Context* context() const { return _ctx; }
+        cl_program programId() const { return _id; }
+        
+        bool isBuilt() const { return _blt; }
+        bool build(const string& options = string());
+        // !TODO:
+        //bool build(const vector<Device> devices, const string& options = string());
+        
+        string log() const;
+        
+        vector<Device> devices() const;
+        string sourceCode() const;
+        vector<ByteCode> binaries() const;
 
-		Kernel createKernel(const char* name) const;
-		Kernel createKernel(const string& name) const;
-		vector<Kernel> createKernels() const;
-		
-	private:
-		Context* ctx;
-		cl_program id;
-		bool blt;
-	};
+        Kernel createKernel(const char* name) const;
+        Kernel createKernel(const string& name) const;
+        vector<Kernel> createKernels() const;
+        
+    private:
+        Context* _ctx;
+        cl_program _id;
+        bool _blt;
+    };
 }

@@ -4,45 +4,43 @@
 
 namespace clw
 {
+    enum EFilterMode
+    {
+        Filter_Nearest = 0x1140,
+        Filter_Linear  = 0x1141
+    };
 
+    enum EAddressingMode
+    {
+        Addressing_None             = 0x1130,
+        Addressing_Clamp_to_edge    = 0x1131,
+        Addressing_Clamp            = 0x1132,
+        Addressing_Repeat           = 0x1133,
+        Addressing_Mirrored_repeat  = 0x1134
+    };
 
-	enum EFilterMode
-	{
-		Filter_Nearest = 0x1140,
-		Filter_Linear  = 0x1141
-	};
+    class Sampler
+    {
+    public:
+        Sampler() : _ctx(nullptr), _id(0) {}
+        Sampler(Context* ctx, cl_sampler id)
+            : _ctx(ctx), _id(id) {}
+        ~Sampler();
 
-	enum EAddressingMode
-	{
-		Addressing_None             = 0x1130,
-		Addressing_Clamp_to_edge    = 0x1131,
-		Addressing_Clamp            = 0x1132,
-		Addressing_Repeat           = 0x1133,
-		Addressing_Mirrored_repeat  = 0x1134
-	};
+        Sampler(const Sampler& other);
+        Sampler& operator=(const Sampler& other);
 
-	class Sampler
-	{
-	public:
-		Sampler() : ctx(nullptr), id(0) {}
-		Sampler(Context* ctx, cl_sampler id)
-			: ctx(ctx), id(id) {}
-		~Sampler();
+        bool isNull() const { return _id == 0; }
+        
+        Context* context() const { return _ctx; }
+        cl_sampler samplerId() const { return _id; }
 
-		Sampler(const Sampler& other);
-		Sampler& operator=(const Sampler& other);
+        EFilterMode filterMode() const;
+        EAddressingMode addressingMode() const;
+        bool normalizedCoords() const;
 
-		bool isNull() const { return id == 0; }
-		
-		Context* context() const { return ctx; }
-		cl_sampler samplerId() const { return id; }
-
-		EFilterMode filterMode() const;
-		EAddressingMode addressingMode() const;
-		bool normalizedCoords() const;
-
-	private:
-		Context* ctx;
-		cl_sampler id;
-	};
+    private:
+        Context* _ctx;
+        cl_sampler _id;
+    };
 }
