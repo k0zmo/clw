@@ -20,6 +20,7 @@ namespace clw
 		bool create(EDeviceType type = EDeviceType::Default);
 		bool create(const vector<Device>& devices);
 		bool createOffline(const Platform& platform = Platform());
+		bool createDefault(clw::Device& device, clw::CommandQueue& queue);
 		void release();
 
 		cl_int lastError() const { return eid; }
@@ -67,4 +68,7 @@ namespace clw
 		cl_int eid;
 		vector<Device> devs;
 	};
+
+	typedef std::function<void(cl_int errId, const string& message)> ErrorHandler;
+	void installErrorHandler(const ErrorHandler& handler);
 }

@@ -25,7 +25,7 @@ namespace clw
 	// Removes (all) items of given value from a container
 	template <class Container>
 	inline void remove_value(Container* container,
-							 const typename Container::value_type& vt)
+	                         const typename Container::value_type& vt)
 	{
 		remove_pred(container,
 			[&](decltype(vt) it)
@@ -53,7 +53,7 @@ namespace clw
 	// Removes first item of a given value from a container
 	template <class Container>
 	inline bool remove_first_value(Container* container,
-								   const typename Container::value_type& vt)
+	                               const typename Container::value_type& vt)
 	{
 		return remove_first_pred(container,
 			[&](decltype(vt) it)
@@ -66,7 +66,7 @@ namespace clw
 	// given predicate from a generic container
 	template <class Container, class Predicate, class DeleteFunc>
 	inline void remove_delete(Container* container,
-							  Predicate pred, DeleteFunc deleteFunc)
+	                          Predicate pred, DeleteFunc deleteFunc)
 	{
 		for(auto it = container->begin(); it != container->end(); )
 		{
@@ -95,7 +95,7 @@ namespace clw
 	// Removes items of given value from a container
 	template <class Container>
 	inline void remove_value_delete(Container* container,
-									typename Container::value_type& vt)
+	                                typename Container::value_type& vt)
 	{
 		remove_delete(container,
 			[&](decltype(vt) it) { return vt == it; }
@@ -130,7 +130,7 @@ namespace clw
 	// Adds unique value to the given container
 	template <class Container>
 	inline bool push_back_unique(Container* container,
-								 const typename Container::value_type& vt)
+	                             const typename Container::value_type& vt)
 	{
 		for(auto it = container->begin() ; it != container->end(); ++it)
 		{
@@ -151,9 +151,9 @@ namespace clw
 
 	template <class Map>
 	inline typename Map::value_type::second_type find_in_map(
-			const Map& map,
-			const typename Map::value_type::first_type& key,
-			const typename Map::value_type::second_type& defaultValue)
+		const Map& map,
+		const typename Map::value_type::first_type& key,
+		const typename Map::value_type::second_type& defaultValue)
 	{
 		auto iter = map.find(key);
 		if(iter != map.end())

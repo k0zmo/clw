@@ -22,7 +22,7 @@ namespace clw
 		Context* context() const { return ctx; }
 		cl_program programId() const { return id; }
 		
-		bool built() const { return blt; }
+		bool isBuilt() const { return blt; }
 		bool build(const string& options = string());
 		// !TODO:
 		//bool build(const vector<Device> devices, const string& options = string());

@@ -102,10 +102,17 @@ namespace clw
 			#undef CASE
 		}
 
+		static ErrorHandler reportErrorHandler;
+
 		void reportError(const char* name, cl_int eid)
 		{
 			if(eid != CL_SUCCESS)
-				std::cerr << name << errorName(eid) << std::endl;;
+			{
+				if(reportErrorHandler)
+					reportErrorHandler(eid, string(name) + errorName(eid));
+				else
+					std::cerr << name << errorName(eid) << std::endl;;
+			}
 		}
 
 		vector<ImageFormat> supportedImageFormats(
@@ -134,6 +141,11 @@ namespace clw
 					EChannelType(buf[i].image_channel_data_type));
 			return imageFormats;
 		}
+	}
+
+	void installErrorHandler(const ErrorHandler& handler)
+	{
+		detail::reportErrorHandler = handler;
 	}
 
 	Context::Context() 
@@ -268,6 +280,17 @@ namespace clw
 			}
 		}	
 		return false;
+	}
+
+	bool Context::createDefault(clw::Device& device, clw::CommandQueue& queue)
+	{
+		if(!create() || numDevices() == 0)
+			return false;
+		device = devices()[0];
+		if(device.isNull())
+			return false;
+		queue = createCommandQueue(0, device);
+		return !queue.isNull();
 	}
 
 	void Context::release()
