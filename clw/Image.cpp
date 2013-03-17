@@ -46,22 +46,22 @@ namespace clw
 
     int Image2D::width() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_WIDTH);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_WIDTH));
     }
 
     int Image2D::height() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_HEIGHT);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_HEIGHT));
     }
 
     int Image2D::bytesPerElement() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_ELEMENT_SIZE);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_ELEMENT_SIZE));
     }
 
     int Image2D::bytesPerLine() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_ROW_PITCH);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_ROW_PITCH));
     }
 
     Image3D::Image3D(const Image3D& other)
@@ -90,31 +90,31 @@ namespace clw
 
     int Image3D::width() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_WIDTH);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_WIDTH));
     }
 
     int Image3D::height() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_HEIGHT);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_HEIGHT));
     }
 
     int Image3D::depth() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_DEPTH);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_DEPTH));
     }
 
     int Image3D::bytesPerElement() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_ELEMENT_SIZE);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_ELEMENT_SIZE));
     }
 
     int Image3D::bytesPerLine() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_ROW_PITCH);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_ROW_PITCH));
     }
 
     int Image3D::bytesPerSlice() const
     {
-        return detail::imageInfo<size_t>(memoryId(), CL_IMAGE_SLICE_PITCH);
+        return int(detail::imageInfo<size_t>(memoryId(), CL_IMAGE_SLICE_PITCH));
     }
 }

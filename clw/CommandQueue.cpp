@@ -95,7 +95,7 @@ namespace clw
         cl_int error;
         if((error = clEnqueueReadBuffer(_id, buffer.memoryId(), 
                 CL_FALSE, offset, size, data,
-                after.size(), after, &event)) != CL_SUCCESS)
+                cl_uint(after.size()), after, &event)) != CL_SUCCESS)
         {
             detail::reportError("CommandQueue::asyncReadBuffer() ", error);
             return Event(event);
@@ -129,7 +129,7 @@ namespace clw
         cl_int error;
         if((error = clEnqueueWriteBuffer(_id, buffer.memoryId(), 
                 CL_FALSE, offset, size, data,
-                after.size(), after, &event)) != CL_SUCCESS)
+                cl_uint(after.size()), after, &event)) != CL_SUCCESS)
         {
             detail::reportError("CommandQueue::asyncWriteBuffer() ", error);
             return Event(event);
@@ -173,7 +173,7 @@ namespace clw
         size_t region[3] = { size_t(width), size_t(height), 1 };
         if((error = clEnqueueReadImage(_id, image.memoryId(),
                 CL_FALSE, origin, region, bytesPerLine, 0, 
-                data, after.size(), after, &event)) != CL_SUCCESS)
+                data, cl_uint(after.size()), after, &event)) != CL_SUCCESS)
         {
             detail::reportError("CommandQueue::asyncReadImage2D() ", error);
             return Event(event);
@@ -217,7 +217,7 @@ namespace clw
         size_t region[3] = { size_t(width), size_t(height), 1 };
         if((error = clEnqueueWriteImage(_id, image.memoryId(),
             CL_FALSE, origin, region, bytesPerLine, 0, 
-            data, after.size(), after, &event)) != CL_SUCCESS)
+            data, cl_uint(after.size()), after, &event)) != CL_SUCCESS)
         {
             detail::reportError("CommandQueue::asyncWriteImage2D() ", error);
             return Event(event);
@@ -252,7 +252,7 @@ namespace clw
         cl_int error;
         cl_event event;
         *data = clEnqueueMapBuffer(_id, buffer.memoryId(), CL_FALSE,
-            access, offset, size, after.size(), after, &event, &error);
+            access, offset, size, cl_uint(after.size()), after, &event, &error);
         if(error != CL_SUCCESS)
         {
             detail::reportError("CommandQueue::asyncMapBuffer() ", error);
@@ -295,7 +295,7 @@ namespace clw
         size_t pitch;
         *data = clEnqueueMapImage(_id, image.memoryId(), CL_FALSE,
             access, origin, region, &pitch, nullptr,
-            after.size(), after, &event, &error);
+            cl_uint(after.size()), after, &event, &error);
         if(error != CL_SUCCESS)
         {
             detail::reportError("CommandQueue::asyncMapImage2D() ", error);
@@ -329,7 +329,7 @@ namespace clw
         cl_event event;
         cl_int error;
         if((error = clEnqueueUnmapMemObject(_id, obj.memoryId(),
-            ptr, after.size(), after, &event)) != CL_SUCCESS)
+            ptr, cl_uint(after.size()), after, &event)) != CL_SUCCESS)
         {
             detail::reportError("CommandQueue()::asyncUnmap() ", error);
             return Event();
@@ -353,7 +353,7 @@ namespace clw
         cl_event event;
         cl_int error = clEnqueueNDRangeKernel
             (_id, kernel.kernelId(), 
-            dims, offset, global, l,
+            cl_uint(dims), offset, global, l,
             0, nullptr, &event);
         if(error != CL_SUCCESS)
         {
@@ -383,8 +383,8 @@ namespace clw
         cl_event event;
         cl_int error = clEnqueueNDRangeKernel
             (_id, kernel.kernelId(), 
-             dims, offset, global, l,
-             after.size(), after, &event);
+             cl_uint(dims), offset, global, l,
+             cl_uint(after.size()), after, &event);
         if(error != CL_SUCCESS)
         {
             detail::reportError("CommandQueue::asyncRunKernel() ", error);

@@ -181,7 +181,7 @@ namespace clw
         if(_events.empty())
             return;
         cl_int error;
-        if((error = clWaitForEvents(_events.size(),
+        if((error = clWaitForEvents(cl_uint(_events.size()),
                 operator const cl_event*())) != CL_SUCCESS)
             detail::reportError("EventList::waitForFinished() ", error);
     }
@@ -209,7 +209,7 @@ namespace clw
     void EventList::remove(const Event& event)
     {
         _events.erase(
-		    std::remove(_events.begin(), _events.end(), event.eventId()),
+            std::remove(_events.begin(), _events.end(), event.eventId()),
             _events.end());
     }
 

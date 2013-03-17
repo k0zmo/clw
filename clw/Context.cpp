@@ -228,7 +228,7 @@ namespace clw
             cl_context_properties(pid),
             0
         };
-        if((_id = clCreateContext(props, dids.size(), dids.data(), 
+        if((_id = clCreateContext(props, cl_uint(dids.size()), dids.data(), 
                 &detail::contextNotify, nullptr, &_eid)) != 0)
         {
             size_t size;
@@ -268,12 +268,12 @@ namespace clw
             if((_eid = clGetContextInfo(_id, CL_CONTEXT_DEVICES, 0,
                     nullptr, &size)) == CL_SUCCESS)
             {
-                int numDevices = size / sizeof(cl_device_id);
+                size_t numDevices = size / sizeof(cl_device_id);
                 vector<cl_device_id> devices_id(numDevices);
                 clGetContextInfo(_id, CL_CONTEXT_DEVICES, size,
                     devices_id.data(), nullptr);
                 _devs.clear();
-                for(int i = 0; i < numDevices; ++i)
+                for(size_t i = 0; i < numDevices; ++i)
                     _devs.push_back(Device(devices_id[i]));
                 _isCreated = true;
                 return true;

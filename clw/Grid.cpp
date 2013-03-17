@@ -8,7 +8,7 @@ namespace clw
         {
             if(multiple <= 1)
                 return value;
-            int v = value % multiple;
+            size_t v = value % multiple;
             if (v)
                 return value + (multiple - v);
             return value;
