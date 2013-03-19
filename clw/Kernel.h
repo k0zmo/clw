@@ -66,6 +66,12 @@ namespace clw
         template<typename Value> void setArg(unsigned index, const Value& value);
         void setArg(unsigned index, const void* data, size_t size);
 
+        bool operator()(CommandQueue& queue);
+#if !defined(_MSC_VER)
+        // Variadic version with arguments
+        template <class... Args>
+        bool operator()(CommandQueue& queue, const Args&... args);
+#endif
     private:
         Context* _ctx;
         cl_kernel _id;
@@ -73,40 +79,70 @@ namespace clw
         Grid _globalWorkOffset;
         Grid _globalWorkSize;
         Grid _localWorkSize;
+#if !defined(_MSC_VER)
+        template <class Head, class... Tail>
+        void setArgVariadic(unsigned& pos, const Head& head, const Tail&... tail);
+        void setArgVariadic(unsigned& pos) { (void) pos; }; // terminator
+#endif
+    };
+
+    // Thin wrapper for dynamically setting local memory size as kernel argument 
+    class LocalMemorySize
+    {
+    public:
+        LocalMemorySize(size_t size)
+            : _size(size)
+        {}
+
+        operator size_t() const { return _size; }
+    private:
+        size_t _size;
     };
 
     template<typename Value> inline void Kernel::setArg(unsigned index, const Value& value)
     {
-        clSetKernelArg(_id, index, sizeof(Value), &value);
+        cl_int error = clSetKernelArg(_id, index, sizeof(Value), &value);
+        detail::reportError("Kernel::setArg(): ", error);
     }
 
     template<> inline void Kernel::setArg<Buffer>(unsigned index, const Buffer& buffer)
     {
         cl_mem mem = buffer.memoryId();
-        clSetKernelArg(_id, index, sizeof(cl_mem), &mem);
+        cl_int error = clSetKernelArg(_id, index, sizeof(cl_mem), &mem);
+        detail::reportError("Kernel::setArg(): ", error);
     }
 
     template<> inline void Kernel::setArg<Image2D>(unsigned index, const Image2D& image2d)
     {
         cl_mem mem = image2d.memoryId();
-        clSetKernelArg(_id, index, sizeof(cl_mem), &mem);
+        cl_int error = clSetKernelArg(_id, index, sizeof(cl_mem), &mem);
+        detail::reportError("Kernel::setArg(): ", error);
     }
 
     template<> inline void Kernel::setArg<Image3D>(unsigned index, const Image3D& image3d)
     {
         cl_mem mem = image3d.memoryId();
-        clSetKernelArg(_id, index, sizeof(cl_mem), &mem);
+        cl_int error = clSetKernelArg(_id, index, sizeof(cl_mem), &mem);
+        detail::reportError("Kernel::setArg(): ", error);
     }
 
     template<> inline void Kernel::setArg<Sampler>(unsigned index, const Sampler& sampler)
     {
         cl_sampler samplerId = sampler.samplerId();
-        clSetKernelArg(_id, index, sizeof(cl_sampler), samplerId);
+        cl_int error = clSetKernelArg(_id, index, sizeof(cl_sampler), samplerId);
+        detail::reportError("Kernel::setArg(): ", error);
+    }
+
+    template<> inline void Kernel::setArg<LocalMemorySize>(unsigned index, const LocalMemorySize& localMemorySize)
+    {
+        cl_int error = clSetKernelArg(_id, index, localMemorySize, nullptr);
+        detail::reportError("Kernel::setArg(): ", error);
     }
 
     inline void Kernel::setArg(unsigned index, const void* data, size_t size)
     {
-        clSetKernelArg(_id, index, size, data);
+        cl_int error = clSetKernelArg(_id, index, size, data);
+        detail::reportError("Kernel::setArg(): ", error);
     }
 
     inline Grid Kernel::globalWorkSize() const
@@ -203,4 +239,21 @@ namespace clw
     {
         setGlobalWorkOffset(Grid(width, height, depth));
     }
+#if !defined(_MSC_VER)
+    template <class Head, class... Tail>
+    void Kernel::setArgVariadic(unsigned& pos, const Head& head, const Tail&... tail)
+    {
+        setArg(pos, head);
+        ++pos;
+        setArgVariadic(pos, tail...);
+    }
+
+    template <class... Args>
+    bool Kernel::operator()(CommandQueue& queue, const Args&... args)
+    {
+        unsigned pos = 0;
+        setArgVariadic(pos, args...);
+        return (*this)(std::forward<CommandQueue&>(queue));
+    }
+#endif
 }

@@ -1,5 +1,6 @@
 #include "Kernel.h"
 #include "Program.h"
+#include "CommandQueue.h"
 
 namespace clw
 {
@@ -83,5 +84,10 @@ namespace clw
         if(isNull())
             return 0;
         return int(detail::kernelInfo<cl_uint>(_id, CL_KERNEL_NUM_ARGS));
+    }
+
+    bool Kernel::operator()(CommandQueue& queue)
+    {
+        return queue.runKernel(*this);
     }
 }
