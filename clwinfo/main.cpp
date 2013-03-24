@@ -111,7 +111,7 @@ int main()
             std::cout << "    Compute units               : " << device.computeUnits() << std::endl;
             std::cout << "    Default alignment           : " << device.defaultAlignment() << " bits" << std::endl;
             std::cout << "    Minimum alignment           : " << device.minimumAlignment() << " bytes" << std::endl;
-			std::cout << "    Float capabilities          : " << floatCapabilitiesName(device.floatCapabilities()) << std::endl;
+            std::cout << "    Float capabilities          : " << floatCapabilitiesName(device.floatCapabilities()) << std::endl;
             std::cout << "    Double capabilities         : " << floatCapabilitiesName(device.doubleCapabilities()) << std::endl;
             std::cout << "    Half capabilities           : " << floatCapabilitiesName(device.halfCapabilities()) << std::endl;
             std::cout << "    GMEM cache size             : " << memorySizeName(device.globalMemoryCacheSize()) << std::endl;
