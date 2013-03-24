@@ -54,4 +54,6 @@ namespace clw
         _sizes[1] = height;
         _sizes[2] = depth;
     }
+
+    std::ostream& operator<<(std::ostream& strm, const Grid& grid);
 }

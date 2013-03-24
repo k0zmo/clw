@@ -32,4 +32,10 @@ namespace clw
             return Grid();
         }
     }
+
+    std::ostream& operator<<(std::ostream& strm, const Grid& grid)
+    {
+        strm << "(" << grid.width() << ", " << grid.height() << ", " << grid.depth() << ")";
+        return strm;
+    }
 }

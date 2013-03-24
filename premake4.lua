@@ -32,7 +32,11 @@ solution "clw"
 		kind "StaticLib"
 		targetdir "lib"
 		objdir "obj"
-		defines "CL_USE_DEPRECATED_OPENCL_1_1_APIS"
+		defines {
+			"CL_USE_DEPRECATED_OPENCL_1_1_APIS",
+			"HAVE_OPENCL_1_1",
+			"HAVE_OPENCL_1_2"
+		}
 		includedirs { _OPTIONS["clincdir"] }
 		-- libdirs  { _OPTIONS["cllibdir"] }
 		files { "clw/*.cpp", "clw/*.h" }
@@ -59,7 +63,11 @@ solution "clw"
 		kind "ConsoleApp"
 		targetdir "bin"
 		objdir "obj"
-		defines "CL_USE_DEPRECATED_OPENCL_1_1_APIS"
+		defines {
+			"CL_USE_DEPRECATED_OPENCL_1_1_APIS",
+			"HAVE_OPENCL_1_1",
+			"HAVE_OPENCL_1_2"
+		}
 		includedirs { _OPTIONS["clincdir"], "." }
 		libdirs  { _OPTIONS["cllibdir"] }
 		files "clwinfo/main.cpp"

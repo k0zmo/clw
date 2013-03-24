@@ -14,9 +14,6 @@
 #pragma warning(disable:4482)
 #endif
 
-#define HAVE_OPENCL_1_1
-//#define HAVE_OPENCL_1_2
-
 namespace clw
 {
     using std::vector;
@@ -34,7 +31,7 @@ namespace clw
     struct ImageFormat;
     class Image2D;
     class Image3D;
-    class NDRange;
+    class Grid;
     class Event;
     class UserEvent;
     class EventList;

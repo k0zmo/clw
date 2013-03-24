@@ -36,6 +36,7 @@ namespace clw
                                        cl_int event_command_exec_status,
                                        void *user_data)
         {
+            (void) event;
             EventCallback* pfn = static_cast<EventCallback*>(user_data);
             (*pfn)(EEventStatus(event_command_exec_status));
         }
