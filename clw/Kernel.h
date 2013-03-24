@@ -71,6 +71,10 @@ namespace clw
         // Variadic version with arguments
         template <class... Args>
         bool operator()(CommandQueue& queue, const Args&... args);
+
+        template <class... Args>
+        bool operator()(CommandQueue& queue, const Grid& local,
+            const Grid& global, const Args&... args);
 #endif
     private:
         Context* _ctx;
@@ -253,7 +257,18 @@ namespace clw
     {
         unsigned pos = 0;
         setArgVariadic(pos, args...);
-        return (*this)(std::forward<CommandQueue&>(queue));
+        return (*this)(queue);
+    }
+
+    template <class... Args>
+    bool Kernel::operator()(CommandQueue& queue, const Grid& local,
+                            const Grid& global, const Args&... args)
+    {
+        unsigned pos = 0;
+        setArgVariadic(pos, args...);
+        setLocalWorkSize(local);
+        setRoundedGlobalWorkSize(global);
+        return (*this)(queue);
     }
 #endif
 }
