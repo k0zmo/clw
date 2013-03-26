@@ -47,7 +47,7 @@ namespace clw
     }
 
     Program::Program(const Program& other)
-        : _ctx(other._ctx), _id(other._id), _blt(other._blt)
+        : _ctx(other._ctx), _id(other._id), _built(other._built)
     {
         if(_id)
             clRetainProgram(_id);
@@ -56,7 +56,7 @@ namespace clw
     Program& Program::operator=(const Program& other)
     {
         _ctx = other._ctx;
-        _blt = other._blt;
+        _built = other._built;
         if(other._id)
             clRetainProgram(other._id);
         if(_id)
@@ -75,8 +75,9 @@ namespace clw
                                       // OpenCL SDK don't allow for pfn_notify
                                       nullptr, nullptr);
         detail::reportError("Program::build(): ", error);
-        _blt = error == CL_SUCCESS;
-        return _blt;
+        _built = error == CL_SUCCESS;
+        _options = options;
+        return _built;
     }
 
     string Program::log() const

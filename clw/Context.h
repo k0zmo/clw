@@ -62,6 +62,8 @@ namespace clw
         Program buildProgramFromSourceFile(const string& fileName, 
                                            const string& options = string());
 
+        // !TODO: createProgramFromBinaries()
+
     private:
         cl_context _id;
         bool _isCreated;
