@@ -10,6 +10,32 @@
 
 namespace clw
 {
+    enum EKernelArgumentAddressQualifier
+    {
+        AddressQ_Invalid  = 0x0000,
+        AddressQ_Global   = 0x119B,
+        AddressQ_Local    = 0x119C,
+        AddressQ_Constant = 0x119D,
+        AddressQ_Private  = 0x119E
+    };
+
+    enum EKernelArgumentAccessQualifier
+    {
+        AccessQ_Invalid   = 0x0000,
+        AccessQ_ReadOnly  = 0x11A0,
+        AccessQ_WriteOnly = 0x11A1,
+        AccessQ_ReadWrite = 0x11A2,
+        AccessQ_None      = 0x11A3
+    };
+
+    enum EKernelArgumentTypeQualifier
+    {
+        TypeQ_None     =        0,
+        TypeQ_Const    = (1 << 0),
+        TypeQ_Restrict = (1 << 1),
+        TypeQ_Volatile = (1 << 2)		
+    };
+
     class Kernel
     {
     public:
@@ -46,6 +72,12 @@ namespace clw
         uint64_t localMemoryUsage() const;
         int preferredMultipleWorkGroupSize() const;
         uint64_t privateMemoryUsage() const;
+
+        EKernelArgumentAddressQualifier argumentAddressQualifier(int index) const;
+        EKernelArgumentAccessQualifier argumentAccessQualifier(int index) const;
+        int argumentTypeQualifier(int index) const;
+        string argumentTypeName(int index) const;
+        string argumentName(int index) const;
 
         Grid globalWorkSize() const;
         void setGlobalWorkSize(const Grid& range);

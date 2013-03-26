@@ -34,6 +34,47 @@ namespace clw
             }
             return value;
         }
+
+#if defined(HAVE_OPENCL_1_2)
+        template<typename Value>
+        Value kernelWorkArgInfo(cl_kernel id, cl_uint arg_index,
+                                cl_kernel_arg_info info)
+        {
+            Value value;
+            cl_int error;
+            if((error = clGetKernelArgInfo(id, arg_index, info, sizeof(value),
+                    &value, nullptr)) != CL_SUCCESS)
+            {
+                reportError("kernelWorkArgInfo(): ", error);
+                return Value(0);
+            }
+            return value;
+        }
+
+        template<>
+        string kernelWorkArgInfo(cl_kernel id, cl_uint arg_index,
+                                 cl_kernel_arg_info info)
+        {
+            size_t size;
+            cl_int error = CL_SUCCESS;
+            if(!id || (error = clGetKernelArgInfo(id, arg_index, 
+                    info, 0, nullptr, &size)) != CL_SUCCESS)
+            {
+                reportError("kernelWorkArgInfo(): ", error);
+                return string();
+            }
+            vector<char> infoBuf(size);
+            if((error = clGetKernelArgInfo(id, arg_index, info,
+                    size, infoBuf.data(), &size)) != CL_SUCCESS)
+            {
+                reportError("kernelWorkArgInfo(): ", error);
+                return string();
+            }
+            return string(infoBuf.data());
+        }
+
+#endif
+
     }
 
     Kernel::~Kernel()
@@ -138,6 +179,54 @@ namespace clw
     {
         return uint64_t(detail::kernelWorkGroupInfo<cl_ulong>
             (_id, nullptr, CL_KERNEL_PRIVATE_MEM_SIZE));
+    }
+
+    EKernelArgumentAddressQualifier Kernel::argumentAddressQualifier(int index) const
+    {
+#if defined(HAVE_OPENCL_1_2)
+        return EKernelArgumentAddressQualifier(detail::kernelWorkArgInfo
+            <cl_kernel_arg_address_qualifier>(_id, index, CL_KERNEL_ARG_ADDRESS_QUALIFIER));
+#else
+        return AddressQ_Invalid;
+#endif
+    }
+
+    EKernelArgumentAccessQualifier Kernel::argumentAccessQualifier(int index) const
+    {
+#if defined(HAVE_OPENCL_1_2)
+        return EKernelArgumentAccessQualifier(detail::kernelWorkArgInfo
+            <cl_kernel_arg_access_qualifier>(_id, index, CL_KERNEL_ARG_ACCESS_QUALIFIER));
+#else
+        return AccessQ_Invalid;
+#endif
+    }
+
+    int Kernel::argumentTypeQualifier(int index) const
+    {
+#if defined(HAVE_OPENCL_1_2)
+        return int(detail::kernelWorkArgInfo<cl_kernel_arg_type_qualifier>
+            (_id, index, CL_KERNEL_ARG_TYPE_QUALIFIER));
+#else
+        return TypeQ_None;
+#endif
+    }
+
+    string Kernel::argumentTypeName(int index) const
+    {
+#if defined(HAVE_OPENCL_1_2)
+        return detail::kernelWorkArgInfo<string>(_id, index, CL_KERNEL_ARG_TYPE_NAME);
+#else
+        return string();
+#endif
+    }
+
+    string Kernel::argumentName(int index) const
+    {
+#if defined(HAVE_OPENCL_1_2)
+        return detail::kernelWorkArgInfo<string>(_id, index, CL_KERNEL_ARG_NAME);
+#else
+        return string();
+#endif
     }
 
     clw::Event Kernel::operator()(CommandQueue& queue)
