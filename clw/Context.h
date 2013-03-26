@@ -26,8 +26,8 @@ namespace clw
         cl_int lastError() const { return _eid; }
         void setLastError(cl_int error) { _eid = error; }
 
-        CommandQueue createCommandQueue(cl_command_queue_properties properties,
-                                        const Device& device);
+        CommandQueue createCommandQueue(const Device& device,
+                                        cl_command_queue_properties properties = 0);
 
         Buffer createBuffer(EAccess access,
                             EMemoryLocation location,

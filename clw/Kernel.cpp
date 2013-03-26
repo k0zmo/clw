@@ -7,14 +7,29 @@ namespace clw
     namespace detail
     {
         template<typename Value>
-        Value kernelInfo(cl_kernel _id, cl_kernel_info info)
+        Value kernelInfo(cl_kernel id, cl_kernel_info info)
         {
             Value value;
             cl_int error;
-            if((error = clGetKernelInfo(_id, info, sizeof(value),
+            if((error = clGetKernelInfo(id, info, sizeof(value),
                     &value, nullptr)) != CL_SUCCESS)
             {
                 reportError("kernelInfo(): ", error);
+                return Value(0);
+            }
+            return value;
+        }
+
+        template<typename Value>
+        Value kernelWorkGroupInfo(cl_kernel id, cl_device_id device_id,
+                                  cl_kernel_work_group_info info)
+        {
+            Value value;
+            cl_int error;
+            if((error = clGetKernelWorkGroupInfo(id, device_id, info, sizeof(value),
+                    &value, nullptr)) != CL_SUCCESS)
+            {
+                reportError("kernelWorkGroupInfo(): ", error);
                 return Value(0);
             }
             return value;
@@ -84,6 +99,45 @@ namespace clw
         if(isNull())
             return 0;
         return int(detail::kernelInfo<cl_uint>(_id, CL_KERNEL_NUM_ARGS));
+    }
+
+    int Kernel::maximumWorkItemsPerGroup() const
+    {
+        // TODO: !nullptr for device_id
+        return detail::kernelWorkGroupInfo<size_t>(_id, nullptr, CL_KERNEL_WORK_GROUP_SIZE);
+    }
+
+    Grid Kernel::requiredWorkGroupSize() const
+    {
+        size_t dims[3];
+        cl_int error = CL_SUCCESS;
+        // TODO: !nullptr for device_id
+        if(!_id || (error = clGetKernelWorkGroupInfo(_id, nullptr, 
+                CL_KERNEL_COMPILE_WORK_GROUP_SIZE, sizeof(dims), 
+                dims, nullptr)) != CL_SUCCESS)
+        {
+            detail::reportError("kernelWorkGroupInfo(): ", error);
+            return Grid();
+        }
+        return Grid(dims[0], dims[1], dims[2]);
+    }
+
+    uint64_t Kernel::localMemoryUsage() const
+    {
+        return uint64_t(detail::kernelWorkGroupInfo<cl_ulong>
+            (_id, nullptr, CL_KERNEL_LOCAL_MEM_SIZE));
+    }
+
+    int Kernel::preferredMultipleWorkGroupSize() const
+    {
+        return int(detail::kernelWorkGroupInfo<size_t>
+            (_id, nullptr, CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE));
+    }
+
+    uint64_t Kernel::privateMemoryUsage() const
+    {
+        return uint64_t(detail::kernelWorkGroupInfo<cl_ulong>
+            (_id, nullptr, CL_KERNEL_PRIVATE_MEM_SIZE));
     }
 
     clw::Event Kernel::operator()(CommandQueue& queue)

@@ -27,7 +27,7 @@ namespace clw
         // !TODO:
         //bool build(const vector<Device> devices, const string& options = string());
         
-        string builtOptions() const { return _options; }
+        string buildOptions() const { return _options; }
         string log() const;
         
         vector<Device> devices() const;

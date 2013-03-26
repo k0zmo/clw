@@ -289,7 +289,7 @@ namespace clw
         device = devices()[0];
         if(device.isNull())
             return false;
-        queue = createCommandQueue(0, device);
+        queue = createCommandQueue(device, 0);
         return !queue.isNull();
     }
 
@@ -303,8 +303,8 @@ namespace clw
         }
     }
 
-    CommandQueue Context::createCommandQueue(cl_command_queue_properties properties,
-                                             const Device& device)
+    CommandQueue Context::createCommandQueue(const Device& device,
+                                             cl_command_queue_properties properties)
     {
         cl_command_queue cid = clCreateCommandQueue
             (_id, device.deviceId(),

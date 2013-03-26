@@ -41,6 +41,12 @@ namespace clw
         string name() const;
         int argCount() const;
 
+        int maximumWorkItemsPerGroup() const;
+        Grid requiredWorkGroupSize() const;
+        uint64_t localMemoryUsage() const;
+        int preferredMultipleWorkGroupSize() const;
+        uint64_t privateMemoryUsage() const;
+
         Grid globalWorkSize() const;
         void setGlobalWorkSize(const Grid& range);
         void setGlobalWorkSize(size_t width);
@@ -226,8 +232,10 @@ namespace clw
     }
 
     inline void Kernel::setGlobalWorkOffset(const Grid& range)
-    { 
+    {
+#if defined(HAVE_OPENCL_1_1)
         _globalWorkOffset = range;
+#endif        
     }
 
     inline void Kernel::setGlobalWorkOffset(size_t width)
