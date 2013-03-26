@@ -6,6 +6,7 @@
 #include "Buffer.h"
 #include "Image.h"
 #include "Sampler.h"
+#include "Event.h"
 
 namespace clw
 {
@@ -66,14 +67,14 @@ namespace clw
         template<typename Value> void setArg(unsigned index, const Value& value);
         void setArg(unsigned index, const void* data, size_t size);
 
-        bool operator()(CommandQueue& queue);
+        clw::Event operator()(CommandQueue& queue);
 #if !defined(_MSC_VER)
         // Variadic version with arguments
         template <class... Args>
-        bool operator()(CommandQueue& queue, const Args&... args);
+        clw::Event operator()(CommandQueue& queue, const Args&... args);
 
         template <class... Args>
-        bool operator()(CommandQueue& queue, const Grid& local,
+        clw::Event operator()(CommandQueue& queue, const Grid& local,
             const Grid& global, const Args&... args);
 #endif
     private:
@@ -253,7 +254,7 @@ namespace clw
     }
 
     template <class... Args>
-    bool Kernel::operator()(CommandQueue& queue, const Args&... args)
+    clw::Event Kernel::operator()(CommandQueue& queue, const Args&... args)
     {
         unsigned pos = 0;
         setArgVariadic(pos, args...);
@@ -261,8 +262,8 @@ namespace clw
     }
 
     template <class... Args>
-    bool Kernel::operator()(CommandQueue& queue, const Grid& local,
-                            const Grid& global, const Args&... args)
+    clw::Event Kernel::operator()(CommandQueue& queue, const Grid& local,
+                                  const Grid& global, const Args&... args)
     {
         unsigned pos = 0;
         setArgVariadic(pos, args...);

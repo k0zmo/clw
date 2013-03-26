@@ -86,8 +86,8 @@ namespace clw
         return int(detail::kernelInfo<cl_uint>(_id, CL_KERNEL_NUM_ARGS));
     }
 
-    bool Kernel::operator()(CommandQueue& queue)
+    clw::Event Kernel::operator()(CommandQueue& queue)
     {
-        return queue.runKernel(*this);
+        return queue.asyncRunKernel(*this);
     }
 }
