@@ -137,6 +137,24 @@ namespace clw
         return Event(event);
     }
 
+    bool CommandQueue::writeBufferRect(Buffer& buffer,
+                                       const void* data,
+                                       const size_t origin[3],
+                                       const size_t size[3],
+                                       size_t bytesPerLine,
+                                       size_t bufferBytesPerLine)
+    {
+        cl_int error;
+        if((error = clEnqueueWriteBufferRect(_id, buffer.memoryId(), 
+                CL_TRUE, origin, 0, size, bufferBytesPerLine, 0, 
+                bytesPerLine, 0, data, 0, nullptr, nullptr)) != CL_SUCCESS)
+        {
+            detail::reportError("CommandQueue::writeBufferRect() ", error);
+            return false;
+        }
+        return true;
+    }
+
     bool CommandQueue::readImage2D(const Image2D& image,
                                    void* data,
                                    int x,

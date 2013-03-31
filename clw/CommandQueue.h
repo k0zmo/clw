@@ -65,7 +65,12 @@ namespace clw
         //bool readBufferRect();
         //Event asyncReadBufferRect();
 
-        //bool writeBufferRect();
+        bool writeBufferRect(Buffer& buffer,
+                             const void* data,
+                             const size_t origin[3],
+                             const size_t size[3],
+                             size_t bytesPerLine,
+                             size_t bufferBytesPerLine);
         //Event asyncWriteBufferRect();
 
         //bool copyBufferRect();
