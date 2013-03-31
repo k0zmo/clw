@@ -16,11 +16,18 @@ newoption {
 	description = "Set path to a directory that contains OpenCL.lib or libOpenCL.so"
 }
 
-_OPTIONS["clincdir"] = _OPTIONS["clincdir"] or "$(AMDAPPSDKROOT)/include"
-_OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "$(AMDAPPSDKROOT)/lib/x86"
+if os.get() == "windows" then 
+	_OPTIONS["clincdir"] = _OPTIONS["clincdir"] or "$(AMDAPPSDKROOT)/include"
+	_OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "$(AMDAPPSDKROOT)/lib/x86"
+end
 
 solution "clw"
 	configurations { "Debug", "Release" }
+
+	vpaths {
+		["Header Files"] = { "**.h" },
+		["Source Files"] = { "**.cpp" }
+	}
 	
 	--
 	-- Library itself
@@ -39,16 +46,27 @@ solution "clw"
 		}
 		includedirs { _OPTIONS["clincdir"] }
 		-- libdirs  { _OPTIONS["cllibdir"] }
-		files { "clw/*.cpp", "clw/*.h" }
+		files { 
+			"clw/*.cpp",
+			"clw/*.h" 
+		}
 
 	configuration "Debug"
 		targetsuffix "_d"
 		defines { "DEBUG", "_DEBUG", }
-		flags { "Symbols", "ExtraWarnings" }
+		flags { 
+			"Symbols", 
+			"ExtraWarnings"
+		}
 	
 	configuration "Release"
 		defines "NDEBUG"
-		flags { "OptimizeSpeed", "NoEditAndContinue", "NoFramePointer", "ExtraWarnings" }
+		flags { 
+			"OptimizeSpeed",
+			"NoEditAndContinue", 
+			"NoFramePointer", 
+			"ExtraWarnings"
+		}
 	
 	configuration { "linux", "gmake" }
 		buildoptions "-std=c++11" 
@@ -80,7 +98,12 @@ solution "clw"
 		
 	configuration "Release"
 		defines "NDEBUG"
-		flags { "OptimizeSpeed", "NoEditAndContinue", "NoFramePointer", "ExtraWarnings" }
+		flags { 
+			"OptimizeSpeed",
+			"NoEditAndContinue", 
+			"NoFramePointer", 
+			"ExtraWarnings"
+		}
 	
 	configuration { "linux", "gmake" }
 		buildoptions  "-std=c++11"   
