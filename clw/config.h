@@ -25,7 +25,7 @@
 #endif
 
 // Import/Export macros
-#if CLW_SYSTEM == CLW__SYSTEM_WINDOWS
+#if CLW_SYSTEM == CLW_SYSTEM_WINDOWS
 #  if defined(CLW_STATIC_LIB)
 #    define CLW_EXPORT
 #  else

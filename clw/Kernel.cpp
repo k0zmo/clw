@@ -186,6 +186,7 @@ namespace clw
         return EKernelArgumentAddressQualifier(detail::kernelWorkArgInfo
             <cl_kernel_arg_address_qualifier>(_id, index, CL_KERNEL_ARG_ADDRESS_QUALIFIER));
 #else
+        (void) index;
         return AddressQ_Invalid;
 #endif
     }
@@ -196,6 +197,7 @@ namespace clw
         return EKernelArgumentAccessQualifier(detail::kernelWorkArgInfo
             <cl_kernel_arg_access_qualifier>(_id, index, CL_KERNEL_ARG_ACCESS_QUALIFIER));
 #else
+        (void) index;
         return AccessQ_Invalid;
 #endif
     }
@@ -206,6 +208,7 @@ namespace clw
         return int(detail::kernelWorkArgInfo<cl_kernel_arg_type_qualifier>
             (_id, index, CL_KERNEL_ARG_TYPE_QUALIFIER));
 #else
+        (void) index;
         return TypeQ_None;
 #endif
     }
@@ -215,6 +218,7 @@ namespace clw
 #if defined(HAVE_OPENCL_1_2)
         return detail::kernelWorkArgInfo<string>(_id, index, CL_KERNEL_ARG_TYPE_NAME);
 #else
+        (void) index;
         return string();
 #endif
     }
@@ -224,6 +228,7 @@ namespace clw
 #if defined(HAVE_OPENCL_1_2)
         return detail::kernelWorkArgInfo<string>(_id, index, CL_KERNEL_ARG_NAME);
 #else
+        (void) index;
         return string();
 #endif
     }
