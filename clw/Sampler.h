@@ -19,7 +19,7 @@ namespace clw
         Addressing_MirroredRepeat  = 0x1134
     };
 
-    class Sampler
+    class CLW_EXPORT Sampler
     {
     public:
         Sampler() : _ctx(nullptr), _id(0) {}

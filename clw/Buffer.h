@@ -5,7 +5,7 @@
 
 namespace clw
 {
-    class Buffer : public MemoryObject
+    class CLW_EXPORT Buffer : public MemoryObject
     {
     public:
         Buffer() {}

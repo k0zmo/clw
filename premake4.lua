@@ -16,41 +16,21 @@ newoption {
 	description = "Set path to a directory that contains OpenCL.lib or libOpenCL.so"
 }
 
+newoption {
+	trigger     = "static",
+	value       = "no",
+	description = "Build as static library?"
+}
+_OPTIONS["static"] = _OPTIONS["static"] or "no"
+
+-- Default paths on windows for AMD APP SDK
 if os.get() == "windows" then 
 	_OPTIONS["clincdir"] = _OPTIONS["clincdir"] or "$(AMDAPPSDKROOT)/include"
 	_OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "$(AMDAPPSDKROOT)/lib/x86"
 end
 
-solution "clw"
-	configurations { "Debug", "Release" }
-
-	vpaths {
-		["Header Files"] = { "**.h" },
-		["Source Files"] = { "**.cpp" }
-	}
-	
-	--
-	-- Library itself
-	--
-	
-	project "clw"
-		language "C++"
-		location "proj"
-		kind "StaticLib"
-		targetdir "lib"
-		objdir "obj"
-		defines {
-			"CL_USE_DEPRECATED_OPENCL_1_1_APIS",
-			"HAVE_OPENCL_1_1",
-			"HAVE_OPENCL_1_2"
-		}
-		includedirs { _OPTIONS["clincdir"] }
-		-- libdirs  { _OPTIONS["cllibdir"] }
-		files { 
-			"clw/*.cpp",
-			"clw/*.h" 
-		}
-
+-- Common settings per project
+local function configureProject()
 	configuration "Debug"
 		targetsuffix "_d"
 		defines { "DEBUG", "_DEBUG", }
@@ -58,43 +38,6 @@ solution "clw"
 			"Symbols", 
 			"ExtraWarnings"
 		}
-	
-	configuration "Release"
-		defines "NDEBUG"
-		flags { 
-			"OptimizeSpeed",
-			"NoEditAndContinue", 
-			"NoFramePointer", 
-			"ExtraWarnings"
-		}
-	
-	configuration { "linux", "gmake" }
-		buildoptions "-std=c++11" 
-		
-	--
-	-- Simple tool to query basic platform and its devices attributes
-	--
-		
-	project "clwinfo"
-		language "C++"
-		location "proj"
-		kind "ConsoleApp"
-		targetdir "bin"
-		objdir "obj"
-		defines {
-			"CL_USE_DEPRECATED_OPENCL_1_1_APIS",
-			"HAVE_OPENCL_1_1",
-			"HAVE_OPENCL_1_2"
-		}
-		includedirs { _OPTIONS["clincdir"], "." }
-		libdirs  { _OPTIONS["cllibdir"] }
-		files "clwinfo/main.cpp"
-		links { "clw", "OpenCL" }
-		
-	configuration "Debug"
-		targetsuffix "_d"
-		defines { "DEBUG", "_DEBUG", }
-		flags { "Symbols", "ExtraWarnings" }
 		
 	configuration "Release"
 		defines "NDEBUG"
@@ -108,3 +51,81 @@ solution "clw"
 	configuration { "linux", "gmake" }
 		buildoptions  "-std=c++11"   
 		links "stdc++"
+end
+
+solution "clw"
+	configurations { "Debug", "Release" }
+
+	-- Available in premake4.4
+	if vpaths ~= nil then
+		vpaths {
+			["Header Files"] = { "**.h" },
+			["Source Files"] = { "**.cpp" }
+		}
+	end
+	
+	--
+	-- Library itself
+	--
+	
+	project "clw"
+		language "C++"
+		location "proj"
+		if _OPTIONS["static"] == "yes" then
+			kind "StaticLib"
+			defines "CLW_STATIC_LIB"
+			targetdir "lib"
+		else
+			kind "SharedLib"
+			defines "CLW_BUILD_SHARED"
+			links "OpenCL"
+			if os.get() == "windows" then
+				targetdir "bin"
+			else
+				targetdir "lib"
+			end
+		end
+		objdir "obj"
+		defines {
+			-- needed in AMD's OpenCL headers to enable still used functions (such as clCreateImage2D)
+			"CL_USE_DEPRECATED_OPENCL_1_1_APIS", 
+			"HAVE_OPENCL_1_1",
+			"HAVE_OPENCL_1_2"
+		}
+		includedirs { _OPTIONS["clincdir"] }
+		libdirs  { _OPTIONS["cllibdir"] }
+		files { 
+			"clw/*.cpp",
+			"clw/*.h" 
+		}
+
+		configureProject()
+		
+	--
+	-- Simple tool to query basic platform and its devices attributes
+	--
+		
+	project "clwinfo"
+		language "C++"
+		location "proj"
+		kind "ConsoleApp"
+		targetdir "bin"
+		objdir "obj"
+		defines {
+			"HAVE_OPENCL_1_1",
+			"HAVE_OPENCL_1_2"
+		}
+		includedirs { 
+			".",
+			_OPTIONS["clincdir"]
+		}
+		files "clwinfo/main.cpp"
+		links "clw"
+		
+		if _OPTIONS["static"] == "yes" then
+			defines "CLW_STATIC_LIB"
+			links "OpenCL"
+			libdirs  { _OPTIONS["cllibdir"] }
+		end
+		
+		configureProject()

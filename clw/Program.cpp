@@ -1,6 +1,7 @@
 #include "Program.h"
 #include "Context.h"
 #include "Kernel.h"
+#include "details.h"
 
 namespace clw
 {

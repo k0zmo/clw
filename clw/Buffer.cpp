@@ -1,4 +1,5 @@
 #include "Buffer.h"
+#include "details.h"
 
 namespace clw
 {

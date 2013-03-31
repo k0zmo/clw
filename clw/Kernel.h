@@ -7,11 +7,8 @@
 #include "Image.h"
 #include "Sampler.h"
 #include "Event.h"
-
-// VS2012.CTP1 or g++
-#if _MSC_FULL_VER == 170051025 || defined(__GNUC__)
-#  define VARIADIC_TEMPLATES_SUPPORTED
-#endif
+#include "Device.h"
+#include "details.h"
 
 namespace clw
 {
@@ -41,7 +38,7 @@ namespace clw
         TypeQ_Volatile = (1 << 2)		
     };
 
-    class Kernel
+    class CLW_EXPORT Kernel
     {
     public:
         Kernel() 
@@ -111,7 +108,7 @@ namespace clw
         void setArg(unsigned index, const void* data, size_t size);
 
         clw::Event operator()(CommandQueue& queue);
-#if defined(VARIADIC_TEMPLATES_SUPPORTED)
+#if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
         // Variadic version with arguments
         template <class... Args>
         clw::Event operator()(CommandQueue& queue, const Args&... args);
@@ -127,7 +124,7 @@ namespace clw
         Grid _globalWorkOffset;
         Grid _globalWorkSize;
         Grid _localWorkSize;
-#if defined(VARIADIC_TEMPLATES_SUPPORTED)
+#if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
         template <class Head, class... Tail>
         void setArgVariadic(unsigned& pos, const Head& head, const Tail&... tail);
         void setArgVariadic(unsigned& pos) { (void) pos; }; // terminator
@@ -135,7 +132,7 @@ namespace clw
     };
 
     // Thin wrapper for dynamically setting local memory size as kernel argument 
-    class LocalMemorySize
+    class CLW_EXPORT LocalMemorySize
     {
     public:
         LocalMemorySize(size_t size)
@@ -289,7 +286,7 @@ namespace clw
     {
         setGlobalWorkOffset(Grid(width, height, depth));
     }
-#if defined(VARIADIC_TEMPLATES_SUPPORTED)
+#if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
     template <class Head, class... Tail>
     void Kernel::setArgVariadic(unsigned& pos, const Head& head, const Tail&... tail)
     {

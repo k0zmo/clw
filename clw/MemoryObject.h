@@ -31,7 +31,7 @@ namespace clw
         Object_Image1DBuffer  = 0x10F6
     };
 
-    class MemoryObject
+    class CLW_EXPORT MemoryObject
     {
     public:
         bool isNull() const { return _id == 0; }

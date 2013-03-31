@@ -1,6 +1,7 @@
 #include "Device.h"
 #include "Platform.h"
 #include "Grid.h"
+#include "details.h"
 
 #include <cstring>
 

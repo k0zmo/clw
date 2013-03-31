@@ -1,7 +1,8 @@
 #include "MemoryObject.h"
+#include "details.h"
 
 #if !defined(CL_MEM_USE_PERSISTENT_MEM_AMD)
-#define CL_MEM_USE_PERSISTENT_MEM_AMD 0x40
+#  define CL_MEM_USE_PERSISTENT_MEM_AMD 0x40
 #endif
 
 namespace clw

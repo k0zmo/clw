@@ -1,4 +1,5 @@
 #include "Platform.h"
+#include "details.h"
 
 namespace clw
 {

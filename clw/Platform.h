@@ -20,7 +20,7 @@ namespace clw
     };
 
     // Thin wrapper over OpenCL platform 
-    class Platform
+    class CLW_EXPORT Platform
     {
     public:
         Platform() : _id(0) {}
@@ -46,8 +46,8 @@ namespace clw
         cl_platform_id _id;
     };
 
-    vector<Platform> availablePlatforms();
-    Platform defaultPlatform();
+    CLW_EXPORT vector<Platform> availablePlatforms();
+    CLW_EXPORT Platform defaultPlatform();
 
     inline EPlatformVendor Platform::vendorEnum() const
     {

@@ -4,7 +4,7 @@
 
 namespace clw
 {
-    class Grid
+    class CLW_EXPORT Grid
     {
     public:
         Grid();
@@ -55,5 +55,5 @@ namespace clw
         _sizes[2] = depth;
     }
 
-    std::ostream& operator<<(std::ostream& strm, const Grid& grid);
+    CLW_EXPORT std::ostream& operator<<(std::ostream& strm, const Grid& grid);
 }

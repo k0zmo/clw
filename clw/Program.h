@@ -6,7 +6,7 @@ namespace clw
 {
     typedef vector<unsigned char> ByteCode;
 
-    class Program
+    class CLW_EXPORT Program
     {
     public:
         Program() : _ctx(nullptr), _id(0), _built(false) {}

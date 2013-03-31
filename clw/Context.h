@@ -8,7 +8,7 @@
 
 namespace clw
 {
-    class Context
+    class CLW_EXPORT Context
     {
     public:
         Context();
@@ -72,5 +72,5 @@ namespace clw
     };
 
     typedef std::function<void(cl_int errId, const string& message)> ErrorHandler;
-    void installErrorHandler(const ErrorHandler& handler);
+    void CLW_EXPORT installErrorHandler(const ErrorHandler& handler);
 }

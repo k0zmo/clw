@@ -43,7 +43,7 @@ namespace clw
         Type_Float                     = 0x10DE
     };
 
-    struct ImageFormat
+    struct CLW_EXPORT ImageFormat
     {
         EChannelOrder order;
         EChannelType type;
@@ -59,7 +59,7 @@ namespace clw
         }
     };
 
-    class Image2D : public MemoryObject
+    class CLW_EXPORT Image2D : public MemoryObject
     {
     public:
         Image2D() {}
@@ -81,7 +81,7 @@ namespace clw
         mutable ImageFormat fmt;
     };
 
-    class Image3D : public MemoryObject
+    class CLW_EXPORT Image3D : public MemoryObject
     {
     public:
         Image3D() {}

@@ -46,7 +46,7 @@ namespace clw
 
     typedef function<void(EEventStatus status)> EventCallback;
 
-    class Event
+    class CLW_EXPORT Event
     {
     public:
         Event() : _id(0) {}
@@ -76,7 +76,7 @@ namespace clw
         EventCallback _callback;
     };
 
-    class UserEvent : public Event
+    class CLW_EXPORT UserEvent : public Event
     {
     public:
         UserEvent() : Event() {}
@@ -89,7 +89,7 @@ namespace clw
         void setStatus(EEventStatus status);
     };
 
-    class EventList
+    class CLW_EXPORT EventList
     {
     public:
         EventList() {}

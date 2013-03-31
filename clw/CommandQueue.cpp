@@ -3,6 +3,7 @@
 #include "Image.h"
 #include "Kernel.h"
 #include "Grid.h"
+#include "details.h"
 
 namespace clw
 {

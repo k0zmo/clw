@@ -21,7 +21,7 @@ namespace clw
 #endif
     };
 
-    class CommandQueue
+    class CLW_EXPORT CommandQueue
     {
     public:
         CommandQueue() : _ctx(nullptr), _id(0) {}

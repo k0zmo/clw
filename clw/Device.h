@@ -35,7 +35,7 @@ namespace clw
         Capability_CorrectlyRoundedDivideSqrt = (1 << 7)
     };
 
-    class Device
+    class CLW_EXPORT Device
     {
     public:
         Device() : _id(0) {}
@@ -144,6 +144,6 @@ namespace clw
         cl_device_id _id;
     };
 
-    vector<Device> allDevices();
-    vector<Device> devices(EDeviceType deviceTypes, const Platform& platform);
+    CLW_EXPORT vector<Device> allDevices();
+    CLW_EXPORT vector<Device> devices(EDeviceType deviceTypes, const Platform& platform);
 }

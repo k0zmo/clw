@@ -4,11 +4,12 @@
 #include "Program.h"
 #include "Buffer.h"
 #include "Image.h"
+#include "details.h"
 
 #include <iostream>
 
 #if !defined(CL_CONTEXT_OFFLINE_DEVICES_AMD)
-#define CL_CONTEXT_OFFLINE_DEVICES_AMD 0x403F
+#  define CL_CONTEXT_OFFLINE_DEVICES_AMD 0x403F
 #endif
 
 namespace clw

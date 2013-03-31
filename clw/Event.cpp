@@ -1,4 +1,5 @@
 #include "Event.h"
+#include "details.h"
 #include <algorithm>
 
 namespace clw

@@ -1,18 +1,16 @@
 #pragma once
 
+#include "config.h"
+
 #include <CL/cl.h>
 #include <CL/cl_ext.h>
+/// TODO: Not yet used
 #include <CL/cl_gl.h>
 
 #include <cstdint>
 #include <string>
 #include <vector>
 #include <functional>
-
-#ifdef _MSC_VER
-// nonstandard extension used: enum used in qualified name
-#pragma warning(disable:4482)
-#endif
 
 namespace clw
 {
@@ -37,14 +35,5 @@ namespace clw
     class EventList;
     class Sampler;
 
-    int compiledOpenCLVersion();
-
-    namespace detail
-    {
-        void reportError(const char* name, cl_int eid);
-        bool supportsExtension(const string& list, const char* ext);
-        vector<string> tokenize(const string& str, char delim, char group = 0);
-        void trim(string* str, bool left, bool right);
-        bool readAsString(const string& filename, string* contents);
-    }
+    CLW_EXPORT int compiledOpenCLVersion();
 }

@@ -1,4 +1,5 @@
 #include "Image.h"
+#include "details.h"
 
 namespace clw
 {
