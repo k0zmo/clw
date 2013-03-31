@@ -1,5 +1,4 @@
 #pragma once
-
 // OS
 #define CLW_SYSTEM_WINDOWS 1
 #define CLW_SYSTEM_LINUX 2
@@ -25,8 +24,8 @@
 #  error "This compiler is not supported"
 #endif
 
-// import/export macros
-#if CLW__SYSTEM == CLW__SYSTEM_WINDOWS
+// Import/Export macros
+#if CLW_SYSTEM == CLW__SYSTEM_WINDOWS
 #  if defined(CLW_STATIC_LIB)
 #    define CLW_EXPORT
 #  else

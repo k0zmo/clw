@@ -21,7 +21,15 @@ newoption {
 	value       = "no",
 	description = "Build as static library?"
 }
+
+newoption {
+	trigger     = "opencl12",
+	value       = "no",
+	description = "Enables OpenCL 1.2 features"
+}
+
 _OPTIONS["static"] = _OPTIONS["static"] or "no"
+_OPTIONS["opencl12"] = _OPTIONS["opencl12"] or "no"
 
 -- Default paths on windows for AMD APP SDK
 if os.get() == "windows" then 
@@ -74,26 +82,23 @@ solution "clw"
 		if _OPTIONS["static"] == "yes" then
 			kind "StaticLib"
 			defines "CLW_STATIC_LIB"
-			targetdir "lib"
 		else
 			kind "SharedLib"
 			defines "CLW_BUILD_SHARED"
 			links "OpenCL"
-			if os.get() == "windows" then
-				targetdir "bin"
-			else
-				targetdir "lib"
-			end
 		end
+        targetdir "bin"
 		objdir "obj"
 		defines {
 			-- needed in AMD's OpenCL headers to enable still used functions (such as clCreateImage2D)
 			"CL_USE_DEPRECATED_OPENCL_1_1_APIS", 
-			"HAVE_OPENCL_1_1",
-			"HAVE_OPENCL_1_2"
+			"HAVE_OPENCL_1_1"
 		}
+		if _OPTIONS["opencl12"] == "yes" then
+			defines "HAVE_OPENCL_1_2"
+		end
 		includedirs { _OPTIONS["clincdir"] }
-		libdirs  { _OPTIONS["cllibdir"] }
+		libdirs { _OPTIONS["cllibdir"] }
 		files { 
 			"clw/*.cpp",
 			"clw/*.h" 
@@ -111,10 +116,10 @@ solution "clw"
 		kind "ConsoleApp"
 		targetdir "bin"
 		objdir "obj"
-		defines {
-			"HAVE_OPENCL_1_1",
-			"HAVE_OPENCL_1_2"
-		}
+		defines "HAVE_OPENCL_1_1"
+		if _OPTIONS["opencl12"] == "yes" then
+			defines "HAVE_OPENCL_1_2"
+		end
 		includedirs { 
 			".",
 			_OPTIONS["clincdir"]
