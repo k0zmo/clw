@@ -13,10 +13,10 @@ namespace clw
     enum EAddressingMode
     {
         Addressing_None             = 0x1130,
-        Addressing_Clamp_to_edge    = 0x1131,
+        Addressing_ClampToEdge    = 0x1131,
         Addressing_Clamp            = 0x1132,
         Addressing_Repeat           = 0x1133,
-        Addressing_Mirrored_repeat  = 0x1134
+        Addressing_MirroredRepeat  = 0x1134
     };
 
     class Sampler

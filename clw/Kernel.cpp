@@ -1,6 +1,7 @@
 #include "Kernel.h"
 #include "Program.h"
 #include "CommandQueue.h"
+#include "Device.h"
 
 namespace clw
 {
@@ -142,18 +143,16 @@ namespace clw
         return int(detail::kernelInfo<cl_uint>(_id, CL_KERNEL_NUM_ARGS));
     }
 
-    int Kernel::maximumWorkItemsPerGroup() const
+    int Kernel::maximumWorkItemsPerGroup(const Device& device) const
     {
-        // TODO: !nullptr for device_id
-        return detail::kernelWorkGroupInfo<size_t>(_id, nullptr, CL_KERNEL_WORK_GROUP_SIZE);
+        return detail::kernelWorkGroupInfo<size_t>(_id, device.deviceId(), CL_KERNEL_WORK_GROUP_SIZE);
     }
 
-    Grid Kernel::requiredWorkGroupSize() const
+    Grid Kernel::requiredWorkGroupSize(const Device& device) const
     {
         size_t dims[3];
         cl_int error = CL_SUCCESS;
-        // TODO: !nullptr for device_id
-        if(!_id || (error = clGetKernelWorkGroupInfo(_id, nullptr, 
+        if(!_id || (error = clGetKernelWorkGroupInfo(_id, device.deviceId(), 
                 CL_KERNEL_COMPILE_WORK_GROUP_SIZE, sizeof(dims), 
                 dims, nullptr)) != CL_SUCCESS)
         {
@@ -163,22 +162,22 @@ namespace clw
         return Grid(dims[0], dims[1], dims[2]);
     }
 
-    uint64_t Kernel::localMemoryUsage() const
+    uint64_t Kernel::localMemoryUsage(const Device& device) const
     {
         return uint64_t(detail::kernelWorkGroupInfo<cl_ulong>
-            (_id, nullptr, CL_KERNEL_LOCAL_MEM_SIZE));
+            (_id, device.deviceId(), CL_KERNEL_LOCAL_MEM_SIZE));
     }
 
-    int Kernel::preferredMultipleWorkGroupSize() const
+    int Kernel::preferredMultipleWorkGroupSize(const Device& device) const
     {
         return int(detail::kernelWorkGroupInfo<size_t>
-            (_id, nullptr, CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE));
+            (_id, device.deviceId(), CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE));
     }
 
-    uint64_t Kernel::privateMemoryUsage() const
+    uint64_t Kernel::privateMemoryUsage(const Device& device) const
     {
         return uint64_t(detail::kernelWorkGroupInfo<cl_ulong>
-            (_id, nullptr, CL_KERNEL_PRIVATE_MEM_SIZE));
+            (_id, device.deviceId(), CL_KERNEL_PRIVATE_MEM_SIZE));
     }
 
     EKernelArgumentAddressQualifier Kernel::argumentAddressQualifier(int index) const
