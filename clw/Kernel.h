@@ -117,6 +117,7 @@ namespace clw
         clw::Event operator()(CommandQueue& queue, const Grid& local,
             const Grid& global, const Args&... args);
 #endif
+
     private:
         Context* _ctx;
         cl_kernel _id;
@@ -146,48 +147,36 @@ namespace clw
 
     template<typename Value> inline void Kernel::setArg(unsigned index, const Value& value)
     {
-        cl_int error = clSetKernelArg(_id, index, sizeof(Value), &value);
-        detail::reportError("Kernel::setArg(): ", error);
+        setArg(index, &value, sizeof(Value));
     }
 
     template<> inline void Kernel::setArg<Buffer>(unsigned index, const Buffer& buffer)
     {
         cl_mem mem = buffer.memoryId();
-        cl_int error = clSetKernelArg(_id, index, sizeof(cl_mem), &mem);
-        detail::reportError("Kernel::setArg(): ", error);
+        setArg(index, &mem, sizeof(cl_mem));
     }
 
     template<> inline void Kernel::setArg<Image2D>(unsigned index, const Image2D& image2d)
     {
         cl_mem mem = image2d.memoryId();
-        cl_int error = clSetKernelArg(_id, index, sizeof(cl_mem), &mem);
-        detail::reportError("Kernel::setArg(): ", error);
+        setArg(index, &mem, sizeof(cl_mem));
     }
 
     template<> inline void Kernel::setArg<Image3D>(unsigned index, const Image3D& image3d)
     {
         cl_mem mem = image3d.memoryId();
-        cl_int error = clSetKernelArg(_id, index, sizeof(cl_mem), &mem);
-        detail::reportError("Kernel::setArg(): ", error);
+        setArg(index, &mem, sizeof(cl_mem));
     }
 
     template<> inline void Kernel::setArg<Sampler>(unsigned index, const Sampler& sampler)
     {
         cl_sampler samplerId = sampler.samplerId();
-        cl_int error = clSetKernelArg(_id, index, sizeof(cl_sampler), samplerId);
-        detail::reportError("Kernel::setArg(): ", error);
+        setArg(index, &samplerId, sizeof(cl_sampler));
     }
 
     template<> inline void Kernel::setArg<LocalMemorySize>(unsigned index, const LocalMemorySize& localMemorySize)
     {
-        cl_int error = clSetKernelArg(_id, index, localMemorySize, nullptr);
-        detail::reportError("Kernel::setArg(): ", error);
-    }
-
-    inline void Kernel::setArg(unsigned index, const void* data, size_t size)
-    {
-        cl_int error = clSetKernelArg(_id, index, size, data);
-        detail::reportError("Kernel::setArg(): ", error);
+        setArg(index, nullptr, localMemorySize);
     }
 
     inline Grid Kernel::globalWorkSize() const

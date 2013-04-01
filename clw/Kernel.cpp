@@ -233,6 +233,12 @@ namespace clw
 #endif
     }
 
+    void Kernel::setArg(unsigned index, const void* data, size_t size)
+    {
+        cl_int error = clSetKernelArg(_id, index, size, data);
+        detail::reportError("Kernel::setArg(): ", error);
+    }
+
     clw::Event Kernel::operator()(CommandQueue& queue)
     {
         return queue.asyncRunKernel(*this);
