@@ -22,6 +22,7 @@ namespace clw
         bool createOffline(const Platform& platform = Platform());
         bool createDefault(Device& device, CommandQueue& queue);
         void release();
+        bool isCreated() const { return _isCreated; }
 
         cl_int lastError() const { return _eid; }
         void setLastError(cl_int error) { _eid = error; }
