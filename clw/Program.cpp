@@ -48,7 +48,7 @@ namespace clw
     }
 
     Program::Program(const Program& other)
-        : _ctx(other._ctx), _id(other._id), _built(other._built)
+        : _ctx(other._ctx), _id(other._id), _options(other._options) ,_built(other._built)
     {
         if(_id)
             clRetainProgram(_id);
@@ -57,6 +57,7 @@ namespace clw
     Program& Program::operator=(const Program& other)
     {
         _ctx = other._ctx;
+        _options = other._options;
         _built = other._built;
         if(other._id)
             clRetainProgram(other._id);

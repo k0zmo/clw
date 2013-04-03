@@ -50,7 +50,7 @@ namespace clw
     }
 
     Event::Event(const Event& other)
-        : _id(other._id)
+        : _id(other._id), _callback(other._callback)
     {
         if(_id)
             clRetainEvent(_id);
@@ -63,6 +63,7 @@ namespace clw
         if(_id)
             clReleaseEvent(_id);
         _id = other._id;
+        _callback = other._callback;
         return *this;
     }
 
