@@ -2,6 +2,7 @@
 
 #include "Platform.h"
 #include "Device.h"
+#include "DeviceFilter.h"
 #include "Context.h"
 #include "CommandQueue.h"
 #include "Program.h"
