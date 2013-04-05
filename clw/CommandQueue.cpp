@@ -86,6 +86,12 @@ namespace clw
         return true;
     }
 
+    bool CommandQueue::readBuffer(const Buffer& buffer,
+                                  void* data)
+    {
+        return readBuffer(buffer, data, 0, buffer.size());
+    }
+
     Event CommandQueue::asyncReadBuffer(const Buffer& buffer,
                                         void* data,
                                         size_t offset,
@@ -104,6 +110,13 @@ namespace clw
         return Event(event);
     }
 
+    Event CommandQueue::asyncReadBuffer(const Buffer& buffer,
+                                        void* data,
+                                        const EventList& after)
+    {
+        return asyncReadBuffer(buffer, data, 0, buffer.size(), after);
+    }
+
     bool CommandQueue::writeBuffer(Buffer& buffer,
                                    const void* data, 
                                    size_t offset, 
@@ -118,6 +131,12 @@ namespace clw
             return false;
         }
         return true;
+    }
+
+    bool CommandQueue::writeBuffer(Buffer& buffer,
+                                   const void* data)
+    {
+        return writeBuffer(buffer, data, 0, buffer.size());
     }
 
     Event CommandQueue::asyncWriteBuffer(Buffer& buffer,
@@ -136,6 +155,38 @@ namespace clw
             return Event(event);
         }
         return Event(event);
+    }
+
+    Event CommandQueue::asyncWriteBuffer(Buffer& buffer,
+                                         const void* data,
+                                         const EventList& after)
+    {
+        return asyncWriteBuffer(buffer, data, 0, buffer.size(), after);
+    }
+
+    Event CommandQueue::asyncCopyBuffer(const Buffer& src,
+                                        const Buffer& dst,
+                                        size_t srcOffset,
+                                        size_t dstOffset,
+                                        size_t size,
+                                        const EventList& after)
+    {
+        cl_int error;
+        cl_event event;
+        if((error = clEnqueueCopyBuffer(_id, src.memoryId(), dst.memoryId(), 
+                srcOffset, dstOffset, size, cl_uint(after.size()), 
+                after, &event)) != CL_SUCCESS)
+        {
+            detail::reportError("CommandQueue::asyncCopyBuffer() ", error);
+            return Event();
+        }
+        return Event(event);
+    }
+    Event CommandQueue::asyncCopyBuffer(const Buffer& src,
+                                        const Buffer& dst,
+                                        const EventList& after)
+    {
+        return asyncCopyBuffer(src, dst, 0, 0, src.size(), after);
     }
 
     bool CommandQueue::writeBufferRect(Buffer& buffer,
@@ -177,6 +228,14 @@ namespace clw
         return true;
     }
 
+    bool CommandQueue::readImage2D(const Image2D& image,
+                                   void* data,
+                                   int bytesPerLine)
+    {
+        return readImage2D(image, data, 0, 0,
+            image.width(), image.height(), bytesPerLine);
+    }
+
     Event CommandQueue::asyncReadImage2D(const Image2D& image,
                                          void* data,
                                          int x,
@@ -200,6 +259,15 @@ namespace clw
         return Event(event);
     }
 
+    Event CommandQueue::asyncReadImage2D(const Image2D& image,
+                                         void* data,
+                                         int bytesPerLine,
+                                         const EventList& after)
+    {
+        return asyncReadImage2D(image, data, 0, 0,
+            image.width(), image.height(), bytesPerLine, after);
+    }
+
     bool CommandQueue::writeImage2D(Image2D& image,
                                     const void* data,
                                     int x, 
@@ -219,6 +287,14 @@ namespace clw
             return false;
         }
         return true;
+    }
+
+    bool CommandQueue::writeImage2D(Image2D& image,
+                                    const void* data,
+                                    int bytesPerLine)
+    {
+        return writeImage2D(image, data, 0, 0, 
+            image.width(), image.height(), bytesPerLine);
     }
 
     Event CommandQueue::asyncWriteImage2D(Image2D& image,
@@ -242,6 +318,79 @@ namespace clw
             return Event(event);
         }
         return Event(event);
+    }
+
+    Event CommandQueue::asyncWriteImage2D(Image2D& image,
+                                          const void* data,
+                                          int bytesPerLine,
+                                          const EventList& after)
+    {
+        return asyncWriteImage2D(image, data, 0, 0, 
+            image.width(), image.height(), bytesPerLine, after);
+    }
+
+    Event CommandQueue::asyncCopyImage(const Image2D& src,
+                                       Image2D& dst,
+                                       int srcX,
+                                       int srcY,
+                                       int width,
+                                       int height,
+                                       int dstX,
+                                       int dstY,
+                                       const EventList& after)
+    {
+        cl_int error;
+        cl_event event;
+        size_t src_origin[3] = { size_t(srcX), size_t(srcY), 0 };
+        size_t dst_origin[3] = { size_t(dstX), size_t(dstY), 0 };
+        size_t region[3] = { size_t(width), size_t(height), 1 };
+        if((error = clEnqueueCopyImage(_id, src.memoryId(), dst.memoryId(),
+                src_origin, dst_origin, region,
+                cl_uint(after.size()), after, &event)) != CL_SUCCESS)
+        {
+            detail::reportError("CommandQueue::asyncCopyImage() ", error);
+            return Event();
+        }
+        return Event(event);
+    }
+
+    Event CommandQueue::asyncCopyImage(const Image2D& src,
+                                       Image2D& dst,
+                                       const EventList& after)
+    {
+        return asyncCopyImage(src, dst, 0, 0,
+            src.width(), src.height(), 0, 0, after);
+    }
+
+    Event CommandQueue::asyncCopyImageToBuffer(const clw::Image2D& image,
+                                               Buffer& buffer, 
+                                               int x, 
+                                               int y,
+                                               int width,
+                                               int height, 
+                                               int offset,
+                                               const EventList& after)
+    {
+        cl_int error;
+        size_t origin[3] = { size_t(x), size_t(y), 0 };
+        size_t region[3] = { size_t(width), size_t(height), 1 };
+        cl_event event;
+        if((error = clEnqueueCopyImageToBuffer(_id, image.memoryId(),
+                buffer.memoryId(), origin, region, offset,
+                cl_uint(after.size()), after, &event)) != CL_SUCCESS)
+        {
+            detail::reportError("CommandQueue::asyncCopyImageToBuffer() ", error);
+            return Event();
+        }
+        return Event(event);
+    }
+
+    Event CommandQueue::asyncCopyImageToBuffer(const clw::Image2D& image,
+                                               Buffer& buffer,
+                                               const EventList& after)
+    {
+        return asyncCopyImageToBuffer(image, buffer, 0, 0,
+            image.width(), image.height(), 0, after);
     }
 
     void* CommandQueue::mapBuffer(Buffer& buffer, 
@@ -280,6 +429,14 @@ namespace clw
         return Event(event);
     }
 
+    Event CommandQueue::asyncMapBuffer(Buffer& buffer, 
+                                       void** data,
+                                       EMapAccess access, 
+                                       const EventList& after)
+    {
+        return asyncMapBuffer(buffer, data, 0, buffer.size(), access, after);
+    }
+
     void* CommandQueue::mapImage2D(Image2D& image,
                                    int x, 
                                    int y,
@@ -296,6 +453,12 @@ namespace clw
             0, nullptr, nullptr, &error);
         detail::reportError("CommandQueue::mapImage2D() ", error);
         return data;
+    }
+
+    void* CommandQueue::mapImage2D(Image2D& image,
+                                   EMapAccess access)
+    {
+        return mapImage2D(image, 0, 0, image.width(), image.height(), access);
     }
 
     Event CommandQueue::asyncMapImage2D(Image2D& image,
@@ -321,6 +484,15 @@ namespace clw
             return Event();
         }
         return Event(event);
+    }
+
+    Event CommandQueue::asyncMapImage2D(Image2D& image,
+                                        void** data,
+                                        EMapAccess access,
+                                        const EventList& after)
+    {
+        return asyncMapImage2D(image, data, 0, 0,
+            image.width(), image.height(), access, after);
     }
 
     bool CommandQueue::unmap(MemoryObject& obj, void* ptr)
