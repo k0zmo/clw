@@ -116,6 +116,7 @@ namespace clw
         cl_program pid = detail::kernelInfo<cl_program>(_id, CL_KERNEL_PROGRAM);
         if(!pid)
             return Program();
+        clRetainProgram(pid);
         return Program(_ctx, pid);
     }
 
