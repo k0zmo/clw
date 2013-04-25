@@ -36,8 +36,8 @@ namespace clw
         Type_Unnormalized_Int8         = 0x10D7,
         Type_Unnormalized_Int16        = 0x10D8,
         Type_Unnormalized_Int32        = 0x10D9,
-        Type_Unnormalized_Uint8        = 0x10DA,
-        Type_Unnormalized_Uint16       = 0x10DB,
+        Type_Unnormalized_UInt8        = 0x10DA,
+        Type_Unnormalized_UInt16       = 0x10DB,
         Type_Unnormalized_UInt32       = 0x10DC,
         Type_HalfFloat                 = 0x10DD,
         Type_Float                     = 0x10DE
@@ -120,8 +120,8 @@ namespace clw
         CASE(Type_Unnormalized_Int8);
         CASE(Type_Unnormalized_Int16);
         CASE(Type_Unnormalized_Int32);
-        CASE(Type_Unnormalized_Uint8);
-        CASE(Type_Unnormalized_Uint16);
+        CASE(Type_Unnormalized_UInt8);
+        CASE(Type_Unnormalized_UInt16);
         CASE(Type_Unnormalized_UInt32);
         CASE(Type_HalfFloat);
         CASE(Type_Float);
