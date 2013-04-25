@@ -82,7 +82,7 @@ namespace clw
             CASE(CL_INVALID_MIP_LEVEL);
             CASE(CL_INVALID_GLOBAL_WORK_SIZE);
             CASE(CL_INVALID_PROPERTY);
-#ifdef HAVE_OPENCL_1_2
+#if defined(HAVE_OPENCL_1_2)
             CASE(CL_COMPILE_PROGRAM_FAILURE);
             CASE(CL_LINKER_NOT_AVAILABLE);
             CASE(CL_LINK_PROGRAM_FAILURE);
@@ -343,9 +343,27 @@ namespace clw
         if(data && location != Location_UseHostMemory)
             mem_flags |= CL_MEM_COPY_HOST_PTR;
         mem_flags |= cl_mem_flags(location);
+#if defined(HAVE_OPENCL_1_2)
+        cl_image_desc desc;
+        desc.image_type = CL_MEM_OBJECT_IMAGE2D;
+        desc.image_width = width;
+        desc.image_height = height;
+        desc.image_depth = 0;
+        desc.image_array_size = 1;
+        desc.image_row_pitch = 0;
+        desc.image_slice_pitch = 0;
+        desc.num_mip_levels = 0;
+        desc.num_samples = 0;
+        desc.buffer = nullptr;
+        cl_mem iid = clCreateImage
+            (_id, mem_flags, &image_format,
+             &image_desc, const_cast<void*>(data), &_eid);
+#else
+
         cl_mem iid = clCreateImage2D
             (_id, mem_flags, &image_format, 
              width, height, 0, const_cast<void*>(data), &_eid);
+#endif
         detail::reportError("Context::createImage2D(): ", _eid);
         return iid ? Image2D(this, iid) : Image2D();
     }
