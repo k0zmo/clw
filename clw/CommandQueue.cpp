@@ -197,11 +197,31 @@ namespace clw
                                        size_t bufferBytesPerLine)
     {
         cl_int error;
+        size_t host_origin[] = {0,0,0};
         if((error = clEnqueueWriteBufferRect(_id, buffer.memoryId(), 
-                CL_TRUE, origin, 0, size, bufferBytesPerLine, 0, 
+                CL_TRUE, origin, host_origin, size, bufferBytesPerLine, 0, 
                 bytesPerLine, 0, data, 0, nullptr, nullptr)) != CL_SUCCESS)
         {
             detail::reportError("CommandQueue::writeBufferRect() ", error);
+            return false;
+        }
+        return true;
+    }
+
+    bool CommandQueue::readBufferRect(const Buffer& buffer,
+                                      void* data,
+                                      const size_t origin[3],
+                                      const size_t size[3],
+                                      size_t bytesPerLine,
+                                      size_t bufferBytesPerLine)
+    {
+        cl_int error;
+        size_t host_origin[] = {0,0,0};
+        if((error = clEnqueueReadBufferRect(_id, buffer.memoryId(), 
+            CL_TRUE, origin, host_origin, size, bufferBytesPerLine, 0, 
+            bytesPerLine, 0, data, 0, nullptr, nullptr)) != CL_SUCCESS)
+        {
+            detail::reportError("CommandQueue::readBufferRect() ", error);
             return false;
         }
         return true;
