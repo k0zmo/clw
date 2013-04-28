@@ -413,6 +413,37 @@ namespace clw
             image.width(), image.height(), 0, after);
     }
 
+    Event CommandQueue::asyncCopyBufferToImage(const clw::Buffer& buffer,
+                                               Image2D& image, 
+                                               int x,
+                                               int y,
+                                               int width,
+                                               int height,
+                                               int offset,
+                                               const EventList& after)
+    {
+        cl_int error;
+        size_t origin[3] = { size_t(x), size_t(y), 0 };
+        size_t region[3] = { size_t(width), size_t(height), 1 };
+        cl_event event;
+        if((error = clEnqueueCopyBufferToImage(_id, buffer.memoryId(),
+            image.memoryId(), offset, origin, region, 
+            cl_uint(after.size()), after, &event)) != CL_SUCCESS)
+        {
+            detail::reportError("CommandQueue::asyncCopyBufferToImage() ", error);
+            return Event();
+        }
+        return Event(event);
+    }
+
+    Event CommandQueue::asyncCopyBufferToImage(const clw::Buffer& buffer,
+                                               Image2D& image,
+                                               const EventList& after)
+    {
+        return asyncCopyBufferToImage(buffer, image, 0, 0, 
+            image.width(), image.height(), 0, after);
+    }
+
     void* CommandQueue::mapBuffer(Buffer& buffer, 
                                   size_t offset, 
                                   size_t size,
