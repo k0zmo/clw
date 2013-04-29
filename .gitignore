@@ -1,8 +1,10 @@
 *.exe
 lib
+lib64
 obj
 proj
 bin
+bin64
 *Makefile
 *.sln
 *.sdf
