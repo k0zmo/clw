@@ -2,7 +2,8 @@
 
 #include "Prerequisites.h"
 #include "Event.h"
-#include "MemoryObject.h"
+#include "Image.h"
+#include "Buffer.h"
 
 namespace clw
 {
@@ -79,8 +80,8 @@ namespace clw
         //       and isn't worth a boilerplate code needed to implement it
 
         Event asyncCopyBuffer(const Buffer& src,
-                              const Buffer& dst,
                               size_t srcOffset,
+                              const Buffer& dst,
                               size_t dstOffset,
                               size_t size,
                               const EventList& after = EventList());
@@ -88,35 +89,50 @@ namespace clw
                               const Buffer& dst,
                               const EventList& after = EventList());
 
-        //bool readBufferRect();
-        //Event asyncReadBufferRect();
-
-        // TODO
         bool writeBufferRect(Buffer& buffer,
                              const void* data,
-                             const size_t origin[3],
-                             const size_t size[3],
+                             const Rect& rect,
                              size_t bytesPerLine,
-                             size_t bufferBytesPerLine);
+                             size_t bufferBytesPerLine,
+                             size_t bytesPerSlice = 0,
+                             size_t bufferBytesPerSlice = 0);
         bool readBufferRect(const Buffer& buffer,
                             void* data,
-                            const size_t origin[3],
-                            const size_t size[3],
+                            const Rect& rect,
                             size_t bytesPerLine,
-                            size_t bufferBytesPerLine);
-        //Event asyncWriteBufferRect();
+                            size_t bufferBytesPerLine,
+                            size_t bytesPerSlice = 0,
+                            size_t bufferBytesPerSlice = 0);
 
-        //Event asyncCopyBufferRect();
-
-        // !TODO OpenCL 1.2
-        // clEnqueueFillBuffer
+        Event asyncWriteBufferRect(Buffer& buffer,
+                                   const void* data,
+                                   const Rect& rect,
+                                   size_t bytesPerLine,
+                                   size_t bufferBytesPerLine,
+                                   size_t bytesPerSlice = 0,
+                                   size_t bufferBytesPerSlice = 0,
+                                   const EventList& after = EventList());
+        Event asyncReadBufferRect(const Buffer& buffer,
+                                  void* data,
+                                  const Rect& rect,
+                                  size_t bytesPerLine,
+                                  size_t bufferBytesPerLine,
+                                  size_t bytesPerSlice = 0,
+                                  size_t bufferBytesPerSlice = 0,
+                                  const EventList& after = EventList());
+        Event asyncCopyBufferRect(const Buffer& src,
+                                  const Rect& rect,
+                                  Buffer& dst,
+                                  const Point& dstOrigin,
+                                  size_t srcBytesPerLine,
+                                  size_t dstBytesPerLine,
+                                  size_t srcBytesPerSlice = 0,
+                                  size_t dstBytesPerSlice = 0,
+                                  const EventList& after = EventList());
 
         bool readImage2D(const Image2D& image,
                          void* data,
-                         int x,
-                         int y,
-                         int width,
-                         int height,
+                         const Rect& rect,
                          int bytesPerLine = 0);
         bool readImage2D(const Image2D& image,
                          void* data,
@@ -124,10 +140,7 @@ namespace clw
 
         Event asyncReadImage2D(const Image2D& image,
                                void* data,
-                               int x,
-                               int y,
-                               int width,
-                               int height,
+                               const Rect& rect,
                                int bytesPerLine = 0,
                                const EventList& after = EventList());
         Event asyncReadImage2D(const Image2D& image,
@@ -137,10 +150,7 @@ namespace clw
 
         bool writeImage2D(Image2D& image,
                           const void* data,
-                          int x, 
-                          int y,
-                          int width, 
-                          int height,
+                          const Rect& rect,
                           int bytesPerLine = 0);
         bool writeImage2D(Image2D& image,
                           const void* data,
@@ -148,10 +158,7 @@ namespace clw
 
         Event asyncWriteImage2D(Image2D& image,
                                 const void* data,
-                                int x,
-                                int y,
-                                int width,
-                                int height,
+                                const Rect& rect,
                                 int bytesPerLine = 0,
                                 const EventList& after = EventList());
         Event asyncWriteImage2D(Image2D& image,
@@ -160,40 +167,27 @@ namespace clw
                                 const EventList& after = EventList());
 
         Event asyncCopyImage(const Image2D& src,
+                             const Rect& srcRect,
                              Image2D& dst,
-                             int srcX,
-                             int srcY,
-                             int width,
-                             int height,
-                             int dstX,
-                             int dstY,
+                             const Point& dstOrigin,
                              const EventList& after = EventList());
         Event asyncCopyImage(const Image2D& src,
                              Image2D& dst,
                              const EventList& after = EventList());
-
-        // !TODO OpenCL 1.2
-        // clEnqueueFillImage
 
         Event asyncCopyImageToBuffer(const clw::Image2D& image,
+                                     const Rect& rect, 
                                      Buffer& buffer, 
-                                     int x, 
-                                     int y,
-                                     int width,
-                                     int height, 
-                                     int offset = 0,
+                                     size_t offset = 0,
                                      const EventList& after = EventList());
         Event asyncCopyImageToBuffer(const clw::Image2D& image,
                                      Buffer& buffer,
                                      const EventList& after = EventList());
 
         Event asyncCopyBufferToImage(const clw::Buffer& buffer,
+                                     size_t offset,
                                      Image2D& image, 
-                                     int x,
-                                     int y,
-                                     int width,
-                                     int height,
-                                     int offset = 0,
+                                     const Rect& rect,
                                      const EventList& after = EventList());
         Event asyncCopyBufferToImage(const clw::Buffer& buffer,
                                      Image2D& image,
@@ -217,20 +211,14 @@ namespace clw
                              const EventList& after = EventList());
 
         void* mapImage2D(Image2D& image,
-                         int x, 
-                         int y,
-                         int width,
-                         int height,
+                         const Rect& rect,
                          EMapAccess access);
         void* mapImage2D(Image2D& image,
                          EMapAccess access);
 
         Event asyncMapImage2D(Image2D& image,
                               void** data,
-                              int x, 
-                              int y,
-                              int width,
-                              int height,
+                              const Rect& rect,
                               EMapAccess access,
                               const EventList& after = EventList());
         Event asyncMapImage2D(Image2D& image,
@@ -244,13 +232,17 @@ namespace clw
                          void* ptr,
                          const EventList& after = EventList());
 
-        bool runKernel(const Kernel& kernel);
-        Event asyncRunKernel(
-            const Kernel& kernel,
-            const EventList& after = EventList());
+        // !TODO OpenCL 1.2
+        // clEnqueueFillBuffer
+        // clEnqueueFillImage
 
-        //bool runTask();
-        //Event asyncRunTask();
+        bool runKernel(const Kernel& kernel);
+        Event asyncRunKernel(const Kernel& kernel,
+                             const EventList& after = EventList());
+
+        bool runTask(const Kernel& kernel);
+        Event asyncRunTask(const Kernel& kernel,
+                           const EventList& after = EventList());
 
         //bool runNativeKernel();
         //Event asyncRunNativeKernel();
@@ -266,4 +258,118 @@ namespace clw
         Context* _ctx;
         cl_command_queue _id;		
     };
+
+    inline bool CommandQueue::readBuffer(const Buffer& buffer,
+                                         void* data)
+    {
+        return readBuffer(buffer, data, 0, buffer.size());
+    }
+
+    inline Event CommandQueue::asyncReadBuffer(const Buffer& buffer,
+                                               void* data,
+                                               const EventList& after)
+    {
+        return asyncReadBuffer(buffer, data, 0, buffer.size(), after);
+    }
+
+    inline bool CommandQueue::writeBuffer(Buffer& buffer,
+                                          const void* data)
+    {
+        return writeBuffer(buffer, data, 0, buffer.size());
+    }
+
+    inline Event CommandQueue::asyncWriteBuffer(Buffer& buffer,
+                                                const void* data,
+                                                const EventList& after)
+    {
+        return asyncWriteBuffer(buffer, data, 0, buffer.size(), after);
+    }
+
+    inline Event CommandQueue::asyncCopyBuffer(const Buffer& src,
+                                               const Buffer& dst,
+                                               const EventList& after)
+    {
+        return asyncCopyBuffer(src, 0, dst, 0, src.size(), after);
+    }
+
+    inline bool CommandQueue::readImage2D(const Image2D& image,
+                                          void* data,
+                                          int bytesPerLine)
+    {
+        return readImage2D(image, data, 
+            Rect(0, 0, image.width(), image.height()),
+            bytesPerLine);
+    }
+
+    inline Event CommandQueue::asyncReadImage2D(const Image2D& image,
+                                                void* data,
+                                                int bytesPerLine,
+                                                const EventList& after)
+    {
+        return asyncReadImage2D(image, data, 
+            Rect(0, 0, image.width(), image.height()),
+            bytesPerLine, after);
+    }
+
+    inline bool CommandQueue::writeImage2D(Image2D& image,
+                                           const void* data,
+                                           int bytesPerLine)
+    {
+        return writeImage2D(image, data,
+            Rect(0, 0, image.width(), image.height()), 
+            bytesPerLine);
+    }
+
+    inline Event CommandQueue::asyncWriteImage2D(Image2D& image,
+                                                 const void* data,
+                                                 int bytesPerLine,
+                                                 const EventList& after)
+    {
+        return asyncWriteImage2D(image, data,
+            Rect(0, 0, image.width(), image.height()), 
+            bytesPerLine, after);
+    }
+
+    inline Event CommandQueue::asyncCopyImage(const Image2D& src,
+                                              Image2D& dst,
+                                              const EventList& after)
+    {
+        return asyncCopyImage(src,
+            Rect(0, 0, src.width(), src.height()),
+            dst, Point(0, 0), after);
+    }
+
+    inline Event CommandQueue::asyncCopyImageToBuffer(const clw::Image2D& image,
+                                                      Buffer& buffer,
+                                                      const EventList& after)
+    {
+        return asyncCopyImageToBuffer(image,
+            Rect(0, 0, image.width(), image.height()), 
+            buffer, 0, after);
+    }
+
+    inline Event CommandQueue::asyncCopyBufferToImage(const clw::Buffer& buffer,
+                                                      Image2D& image,
+                                                      const EventList& after)
+    {
+        return asyncCopyBufferToImage(buffer, 0, 
+            image, Rect(0, 0, image.width(), image.height()),
+            after);
+    }
+
+    inline void* CommandQueue::mapImage2D(Image2D& image, EMapAccess access)
+    {
+        return mapImage2D(image, Rect(0, 0, image.width(), image.height()), access);
+    }
+
+    inline Event CommandQueue::asyncMapImage2D(Image2D& image,
+                                               void** data,
+                                               EMapAccess access,
+                                               const EventList& after)
+    {
+        return asyncMapImage2D(image, data,
+            Rect(0, 0, image.width(), image.height()), 
+            access, after);
+    }
+
 }
