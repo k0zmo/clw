@@ -156,3 +156,6 @@ solution "clw"
 			configuration "x64"
 				libdirs { _OPTIONS["cllib64dir"] }       
         configureProject()
+		
+		configuration "linux"
+			linkoptions "-Wl,--rpath=."
