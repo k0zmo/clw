@@ -17,6 +17,7 @@ namespace clw
     {
         MapAccess_Read                      = 1 << 0,
         MapAccess_Write                     = 1 << 1,
+        MapAccess_ReadWrite                 = (1 << 1) | (1 << 0),
 #if defined(HAVE_OPENCL_1_2)
         MapAccess_InvalidateRegion          = 1 << 2
 #endif
