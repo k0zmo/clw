@@ -22,13 +22,14 @@ namespace clw
     }
 
     Image2D::Image2D(const Image2D& other)
-        : MemoryObject()
+        : MemoryObject(), fmt(other.format())
     {
         setMemoryId(other._ctx, other._id);
     }
 
     Image2D& Image2D::operator=(const Image2D& other)
     {
+        fmt = other.format();
         setMemoryId(other._ctx, other._id);
         return *this;
     }
@@ -66,13 +67,14 @@ namespace clw
     }
 
     Image3D::Image3D(const Image3D& other)
-        : MemoryObject()
+        : MemoryObject(), fmt(other.format())
     {
         setMemoryId(other._ctx, other._id);
     }
 
     Image3D& Image3D::operator=(const Image3D& other)
     {
+        fmt = other.format();
         setMemoryId(other._ctx, other._id);
         return *this;
     }
