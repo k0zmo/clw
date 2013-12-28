@@ -6,11 +6,11 @@ namespace clw
     namespace detail
     {
         template<typename Value>
-        Value bufferInfo(cl_mem _id, cl_mem_info info)
+        Value bufferInfo(cl_mem id, cl_mem_info info)
         {
             Value value;
             cl_int error;
-            if((error = clGetMemObjectInfo(_id, info, sizeof(Value), 
+            if((error = clGetMemObjectInfo(id, info, sizeof(Value), 
                 &value, nullptr)) != CL_SUCCESS)
             {
                 reportError("memObjectInfo(): ", error);
