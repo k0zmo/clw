@@ -2,6 +2,7 @@
 #include "Program.h"
 #include "CommandQueue.h"
 #include "Device.h"
+#include "details.h"
 
 namespace clw
 {

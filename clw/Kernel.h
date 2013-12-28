@@ -2,13 +2,13 @@
 
 #include "Prerequisites.h"
 #include "Grid.h"
-
-#include "Buffer.h"
-#include "Image.h"
-#include "Sampler.h"
-#include "Event.h"
 #include "Device.h"
-#include "details.h"
+
+#if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
+#  include "Event.h"
+#endif
+
+#include "KernelTypesTraits.h"
 
 namespace clw
 {
@@ -36,6 +36,19 @@ namespace clw
         TypeQ_Const    = (1 << 0),
         TypeQ_Restrict = (1 << 1),
         TypeQ_Volatile = (1 << 2)		
+    };
+
+    // Thin wrapper for dynamically setting local memory size as kernel argument 
+    class LocalMemorySize
+    {
+    public:
+        LocalMemorySize(size_t size)
+            : _size(size)
+        {}
+
+        operator size_t() const { return _size; }
+    private:
+        size_t _size;
     };
 
     class CLW_EXPORT Kernel
@@ -104,7 +117,19 @@ namespace clw
         void setGlobalWorkOffset(size_t width, size_t height);
         void setGlobalWorkOffset(size_t width, size_t height, size_t depth);
 
-        template<typename Value> void setArg(unsigned index, const Value& value);
+        template <typename T> 
+        typename std::enable_if<is_kernel_custom_arg<T>::value>::type
+        setArg(unsigned index, const T& value);
+
+        template <typename T>
+        typename std::enable_if<is_kernel_memory_object<T>::value>::type
+        setArg(unsigned index, const T& memObject);
+
+        template <typename T> 
+        typename std::enable_if<is_kernel_value_type<T>::value>::type
+        setArg(unsigned index, T value);
+
+        void setArg(unsigned index, const LocalMemorySize& localMemorySize);
         void setArg(unsigned index, const void* data, size_t size);
 
         clw::Event operator()(CommandQueue& queue);
@@ -132,49 +157,29 @@ namespace clw
 #endif
     };
 
-    // Thin wrapper for dynamically setting local memory size as kernel argument 
-    class CLW_EXPORT LocalMemorySize
+    template <typename T> 
+    typename std::enable_if<is_kernel_value_type<T>::value>::type
+    Kernel::setArg(unsigned index, T value)
     {
-    public:
-        LocalMemorySize(size_t size)
-            : _size(size)
-        {}
-
-        operator size_t() const { return _size; }
-    private:
-        size_t _size;
-    };
-
-    template<typename Value> inline void Kernel::setArg(unsigned index, const Value& value)
-    {
-        setArg(index, &value, sizeof(Value));
+        setArg(index, &value, sizeof(T));
     }
 
-    template<> inline void Kernel::setArg<Buffer>(unsigned index, const Buffer& buffer)
+    template <typename T>
+    typename std::enable_if<is_kernel_memory_object<T>::value>::type
+    Kernel::setArg(unsigned index, const T& memObject)
     {
-        cl_mem mem = buffer.memoryId();
+        cl_mem mem = memObject.memoryId();
         setArg(index, &mem, sizeof(cl_mem));
     }
 
-    template<> inline void Kernel::setArg<Image2D>(unsigned index, const Image2D& image2d)
+    template <typename T> 
+    typename std::enable_if<is_kernel_custom_arg<T>::value>::type
+    Kernel::setArg(unsigned index, const T& value)
     {
-        cl_mem mem = image2d.memoryId();
-        setArg(index, &mem, sizeof(cl_mem));
+        setArg(index, &value, sizeof(T));
     }
 
-    template<> inline void Kernel::setArg<Image3D>(unsigned index, const Image3D& image3d)
-    {
-        cl_mem mem = image3d.memoryId();
-        setArg(index, &mem, sizeof(cl_mem));
-    }
-
-    template<> inline void Kernel::setArg<Sampler>(unsigned index, const Sampler& sampler)
-    {
-        cl_sampler samplerId = sampler.samplerId();
-        setArg(index, &samplerId, sizeof(cl_sampler));
-    }
-
-    template<> inline void Kernel::setArg<LocalMemorySize>(unsigned index, const LocalMemorySize& localMemorySize)
+    inline void Kernel::setArg(unsigned index, const LocalMemorySize& localMemorySize)
     {
         setArg(index, nullptr, localMemorySize);
     }
