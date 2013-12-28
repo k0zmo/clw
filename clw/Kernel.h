@@ -140,16 +140,16 @@ namespace clw
         void setGlobalWorkOffset(size_t width, size_t height, size_t depth);
 
         template <typename T> 
-        typename std::enable_if<is_kernel_custom_arg<T>::value>::type
-        setArg(unsigned index, const T& value);
+        typename std::enable_if<detail::is_kernel_value_type<T>::value>::type
+        setArg(unsigned index, T value);
 
         template <typename T>
-        typename std::enable_if<is_kernel_memory_object<T>::value>::type
+        typename std::enable_if<detail::is_kernel_memory_object<T>::value>::type
         setArg(unsigned index, const T& memObject);
 
         template <typename T> 
-        typename std::enable_if<is_kernel_value_type<T>::value>::type
-        setArg(unsigned index, T value);
+        typename std::enable_if<detail::is_kernel_custom_arg<T>::value>::type
+        setArg(unsigned index, const T& value);
 
         void setArg(unsigned index, const LocalMemorySize& localMemorySize);
         void setArg(unsigned index, const void* data, size_t size);
@@ -180,14 +180,14 @@ namespace clw
     };
 
     template <typename T> 
-    typename std::enable_if<is_kernel_value_type<T>::value>::type
+    typename std::enable_if<detail::is_kernel_value_type<T>::value>::type
     Kernel::setArg(unsigned index, T value)
     {
         setArg(index, &value, sizeof(T));
     }
 
     template <typename T>
-    typename std::enable_if<is_kernel_memory_object<T>::value>::type
+    typename std::enable_if<detail::is_kernel_memory_object<T>::value>::type
     Kernel::setArg(unsigned index, const T& memObject)
     {
         cl_mem mem = memObject.memoryId();
@@ -195,7 +195,7 @@ namespace clw
     }
 
     template <typename T> 
-    typename std::enable_if<is_kernel_custom_arg<T>::value>::type
+    typename std::enable_if<detail::is_kernel_custom_arg<T>::value>::type
     Kernel::setArg(unsigned index, const T& value)
     {
         setArg(index, &value, sizeof(T));
