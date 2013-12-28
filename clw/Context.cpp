@@ -312,7 +312,7 @@ namespace clw
         device = devices()[0];
         if(device.isNull())
             return false;
-        queue = createCommandQueue(device, 0);
+        queue = createCommandQueue(device, CommandQueueFlags());
         return !queue.isNull();
     }
 
@@ -327,11 +327,11 @@ namespace clw
     }
 
     CommandQueue Context::createCommandQueue(const Device& device,
-                                             cl_command_queue_properties properties)
+                                             CommandQueueFlags properties)
     {
         cl_command_queue cid = clCreateCommandQueue
             (_id, device.deviceId(),
-            properties, &_eid);
+            properties.raw(), &_eid);
         detail::reportError("Context::createCommandQueue(): ", _eid);
         return cid ? CommandQueue(this, cid) : CommandQueue();
     }
@@ -342,7 +342,7 @@ namespace clw
                                  const void* data)
     {
         cl_mem_flags mem_flags = cl_mem_flags(access);
-        if(data && location != Location_UseHostMemory)
+        if(data && location != EMemoryLocation::UseHostMemory)
             mem_flags |= CL_MEM_COPY_HOST_PTR;
         mem_flags |= cl_mem_flags(location);
         cl_mem bid = clCreateBuffer
@@ -362,7 +362,7 @@ namespace clw
         image_format.image_channel_order = cl_channel_order(format.order);
         image_format.image_channel_data_type = cl_channel_type(format.type);
         cl_mem_flags mem_flags = cl_mem_flags(access);
-        if(data && location != Location_UseHostMemory)
+        if(data && location != EMemoryLocation::UseHostMemory)
             mem_flags |= CL_MEM_COPY_HOST_PTR;
         mem_flags |= cl_mem_flags(location);
 #if defined(HAVE_OPENCL_1_2)
@@ -379,7 +379,7 @@ namespace clw
         desc.buffer = nullptr;
         cl_mem iid = clCreateImage
             (_id, mem_flags, &image_format,
-             &image_desc, const_cast<void*>(data), &_eid);
+             &desc, const_cast<void*>(data), &_eid);
 #else
 
         cl_mem iid = clCreateImage2D

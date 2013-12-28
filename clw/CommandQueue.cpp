@@ -415,16 +415,16 @@ namespace clw
     void* CommandQueue::mapBuffer(Buffer& buffer, 
                                   size_t offset, 
                                   size_t size,
-                                  EMapAccess access)
+                                  MapAccessFlags access)
     {
         cl_int error;
         void* data = clEnqueueMapBuffer(_id, buffer.memoryId(), CL_TRUE,
-            access, offset, size, 0, nullptr, nullptr, &error);
+            access.raw(), offset, size, 0, nullptr, nullptr, &error);
         detail::reportError("CommandQueue::mapBuffer() ", error);
         return data;
     }
 
-    void* CommandQueue::mapBuffer(Buffer& buffer, EMapAccess access)
+    void* CommandQueue::mapBuffer(Buffer& buffer, MapAccessFlags access)
     {
         return mapBuffer(buffer, 0, buffer.size(), access);
     }
@@ -433,13 +433,13 @@ namespace clw
                                        void** data,
                                        size_t offset, 
                                        size_t size, 
-                                       EMapAccess access, 
+                                       MapAccessFlags access, 
                                        const EventList& after)
     {
         cl_int error;
         cl_event event;
         *data = clEnqueueMapBuffer(_id, buffer.memoryId(), CL_FALSE,
-            access, offset, size, cl_uint(after.size()), after, &event, &error);
+            access.raw(), offset, size, cl_uint(after.size()), after, &event, &error);
         if(error != CL_SUCCESS)
         {
             detail::reportError("CommandQueue::asyncMapBuffer() ", error);
@@ -450,7 +450,7 @@ namespace clw
 
     Event CommandQueue::asyncMapBuffer(Buffer& buffer, 
                                        void** data,
-                                       EMapAccess access, 
+                                       MapAccessFlags access, 
                                        const EventList& after)
     {
         return asyncMapBuffer(buffer, data, 0, buffer.size(), access, after);
@@ -458,12 +458,12 @@ namespace clw
 
     void* CommandQueue::mapImage2D(Image2D& image,
                                    const Rect& rect,
-                                   EMapAccess access)
+                                   MapAccessFlags access)
     {
         cl_int error;
         size_t pitch;
         void* data = clEnqueueMapImage(_id, image.memoryId(), CL_TRUE,
-            access, rect.origin(), rect.region(), &pitch, nullptr,
+            access.raw(), rect.origin(), rect.region(), &pitch, nullptr,
             0, nullptr, nullptr, &error);
         detail::reportError("CommandQueue::mapImage2D() ", error);
         return data;
@@ -472,14 +472,14 @@ namespace clw
     Event CommandQueue::asyncMapImage2D(Image2D& image,
                                         void** data,
                                         const Rect& rect,
-                                        EMapAccess access,
+                                        MapAccessFlags access,
                                         const EventList& after)
     {
         cl_int error;
         cl_event event;
         size_t pitch;
         *data = clEnqueueMapImage(_id, image.memoryId(), CL_FALSE,
-            access, rect.origin(), rect.region(), &pitch, nullptr,
+            access.raw(), rect.origin(), rect.region(), &pitch, nullptr,
             cl_uint(after.size()), after, &event, &error);
         if(error != CL_SUCCESS)
         {

@@ -27,6 +27,7 @@
 #include "Device.h"
 #include "Sampler.h"
 #include "MemoryObject.h"
+#include "CommandQueue.h"
 
 namespace clw
 {
@@ -50,7 +51,7 @@ namespace clw
         void setLastError(cl_int error) { _eid = error; }
 
         CommandQueue createCommandQueue(const Device& device,
-                                        cl_command_queue_properties properties = 0);
+                                        CommandQueueFlags properties = CommandQueueFlags());
 
         Buffer createBuffer(EAccess access,
                             EMemoryLocation location,

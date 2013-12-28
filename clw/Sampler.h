@@ -26,19 +26,19 @@
 
 namespace clw
 {
-    enum EFilterMode
+    enum class EFilterMode
     {
-        Filter_Nearest = 0x1140,
-        Filter_Linear  = 0x1141
+        Nearest = 0x1140,
+        Linear  = 0x1141
     };
 
-    enum EAddressingMode
+    enum class EAddressingMode
     {
-        Addressing_None           = 0x1130,
-        Addressing_ClampToEdge    = 0x1131,
-        Addressing_Clamp          = 0x1132,
-        Addressing_Repeat         = 0x1133,
-        Addressing_MirroredRepeat = 0x1134
+        None           = 0x1130,
+        ClampToEdge    = 0x1131,
+        Clamp          = 0x1132,
+        Repeat         = 0x1133,
+        MirroredRepeat = 0x1134
     };
 
     class CLW_EXPORT Sampler

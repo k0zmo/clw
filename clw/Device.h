@@ -23,10 +23,11 @@
 #pragma once
 
 #include "Prerequisites.h"
+#include "EnumFlags.h"
 
 namespace clw
 {
-    enum EDeviceType
+    enum class EDeviceType : unsigned
     {
         Default       = (1 << 0),
         Cpu           = (1 << 1),
@@ -35,27 +36,29 @@ namespace clw
         Custom        = (1 << 4),
         All           =  0xFFFFFFFF
     };
+    typedef EnumFlags<EDeviceType> DeviceFlags;
 
-    enum ECacheType
+    enum class ECacheType
     {
-        Cache_NoChache        = 0,
-        Cache_ReadOnlyCache   = 1,
-        Cache_ReadWriteCache  = 2
+        NoChache        = 0,
+        ReadOnlyCache   = 1,
+        ReadWriteCache  = 2
     };
 
-    enum EFloatCapabilities
+    enum class EFloatCaps
     {
-        Capability_NotSupported               = 0,
-        Capability_Denorm                     = (1 << 0),
-        Capability_InfinityAndNaN             = (1 << 1),
-        Capability_RoundToNearest             = (1 << 2),
-        Capability_RoundToZero                = (1 << 3),
-        Capability_RoundToInf                 = (1 << 4),
-        Capability_FusedMultiplyAdd           = (1 << 5),
+        NotSupported               = 0,
+        Denorm                     = (1 << 0),
+        InfinityAndNaN             = (1 << 1),
+        RoundToNearest             = (1 << 2),
+        RoundToZero                = (1 << 3),
+        RoundToInf                 = (1 << 4),
+        FusedMultiplyAdd           = (1 << 5),
         // Supported in OpenCL 1.2+
-        Capability_SoftwareFloat              = (1 << 6),
-        Capability_CorrectlyRoundedDivideSqrt = (1 << 7)
+        SoftwareFloat              = (1 << 6),
+        CorrectlyRoundedDivideSqrt = (1 << 7)
     };
+    typedef EnumFlags<EFloatCaps> FloatCapsFlags;
 
     class CLW_EXPORT Device
     {
@@ -94,9 +97,9 @@ namespace clw
         int defaultAlignment() const;
         int minimumAlignment() const;
 
-        EFloatCapabilities floatCapabilities() const;
-        EFloatCapabilities doubleCapabilities() const;
-        EFloatCapabilities halfCapabilities() const;
+        FloatCapsFlags floatCapabilities() const;
+        FloatCapsFlags doubleCapabilities() const;
+        FloatCapsFlags halfCapabilities() const;
 
         uint64_t globalMemoryCacheSize() const;
         int globalMemoryCacheLineSize() const;
@@ -167,5 +170,5 @@ namespace clw
     };
 
     CLW_EXPORT vector<Device> allDevices();
-    CLW_EXPORT vector<Device> devices(EDeviceType deviceTypes, const Platform& platform);
+    CLW_EXPORT vector<Device> devices(DeviceFlags deviceTypes, const Platform& platform);
 }

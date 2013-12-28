@@ -29,40 +29,40 @@ namespace clw
 {
     // !TODO: Add new classes to reflect changes in OpenCL 1.2
 
-    enum EChannelOrder
+    enum class EChannelOrder
     {
-        Order_R           = 0x10B0,
-        Order_A           = 0x10B1,
-        Order_RG          = 0x10B2,
-        Order_RA          = 0x10B3,
-        Order_RGB         = 0x10B4,
-        Order_RGBA        = 0x10B5,
-        Order_BGRA        = 0x10B6,
-        Order_ARGB        = 0x10B7,
-        Order_Intensity   = 0x10B8,
-        Order_Luminance   = 0x10B9,
-        Order_Rx          = 0x10BA,
-        Order_RGx         = 0x10BB,
-        Order_RGBx        = 0x10BC
+        R           = 0x10B0,
+        A           = 0x10B1,
+        RG          = 0x10B2,
+        RA          = 0x10B3,
+        RGB         = 0x10B4,
+        RGBA        = 0x10B5,
+        BGRA        = 0x10B6,
+        ARGB        = 0x10B7,
+        Intensity   = 0x10B8,
+        Luminance   = 0x10B9,
+        Rx          = 0x10BA,
+        RGx         = 0x10BB,
+        RGBx        = 0x10BC
     };
 
-    enum EChannelType
+    enum class EChannelType
     {
-        Type_Normalized_Int8           = 0x10D0,
-        Type_Normalized_Int16          = 0x10D1,
-        Type_Normalized_UInt8          = 0x10D2,
-        Type_Normalized_UInt16         = 0x10D3,
-        Type_Normalized_565            = 0x10D4,
-        Type_Normalized_555            = 0x10D5,
-        Type_Normalized_101010         = 0x10D6,
-        Type_Unnormalized_Int8         = 0x10D7,
-        Type_Unnormalized_Int16        = 0x10D8,
-        Type_Unnormalized_Int32        = 0x10D9,
-        Type_Unnormalized_UInt8        = 0x10DA,
-        Type_Unnormalized_UInt16       = 0x10DB,
-        Type_Unnormalized_UInt32       = 0x10DC,
-        Type_HalfFloat                 = 0x10DD,
-        Type_Float                     = 0x10DE
+        Normalized_Int8           = 0x10D0,
+        Normalized_Int16          = 0x10D1,
+        Normalized_UInt8          = 0x10D2,
+        Normalized_UInt16         = 0x10D3,
+        Normalized_565            = 0x10D4,
+        Normalized_555            = 0x10D5,
+        Normalized_101010         = 0x10D6,
+        Unnormalized_Int8         = 0x10D7,
+        Unnormalized_Int16        = 0x10D8,
+        Unnormalized_Int32        = 0x10D9,
+        Unnormalized_UInt8        = 0x10DA,
+        Unnormalized_UInt16       = 0x10DB,
+        Unnormalized_UInt32       = 0x10DC,
+        HalfFloat                 = 0x10DD,
+        Float                     = 0x10DE
     };
 
     struct CLW_EXPORT ImageFormat
@@ -132,21 +132,21 @@ namespace clw
     {
         switch(type)
         {
-        CASE(Type_Normalized_Int8);
-        CASE(Type_Normalized_Int16);
-        CASE(Type_Normalized_UInt8);
-        CASE(Type_Normalized_UInt16);
-        CASE(Type_Normalized_565);
-        CASE(Type_Normalized_555);
-        CASE(Type_Normalized_101010);
-        CASE(Type_Unnormalized_Int8);
-        CASE(Type_Unnormalized_Int16);
-        CASE(Type_Unnormalized_Int32);
-        CASE(Type_Unnormalized_UInt8);
-        CASE(Type_Unnormalized_UInt16);
-        CASE(Type_Unnormalized_UInt32);
-        CASE(Type_HalfFloat);
-        CASE(Type_Float);
+        CASE(EChannelType::Normalized_Int8);
+        CASE(EChannelType::Normalized_Int16);
+        CASE(EChannelType::Normalized_UInt8);
+        CASE(EChannelType::Normalized_UInt16);
+        CASE(EChannelType::Normalized_565);
+        CASE(EChannelType::Normalized_555);
+        CASE(EChannelType::Normalized_101010);
+        CASE(EChannelType::Unnormalized_Int8);
+        CASE(EChannelType::Unnormalized_Int16);
+        CASE(EChannelType::Unnormalized_Int32);
+        CASE(EChannelType::Unnormalized_UInt8);
+        CASE(EChannelType::Unnormalized_UInt16);
+        CASE(EChannelType::Unnormalized_UInt32);
+        CASE(EChannelType::HalfFloat);
+        CASE(EChannelType::Float);
         default: return "Undefined";
         }
     }
@@ -155,19 +155,19 @@ namespace clw
     {
         switch(order)
         {
-        CASE(Order_R);
-        CASE(Order_A);
-        CASE(Order_RG);
-        CASE(Order_RA);
-        CASE(Order_RGB);
-        CASE(Order_RGBA);
-        CASE(Order_BGRA);
-        CASE(Order_ARGB);
-        CASE(Order_Intensity);
-        CASE(Order_Luminance);
-        CASE(Order_Rx);
-        CASE(Order_RGx);
-        CASE(Order_RGBx);
+        CASE(EChannelOrder::R);
+        CASE(EChannelOrder::A);
+        CASE(EChannelOrder::RG);
+        CASE(EChannelOrder::RA);
+        CASE(EChannelOrder::RGB);
+        CASE(EChannelOrder::RGBA);
+        CASE(EChannelOrder::BGRA);
+        CASE(EChannelOrder::ARGB);
+        CASE(EChannelOrder::Intensity);
+        CASE(EChannelOrder::Luminance);
+        CASE(EChannelOrder::Rx);
+        CASE(EChannelOrder::RGx);
+        CASE(EChannelOrder::RGBx);
         default: return "Undefined";
         }
     }

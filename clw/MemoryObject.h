@@ -26,31 +26,31 @@
 
 namespace clw
 {
-    enum EAccess
+    enum class EAccess
     {
-        Access_ReadWrite          = 0x01,
-        Access_WriteOnly          = 0x02,
-        Access_ReadOnly           = 0x04,
+        ReadWrite          = 0x01,
+        WriteOnly          = 0x02,
+        ReadOnly           = 0x04,
     };
 
-    enum EMemoryLocation
+    enum class EObjectType
     {
-        Location_Device             = 0x00,
-        Location_UseHostMemory      = 0x08,
-        Location_AllocHostMemory    = 0x10,
+        Buffer         = 0x10F0,
+        Image2D        = 0x10F1,
+        Image3D        = 0x10F2,
+        Image2DArray   = 0x10F3,
+        Image1D        = 0x10F4,
+        Image1DArray   = 0x10F5,
+        Image1DBuffer  = 0x10F6
+    };
+
+    enum class EMemoryLocation
+    {
+        Device             = 0x00,
+        UseHostMemory      = 0x08,
+        AllocHostMemory    = 0x10,
         // AMD Only - alloc from GPU's CPU visible heap
-        Location_UsePinnedMemory    = 0x40 
-    };
-
-    enum EObjectType
-    {
-        Object_Buffer         = 0x10F0,
-        Object_Image2D        = 0x10F1,
-        Object_Image3D        = 0x10F2,
-        Object_Image2DArray   = 0x10F3,
-        Object_Image1D        = 0x10F4,
-        Object_Image1DArray   = 0x10F5,
-        Object_Image1DBuffer  = 0x10F6
+        UsePinnedMemory    = 0x40 
     };
 
     class CLW_EXPORT MemoryObject

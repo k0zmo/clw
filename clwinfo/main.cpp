@@ -28,10 +28,10 @@ std::string deviceTypeName(clw::EDeviceType type)
 {
     switch(type)
     {
-    case clw::Cpu: return std::string("Cpu");
-    case clw::Gpu: return std::string("Gpu");
-    case clw::Accelerator: return std::string("Accelerator"); 
-    case clw::Custom: return std::string("Custom");
+    case clw::EDeviceType::Cpu: return std::string("Cpu");
+    case clw::EDeviceType::Gpu: return std::string("Gpu");
+    case clw::EDeviceType::Accelerator: return std::string("Accelerator"); 
+    case clw::EDeviceType::Custom: return std::string("Custom");
     default: return std::string("Undefined");
     }
 }
@@ -45,32 +45,32 @@ std::string cacheTypeName(clw::ECacheType type)
 {
     switch(type)
     {
-    case clw::Cache_NoChache: return "No chache";
-    case clw::Cache_ReadOnlyCache: return "Read-only cache";
-    case clw::Cache_ReadWriteCache: return "Read-write cache";
+    case clw::ECacheType::NoChache: return "No chache";
+    case clw::ECacheType::ReadOnlyCache: return "Read-only cache";
+    case clw::ECacheType::ReadWriteCache: return "Read-write cache";
     default: return std::string("Undefined");
     }
 }
 
-std::string floatCapabilitiesName(clw::EFloatCapabilities caps)
+std::string floatCapabilitiesName(clw::FloatCapsFlags caps)
 {
     std::string accum;
-    if(caps & clw::Capability_Denorm)
+    if(caps.testFlag(clw::EFloatCaps::Denorm))
         accum += "Denorm ";
-    if(caps & clw::Capability_InfinityAndNaN)
+    if(caps.testFlag(clw::EFloatCaps::InfinityAndNaN))
         accum += "InfinityAndNaN ";
-    if(caps & clw::Capability_RoundToNearest)
+    if(caps.testFlag(clw::EFloatCaps::RoundToNearest))
         accum += "RoundToNearest ";
-    if(caps & clw::Capability_RoundToZero)
+    if(caps.testFlag(clw::EFloatCaps::RoundToZero))
         accum += "RoundToZero ";
-    if(caps & clw::Capability_RoundToInf)
+    if(caps.testFlag(clw::EFloatCaps::RoundToInf))
         accum += "RoundToInf ";
-    if(caps & clw::Capability_FusedMultiplyAdd)
+    if(caps.testFlag(clw::EFloatCaps::FusedMultiplyAdd))
         accum += "FusedMultiplyAdd ";
-    if(caps & clw::Capability_CorrectlyRoundedDivideSqrt)
+    if(caps.testFlag(clw::EFloatCaps::CorrectlyRoundedDivideSqrt))
         accum += "CorrectlyRoundedDivideSqrt ";
-    if(caps & clw::Capability_SoftwareFloat)
-        accum += "SoftwareFloat ";
+    if(caps.testFlag(clw::EFloatCaps::SoftwareFloat))
+        accum += "SoftwareFloat";
 
     if(accum.empty())
         accum += "Not supported";
@@ -108,7 +108,7 @@ int main()
             std::cout << "        " << extension << std::endl;
         std::cout << "\n";
 
-        auto devices = clw::devices(clw::All, platform);
+        auto devices = clw::devices(clw::EDeviceType::All, platform);
         for(const clw::Device& device : devices)
         {
             std::cout << "OpenCL Device:                    (available: " << boolName(device.isAvailable()) << ")\n";
@@ -172,7 +172,7 @@ int main()
 
             // Radeons specific device attributes
             if(device.vendor() == std::string("Advanced Micro Devices, Inc.") &&
-               device.deviceType() == clw::Gpu)
+               device.deviceType() == clw::EDeviceType::Gpu)
             {
                 auto gmemFree = device.globalFreeMemory();
                 std::cout << "    AMD specific                : " << std::endl;
@@ -191,7 +191,7 @@ int main()
                 std::cout << "      LMEM memory banks         : " << device.localMemoryBanks() << std::endl;				
             }
             else if(device.vendor() == std::string("NVIDIA") &&
-                    device.deviceType() == clw::Gpu)
+                    device.deviceType() == clw::EDeviceType::Gpu)
             {
                 std::cout << "    NVIDIA specific             : " << std::endl;
                 std::cout << "      Compute Capability        : " << device.computeCapabilityMajor() << "." << device.computeCapabilityMinor() << std::endl;

@@ -211,7 +211,7 @@ namespace clw
             <cl_kernel_arg_address_qualifier>(_id, index, CL_KERNEL_ARG_ADDRESS_QUALIFIER));
 #else
         (void) index;
-        return AddressQ_Invalid;
+        return EKernelArgumentAddressQualifier::Invalid;
 #endif
     }
 
@@ -222,18 +222,20 @@ namespace clw
             <cl_kernel_arg_access_qualifier>(_id, index, CL_KERNEL_ARG_ACCESS_QUALIFIER));
 #else
         (void) index;
-        return AccessQ_Invalid;
+        return EKernelArgumentAccessQualifier::Invalid;
 #endif
     }
 
-    int Kernel::argumentTypeQualifier(int index) const
+    KernelArgumentTypeQualifierFlags Kernel::argumentTypeQualifier(int index) const
     {
 #if defined(HAVE_OPENCL_1_2)
-        return int(detail::kernelWorkArgInfo<cl_kernel_arg_type_qualifier>
-            (_id, index, CL_KERNEL_ARG_TYPE_QUALIFIER));
+        return KernelArgumentTypeQualifierFlags(
+            static_cast<KernelArgumentTypeQualifierFlags::enum_type>(
+                detail::kernelWorkArgInfo<cl_kernel_arg_type_qualifier>
+                    (_id, index, CL_KERNEL_ARG_TYPE_QUALIFIER)));
 #else
         (void) index;
-        return TypeQ_None;
+        return KernelArgumentTypeQualifierFlags(EKernelArgumentTypeQualifier::None);
 #endif
     }
 

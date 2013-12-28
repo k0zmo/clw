@@ -26,44 +26,44 @@
 
 namespace clw
 {
-    enum EEventStatus
+    enum class EEventStatus
     {
-        Status_Errored    = -1,
-        Status_Complete   =  0,
-        Status_Running    =  1,
-        Status_Submitted  =  2,
-        Status_Queued     =  3
+        Errored    = -1,
+        Complete   =  0,
+        Running    =  1,
+        Submitted  =  2,
+        Queued     =  3
     };
 
-    enum ECommandType
+    enum class ECommandType
     {
-        Command_NDRangeKernel         = 0x11F0,
-        Command_Task                  = 0x11F1,
-        Command_NativeKernel          = 0x11F2,
-        Command_ReadBuffer            = 0x11F3,
-        Command_WriteBuffer           = 0x11F4,
-        Command_CopyBuffer            = 0x11F5,
-        Command_ReadImage             = 0x11F6,
-        Command_WriteImage            = 0x11F7,
-        Command_CopyImage             = 0x11F8,
-        Command_CopyBufferToImage     = 0x11F9,
-        Command_CopyImageToBuffer     = 0x11FA,
-        Command_MapBuffer             = 0x11FB,
-        Command_MapImage              = 0x11FC,
-        Command_UnmapMemObject        = 0x11FD,
-        Command_Marker                = 0x11FE,
-        Command_AcquireGLObjects      = 0x11FF,
-        Command_ReleaseGLObjects      = 0x1200,
+        NDRangeKernel         = 0x11F0,
+        Task                  = 0x11F1,
+        NativeKernel          = 0x11F2,
+        ReadBuffer            = 0x11F3,
+        WriteBuffer           = 0x11F4,
+        CopyBuffer            = 0x11F5,
+        ReadImage             = 0x11F6,
+        WriteImage            = 0x11F7,
+        CopyImage             = 0x11F8,
+        CopyBufferToImage     = 0x11F9,
+        CopyImageToBuffer     = 0x11FA,
+        MapBuffer             = 0x11FB,
+        MapImage              = 0x11FC,
+        UnmapMemObject        = 0x11FD,
+        Marker                = 0x11FE,
+        AcquireGLObjects      = 0x11FF,
+        ReleaseGLObjects      = 0x1200,
         // OpenCL 1.1
-        Command_ReadBufferRect        = 0x1201,
-        Command_WriteBufferRect       = 0x1202,
-        Command_CopyBufferRect        = 0x1203,
-        Command_User                  = 0x1204,
+        ReadBufferRect        = 0x1201,
+        WriteBufferRect       = 0x1202,
+        CopyBufferRect        = 0x1203,
+        User                  = 0x1204,
         // OpenCL 1.2
-        Command_Barrier               = 0x1205,
-        Command_MigrateMemObjects     = 0x1206,
-        Command_FillBuffer            = 0x1207,
-        Command_FillImage             = 0x1208
+        Barrier               = 0x1205,
+        MigrateMemObjects     = 0x1206,
+        FillBuffer            = 0x1207,
+        FillImage             = 0x1208
     };
 
     typedef function<void(EEventStatus status)> EventCallback;

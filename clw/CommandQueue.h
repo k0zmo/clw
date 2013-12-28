@@ -26,24 +26,27 @@
 #include "Event.h"
 #include "Image.h"
 #include "Buffer.h"
+#include "EnumFlags.h"
 
 namespace clw
 {
-    enum ECommandQueueProperty
+    enum class ECommandQueueProperty
     {
-        Property_OutOfOrderExecModeEnabled   = (1 << 0),
-        Property_ProfilingEnabled            = (1 << 1)
+        OutOfOrderExecModeEnabled   = (1 << 0),
+        ProfilingEnabled            = (1 << 1)
     };
+    typedef EnumFlags<ECommandQueueProperty> CommandQueueFlags;
 
-    enum EMapAccess
+    enum class EMapAccess
     {
-        MapAccess_Read                      = 1 << 0,
-        MapAccess_Write                     = 1 << 1,
-        MapAccess_ReadWrite                 = (1 << 1) | (1 << 0),
+        Read                      = 1 << 0,
+        Write                     = 1 << 1,
+        ReadWrite                 = (1 << 1) | (1 << 0),
 #if defined(HAVE_OPENCL_1_2)
-        MapAccess_InvalidateRegion          = 1 << 2
+        InvalidateRegion          = 1 << 2
 #endif
     };
+    typedef EnumFlags<EMapAccess> MapAccessFlags;
 
     class CLW_EXPORT CommandQueue
     {
@@ -219,34 +222,34 @@ namespace clw
         void* mapBuffer(Buffer& buffer, 
                         size_t offset, 
                         size_t size,
-                        EMapAccess access);
-        void* mapBuffer(Buffer& buffer, EMapAccess access);
+                        MapAccessFlags access);
+        void* mapBuffer(Buffer& buffer, MapAccessFlags access);
 
         Event asyncMapBuffer(Buffer& buffer, 
                              void** data,
                              size_t offset, 
                              size_t size, 
-                             EMapAccess access, 
+                             MapAccessFlags access, 
                              const EventList& after = EventList());
         Event asyncMapBuffer(Buffer& buffer, 
                              void** data,
-                             EMapAccess access, 
+                             MapAccessFlags access, 
                              const EventList& after = EventList());
 
         void* mapImage2D(Image2D& image,
                          const Rect& rect,
-                         EMapAccess access);
+                         MapAccessFlags access);
         void* mapImage2D(Image2D& image,
-                         EMapAccess access);
+                         MapAccessFlags access);
 
         Event asyncMapImage2D(Image2D& image,
                               void** data,
                               const Rect& rect,
-                              EMapAccess access,
+                              MapAccessFlags access,
                               const EventList& after = EventList());
         Event asyncMapImage2D(Image2D& image,
                               void** data,
-                              EMapAccess access,
+                              MapAccessFlags access,
                               const EventList& after = EventList());
 
         bool unmap(MemoryObject& obj,
@@ -380,14 +383,14 @@ namespace clw
             after);
     }
 
-    inline void* CommandQueue::mapImage2D(Image2D& image, EMapAccess access)
+    inline void* CommandQueue::mapImage2D(Image2D& image, MapAccessFlags access)
     {
         return mapImage2D(image, Rect(0, 0, image.width(), image.height()), access);
     }
 
     inline Event CommandQueue::asyncMapImage2D(Image2D& image,
                                                void** data,
-                                               EMapAccess access,
+                                               MapAccessFlags access,
                                                const EventList& after)
     {
         return asyncMapImage2D(image, data,

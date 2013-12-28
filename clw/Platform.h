@@ -26,19 +26,19 @@
 
 namespace clw
 {
-    enum EPlatformVersion
+    enum class EPlatformVersion
     {
-        Version_1_0 = 1,
-        Version_1_1 = 2,
-        Version_1_2 = 3
+        v1_0 = 1,
+        v1_1 = 2,
+        v1_2 = 3
     };
 
-    enum EPlatformVendor
+    enum class EPlatformVendor
     {
-        Vendor_AMD,
-        Vendor_Intel,
-        Vendor_NVIDIA,
-        Vendor_Undefined
+        AMD,
+        Intel,
+        NVIDIA,
+        Undefined
     };
 
     // Thin wrapper over OpenCL platform 
@@ -75,12 +75,12 @@ namespace clw
     {
         string suffix = extensionSuffix();
         if(suffix == "AMD")
-            return Vendor_AMD;
+            return EPlatformVendor::AMD;
         else if(suffix == "INTEL")
-            return Vendor_Intel;
+            return EPlatformVendor::Intel;
         else if(suffix == "NV")
-            return Vendor_NVIDIA;
+            return EPlatformVendor::NVIDIA;
         else
-            return Vendor_Undefined;
+            return EPlatformVendor::Undefined;
     }
 }

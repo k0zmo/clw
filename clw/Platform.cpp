@@ -106,9 +106,9 @@ namespace clw
         case 1:
             switch(minor)
             {
-            case 0: return EPlatformVersion::Version_1_0;
-            case 1: return EPlatformVersion::Version_1_1;
-            case 2: return EPlatformVersion::Version_1_2;
+            case 0: return EPlatformVersion::v1_0;
+            case 1: return EPlatformVersion::v1_1;
+            case 2: return EPlatformVersion::v1_2;
             }
         default:
             return EPlatformVersion(0);

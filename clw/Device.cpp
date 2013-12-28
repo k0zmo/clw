@@ -223,25 +223,25 @@ namespace clw
         return int(detail::deviceInfo<cl_uint>(_id, CL_DEVICE_MIN_DATA_TYPE_ALIGN_SIZE));
     }
 
-    EFloatCapabilities Device::floatCapabilities() const
+    FloatCapsFlags Device::floatCapabilities() const
     {
         cl_device_fp_config fp_config = detail::deviceInfo<cl_device_fp_config>
             (_id, CL_DEVICE_SINGLE_FP_CONFIG);
-        return EFloatCapabilities(fp_config);
+        return FloatCapsFlags(static_cast<FloatCapsFlags::enum_type>(fp_config));
     }
 
-    EFloatCapabilities Device::doubleCapabilities() const
+    FloatCapsFlags Device::doubleCapabilities() const
     {
         cl_device_fp_config fp_config = detail::deviceInfo<cl_device_fp_config>
             (_id, CL_DEVICE_DOUBLE_FP_CONFIG);
-        return EFloatCapabilities(fp_config);
+        return FloatCapsFlags(static_cast<FloatCapsFlags::enum_type>(fp_config));
     }
 
-    EFloatCapabilities Device::halfCapabilities() const
+    FloatCapsFlags Device::halfCapabilities() const
     {
         cl_device_fp_config fp_config = detail::deviceInfo<cl_device_fp_config>
             (_id, CL_DEVICE_HALF_FP_CONFIG);
-        return EFloatCapabilities(fp_config);
+        return FloatCapsFlags(static_cast<FloatCapsFlags::enum_type>(fp_config));
     }
 
     uint64_t Device::globalMemoryCacheSize() const
@@ -439,19 +439,19 @@ namespace clw
         return devices;
     }
 
-    vector<Device> devices(EDeviceType deviceTypes, const Platform& platform)
+    vector<Device> devices(DeviceFlags deviceTypes, const Platform& platform)
     {
         cl_uint size;
         cl_int error = CL_SUCCESS;
         if(platform.isNull() || 
-                (error = clGetDeviceIDs(platform.platformId(), deviceTypes, 
+                (error = clGetDeviceIDs(platform.platformId(), deviceTypes.raw(), 
                                0, nullptr, &size)) != CL_SUCCESS)
         {
             detail::reportError("devices(): ", error);
             return vector<Device>();
         }
         vector<cl_device_id> buf(size);
-        clGetDeviceIDs(platform.platformId(), deviceTypes,
+        clGetDeviceIDs(platform.platformId(), deviceTypes.raw(),
                        size, buf.data(), &size);
         vector<Device> devs(size);
         for(size_t i = 0; i < buf.size(); ++i)

@@ -25,6 +25,7 @@
 #include "Prerequisites.h"
 #include "Grid.h"
 #include "Device.h"
+#include "EnumFlags.h"
 
 #if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
 #  include "Event.h"
@@ -34,31 +35,32 @@
 
 namespace clw
 {
-    enum EKernelArgumentAddressQualifier
+    enum class EKernelArgumentAddressQualifier
     {
-        AddressQ_Invalid  = 0x0000,
-        AddressQ_Global   = 0x119B,
-        AddressQ_Local    = 0x119C,
-        AddressQ_Constant = 0x119D,
-        AddressQ_Private  = 0x119E
+        Invalid  = 0x0000,
+        Global   = 0x119B,
+        Local    = 0x119C,
+        Constant = 0x119D,
+        Private  = 0x119E
     };
 
-    enum EKernelArgumentAccessQualifier
+    enum class EKernelArgumentAccessQualifier
     {
-        AccessQ_Invalid   = 0x0000,
-        AccessQ_ReadOnly  = 0x11A0,
-        AccessQ_WriteOnly = 0x11A1,
-        AccessQ_ReadWrite = 0x11A2,
-        AccessQ_None      = 0x11A3
+        Invalid   = 0x0000,
+        ReadOnly  = 0x11A0,
+        WriteOnly = 0x11A1,
+        ReadWrite = 0x11A2,
+        None      = 0x11A3
     };
 
-    enum EKernelArgumentTypeQualifier
+    enum class EKernelArgumentTypeQualifier
     {
-        TypeQ_None     =        0,
-        TypeQ_Const    = (1 << 0),
-        TypeQ_Restrict = (1 << 1),
-        TypeQ_Volatile = (1 << 2)		
+        None     =        0,
+        Const    = (1 << 0),
+        Restrict = (1 << 1),
+        Volatile = (1 << 2)		
     };
+    typedef EnumFlags<EKernelArgumentTypeQualifier> KernelArgumentTypeQualifierFlags;
 
     // Thin wrapper for dynamically setting local memory size as kernel argument 
     class LocalMemorySize
@@ -112,7 +114,7 @@ namespace clw
 
         EKernelArgumentAddressQualifier argumentAddressQualifier(int index) const;
         EKernelArgumentAccessQualifier argumentAccessQualifier(int index) const;
-        int argumentTypeQualifier(int index) const;
+        KernelArgumentTypeQualifierFlags argumentTypeQualifier(int index) const;
         string argumentTypeName(int index) const;
         string argumentName(int index) const;
 
