@@ -42,7 +42,7 @@ namespace clw
         };
 
         template<typename T>
-        struct not
+        struct not_
             : public std::integral_constant<bool,
                 !T::value
             >
@@ -50,7 +50,7 @@ namespace clw
         };
 
         template<bool B>
-        struct not_
+        struct not_bool
             : public std::integral_constant<bool,
                 !B
             >
@@ -76,7 +76,7 @@ namespace clw
         template<typename T>
         struct is_signed_
             : public std::integral_constant<bool,
-                not<typename is_unsigned_<T>>::value
+                not_<is_unsigned_<T>>::value
             >
         {
         };
@@ -105,12 +105,12 @@ namespace clw
             static_assert(std::is_same<if_<false, int, double>::type, double>::value, "Ooops");
 
             static_assert(std::is_integral<int>::value, "Ooops");
-            static_assert(!not<std::is_integral<int>>::value, "Ooops");
+            static_assert(!not_<std::is_integral<int>>::value, "Ooops");
             static_assert(!std::is_integral<nullptr_t>::value, "Ooops");
-            static_assert(not<std::is_integral<nullptr_t>>::value, "Ooops");
+            static_assert(not_<std::is_integral<nullptr_t>>::value, "Ooops");
 
-            static_assert(!not_<true>::value, "Ooops");
-            static_assert(not_<false>::value, "Ooops");
+            static_assert(!not_bool<true>::value, "Ooops");
+            static_assert(not_bool<false>::value, "Ooops");
 
             enum class EC {};
             enum E {};
