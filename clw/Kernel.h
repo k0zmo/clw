@@ -31,6 +31,7 @@
 #endif
 
 #include "KernelTypesTraits.h"
+#include "EnumFlags.h"
 
 namespace clw
 {
@@ -60,6 +61,7 @@ namespace clw
         Volatile = (1 << 2)		
     };
     typedef EnumFlags<EKernelArgumentTypeQualifier> KernelArgumentTypeQualifierFlags;
+    CLW_DEFINE_ENUMFLAGS_OPERATORS(KernelArgumentTypeQualifierFlags)
 
     // Thin wrapper for dynamically setting local memory size as kernel argument 
     class LocalMemorySize

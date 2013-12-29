@@ -23,6 +23,7 @@
 #pragma once
 
 #include "Prerequisites.h"
+#include "EnumFlags.h"
 
 namespace clw
 {
@@ -36,6 +37,7 @@ namespace clw
         All           =  0xFFFFFFFF
     };
     typedef EnumFlags<EDeviceType> DeviceFlags;
+    CLW_DEFINE_ENUMFLAGS_OPERATORS(DeviceFlags)
 
     enum class ECacheType
     {
@@ -58,6 +60,7 @@ namespace clw
         CorrectlyRoundedDivideSqrt = (1 << 7)
     };
     typedef EnumFlags<EFloatCaps> FloatCapsFlags;
+    CLW_DEFINE_ENUMFLAGS_OPERATORS(FloatCapsFlags)
 
     class CLW_EXPORT Device
     {

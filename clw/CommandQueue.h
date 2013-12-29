@@ -36,6 +36,7 @@ namespace clw
         ProfilingEnabled            = (1 << 1)
     };
     typedef EnumFlags<ECommandQueueProperty> CommandQueueFlags;
+    CLW_DEFINE_ENUMFLAGS_OPERATORS(CommandQueueFlags)
 
     enum class EMapAccess
     {
@@ -46,6 +47,7 @@ namespace clw
 #endif
     };
     typedef EnumFlags<EMapAccess> MapAccessFlags;
+    CLW_DEFINE_ENUMFLAGS_OPERATORS(MapAccessFlags)
 
     class CLW_EXPORT CommandQueue
     {

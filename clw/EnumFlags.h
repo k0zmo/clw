@@ -36,16 +36,16 @@ namespace clw
         typedef typename detail::if_<(sizeof(Enum) > 4), 
             typename detail::if_<detail::is_enum_signed<Enum>::value, int64_t, uint64_t>::type,
             typename detail::if_<detail::is_enum_signed<Enum>::value, int32_t, uint64_t>::type
-        >::type enum_type;
-        //typedef typename std::underlying_type<Enum>::type enum_type;
+        >::type underlying_type;
+        //typedef typename std::underlying_type<Enum>::type underlying_type;
+        typedef Enum enum_type;
 
         EnumFlags() : _v(0) {}
-        EnumFlags(Enum v) : _v(enum_type(v)) {}
-        explicit EnumFlags(enum_type v) : _v(v) {}
+        EnumFlags(Enum v) : _v(static_cast<underlying_type>(v)) {}
 
         // Compiler-generated copy/move ctor/assignment operators are fine
 
-        enum_type raw() const { return _v; }
+        underlying_type raw() const { return _v; }
         Enum cast() const { return static_cast<Enum>(_v); }
 
         EnumFlags operator~() const { return EnumFlags(~_v); }
@@ -57,45 +57,22 @@ namespace clw
         EnumFlags& operator|=(EnumFlags f) { _v |= f._v; return *this; }
         EnumFlags& operator^=(EnumFlags f) { _v ^= f._v; return *this; }
 
-        bool testFlag(Enum f) const { return (_v & enum_type(f)) == enum_type(f); }       
+        // explicit operator bool() const { return _v != 0; }
+        bool testFlag(Enum f) const { return (_v & static_cast<underlying_type>(f)) == static_cast<underlying_type>(f); }
 
     private:
-        enum_type _v;
+        explicit EnumFlags(underlying_type v) : _v(v) {}
+
+    private:
+        underlying_type _v;
     };
 
-    template<typename Enum>
-    inline EnumFlags<Enum> operator|(Enum a, const EnumFlags<Enum>& b)
-    {
-        return b | a;
-    }
-
-    template<typename Enum>
-    inline EnumFlags<Enum> operator&(Enum a, const EnumFlags<Enum>& b)
-    {
-        return b & a;
-    }
-
-    template<typename Enum>
-    inline EnumFlags<Enum> operator^(Enum a, const EnumFlags<Enum>& b)
-    {
-        return b ^ a;
-    }
-
-    template<typename Enum>
-    inline EnumFlags<Enum> operator|(Enum a, Enum b)
-    {
-        return EnumFlags<Enum>(a) | EnumFlags<Enum>(b);
-    }
-
-    template<typename Enum>
-    inline EnumFlags<Enum> operator&(Enum a, Enum b)
-    {
-        return EnumFlags<Enum>(a) & EnumFlags<Enum>(b);
-    }
-
-    template<typename Enum>
-    inline EnumFlags<Enum> operator^(Enum a, Enum b)
-    {
-        return EnumFlags<Enum>(a) ^ EnumFlags<Enum>(b);
-    }
+#define CLW_DEFINE_ENUMFLAGS_OPERATORS(EnumFlagsType) \
+    inline EnumFlagsType operator|(EnumFlagsType::enum_type a, EnumFlagsType b) { return b | a; } \
+    inline EnumFlagsType operator&(EnumFlagsType::enum_type a, EnumFlagsType b) { return b & a; } \
+    inline EnumFlagsType operator^(EnumFlagsType::enum_type a, EnumFlagsType b) { return b ^ a; } \
+    inline EnumFlagsType operator|(EnumFlagsType::enum_type a, EnumFlagsType::enum_type b) { return EnumFlagsType(a) | b; } \
+    inline EnumFlagsType operator&(EnumFlagsType::enum_type a, EnumFlagsType::enum_type b) { return EnumFlagsType(a) & b; } \
+    inline EnumFlagsType operator^(EnumFlagsType::enum_type a, EnumFlagsType::enum_type b) { return EnumFlagsType(a) ^ b; } \
+    inline EnumFlagsType operator~(EnumFlagsType::enum_type a) { return ~EnumFlagsType(a); }
 }
