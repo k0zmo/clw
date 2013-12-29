@@ -117,8 +117,6 @@ namespace clw
 #endif
             // cl_khr_icd extension
             CASE(CL_PLATFORM_NOT_FOUND_KHR);
-            // cl_khr_gl_sharing
-            CASE(CL_INVALID_GL_SHAREGROUP_REFERENCE_KHR);
             default: return string("Error ") + std::to_string(
                 static_cast<unsigned long long>(_eid));
             }

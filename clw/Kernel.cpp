@@ -96,7 +96,6 @@ namespace clw
             }
             return string(infoBuf.data());
         }
-
 #endif
 
     }
@@ -235,7 +234,7 @@ namespace clw
                     (_id, index, CL_KERNEL_ARG_TYPE_QUALIFIER)));
 #else
         (void) index;
-        return KernelArgumentTypeQualifierFlags(EKernelArgumentTypeQualifier::None);
+        return EKernelArgumentTypeQualifier::None;
 #endif
     }
 

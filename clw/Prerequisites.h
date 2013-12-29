@@ -26,8 +26,6 @@
 
 #include <CL/cl.h>
 #include <CL/cl_ext.h>
-/// TODO: Not yet used
-#include <CL/cl_gl.h>
 
 #include <cstdint>
 #include <string>

@@ -128,6 +128,10 @@ namespace clw
         };
     }
 
+    // Sample usage: 
+    // clw::deviceFiltered(clw::Filter::PlatformVendor(clw::Vendor_Intel) && 
+    //                     clw::Filter::DeviceType(clw::Cpu));
+
     // This function should be use with much care.
     // Context must be created with devices from only one platform
     template<class Filter>

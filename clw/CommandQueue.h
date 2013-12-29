@@ -41,7 +41,6 @@ namespace clw
     {
         Read                      = 1 << 0,
         Write                     = 1 << 1,
-        ReadWrite                 = (1 << 1) | (1 << 0),
 #if defined(HAVE_OPENCL_1_2)
         InvalidateRegion          = 1 << 2
 #endif
