@@ -54,6 +54,7 @@ namespace clw
     class UserEvent;
     class EventList;
     class Sampler;
+    template<class> class EnumFlags;
 
     class Point
     {

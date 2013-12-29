@@ -23,6 +23,7 @@
 #include "Device.h"
 #include "Platform.h"
 #include "Grid.h"
+#include "EnumFlags.h"
 #include "details.h"
 
 #include <cstring>

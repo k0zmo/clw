@@ -24,6 +24,7 @@
 #include "Program.h"
 #include "CommandQueue.h"
 #include "Device.h"
+#include "EnumFlags.h"
 #include "details.h"
 
 namespace clw

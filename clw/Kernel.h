@@ -25,7 +25,6 @@
 #include "Prerequisites.h"
 #include "Grid.h"
 #include "Device.h"
-#include "EnumFlags.h"
 
 #if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
 #  include "Event.h"

@@ -23,7 +23,6 @@
 #pragma once
 
 #include "Prerequisites.h"
-#include "EnumFlags.h"
 
 namespace clw
 {
