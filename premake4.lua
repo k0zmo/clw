@@ -135,8 +135,7 @@ solution "clw"
         -- copy CL directory
         configuration "windows"
             postbuildcommands {
-                [[robocopy "]] .. _OPTIONS["clincdir"] .. [[" ../ /COPYALL /E]],
-                [[if %errorlevel% leq 2 exit 0 else exit %errorlevel%]]
+                [[xcopy "]] .. _OPTIONS["clincdir"] .. [[" ..\ /S /Y]]
             }
         -- TODO: linux
 
