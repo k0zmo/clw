@@ -32,36 +32,46 @@ _OPTIONS["opencl12"] = _OPTIONS["opencl12"] or "no"
 
 -- Default paths on windows for AMD APP SDK
 if os.get() == "windows" then 
-    _OPTIONS["clincdir"] = _OPTIONS["clincdir"] or "$(AMDAPPSDKROOT)/include"
-    _OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "$(AMDAPPSDKROOT)/lib/x86"
-	_OPTIONS["cllib64dir"] = _OPTIONS["cllib64dir"] or "$(AMDAPPSDKROOT)/lib/x86_64"
+    _OPTIONS["clincdir"] = _OPTIONS["clincdir"] or os.getenv("AMDAPPSDKROOT") .. "include"
+    _OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or os.getenv("AMDAPPSDKROOT") .. "lib/x86"
+    _OPTIONS["cllib64dir"] = _OPTIONS["cllib64dir"] or os.getenv("AMDAPPSDKROOT") .. "lib/x86_64"
+elseif os.get() == "linux" then
+    _OPTIONS["clincdir"] = _OPTIONS["clincdir"] or "usr/include"
+    if os.is64bit ~= nil and os.is64bit() == false then
+        _OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "usr/lib"
+        _OPTIONS["cllib64dir"] = _OPTIONS["cllib64dir"] or "usr/lib64"
+    else
+        -- assume it's 64-bit
+        _OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "usr/lib32"
+        _OPTIONS["cllib64dir"] = _OPTIONS["cllib64dir"] or "usr/lib"
+    end
 end
 
 -- Common settings per project
 local function configureProject()
-	configuration "Debug or DebugLib"
-		targetsuffix "_d"
-		defines { "DEBUG", "_DEBUG", }
-		flags { 
-			"Symbols", 
-			"ExtraWarnings"
-		}
-	configuration "Release or ReleaseLib"
-		defines "NDEBUG"
-		flags { 
-			"OptimizeSpeed",
-			"NoEditAndContinue", 
-			"NoFramePointer", 
-			"ExtraWarnings"
-		}
-	configuration { "linux", "gmake" }
-		buildoptions  "-std=c++11"   
-		links "stdc++"
+    configuration "Debug or DebugLib"
+        targetsuffix "_d"
+        defines { "DEBUG", "_DEBUG", }
+        flags { 
+            "Symbols", 
+            "ExtraWarnings"
+        }
+    configuration "Release or ReleaseLib"
+        defines "NDEBUG"
+        flags { 
+            "OptimizeSpeed",
+            "NoEditAndContinue", 
+            "NoFramePointer", 
+            "ExtraWarnings"
+        }
+    configuration { "linux", "gmake" }
+        buildoptions  "-std=c++11"   
+        links "stdc++"
 end
 
 solution "clw"
     configurations { "Debug", "Release", "DebugLib", "ReleaseLib" }
-	platforms { "x32", "x64" }
+    platforms { "x32", "x64" }
 
     -- Available in premake4.4
     if vpaths ~= nil then
@@ -79,7 +89,7 @@ solution "clw"
         language "C++"
         location "proj"
         objdir "obj"
-		includedirs { _OPTIONS["clincdir"] }  
+        includedirs { _OPTIONS["clincdir"] }  
         files { 
             "clw/*.cpp",
             "clw/*.h" 
@@ -92,36 +102,44 @@ solution "clw"
         if _OPTIONS["opencl12"] == "yes" then
             defines "HAVE_OPENCL_1_2"
         end
-		
-		-- linker settings for different architectures
-		configuration "x32"
-			libdirs { _OPTIONS["cllibdir"] }
-		configuration "x64"
-			libdirs { _OPTIONS["cllib64dir"] }		
-			
-		-- donfiguration for static builds
-		configuration "DebugLib or ReleaseLib"
-			kind "StaticLib"
-			defines "CLW_STATIC_LIB"
 
-		-- configuration for dll builds
-		configuration "Debug or Release"
-			kind "SharedLib"
+        -- linker settings for different architectures
+        configuration "x32"
+            libdirs { _OPTIONS["cllibdir"] }
+        configuration "x64"
+            libdirs { _OPTIONS["cllib64dir"] }      
+            
+        -- donfiguration for static builds
+        configuration "DebugLib or ReleaseLib"
+            kind "StaticLib"
+            defines "CLW_STATIC_LIB"
+
+        -- configuration for dll builds
+        configuration "Debug or Release"
+            kind "SharedLib"
             defines "CLW_BUILD_SHARED"
             links "OpenCL"
-			
-		-- output directory for different builds and architectures
-		configuration { "DebugLib or ReleaseLib", "x32" }
-			targetdir "lib"
-		configuration { "DebugLib or ReleaseLib", "x64" }
-			targetdir "lib64"
-		configuration { "Debug or Release", "x32" }
-			targetdir "bin"
-		configuration { "Debug or Release", "x64" }
-			targetdir "bin64"
-			
-		configureProject()
-        
+            
+        -- output directory for different builds and architectures
+        configuration { "DebugLib or ReleaseLib", "x32" }
+            targetdir "lib"
+        configuration { "DebugLib or ReleaseLib", "x64" }
+            targetdir "lib64"
+        configuration { "Debug or Release", "x32" }
+            targetdir "bin"
+        configuration { "Debug or Release", "x64" }
+            targetdir "bin64"
+            
+        configureProject()
+
+        -- copy CL directory
+        configuration "windows"
+            postbuildcommands {
+                [[robocopy "]] .. _OPTIONS["clincdir"] .. [[" ../ /COPYALL /E]],
+                [[if %errorlevel% leq 2 exit 0 else exit %errorlevel%]]
+            }
+        -- TODO: linux
+
     --
     -- Simple tool to query basic platform and its devices attributes
     --
@@ -130,7 +148,7 @@ solution "clw"
         language "C++"
         location "proj"
         kind "ConsoleApp"
-		objdir "obj"
+        objdir "obj"
         files "clwinfo/main.cpp"
         includedirs { 
             ".",
@@ -140,22 +158,22 @@ solution "clw"
         if _OPTIONS["opencl12"] == "yes" then
             defines "HAVE_OPENCL_1_2"
         end
-		links "clw"
+        links "clw"
         
-		configuration "x32"
-			targetdir "bin"
-		configuration "x64"
-			targetdir "bin64"
-			
-		configuration "DebugLib or ReleaseLib"
+        configuration "x32"
+            targetdir "bin"
+        configuration "x64"
+            targetdir "bin64"
+            
+        configuration "DebugLib or ReleaseLib"
             defines "CLW_STATIC_LIB"
-			-- need to explicitly link OpenCL
+            -- need to explicitly link OpenCL
             links "OpenCL"
-			configuration "x32"
-				libdirs { _OPTIONS["cllibdir"] }
-			configuration "x64"
-				libdirs { _OPTIONS["cllib64dir"] }       
+            configuration "x32"
+                libdirs { _OPTIONS["cllibdir"] }
+            configuration "x64"
+                libdirs { _OPTIONS["cllib64dir"] }       
         configureProject()
-		
-		configuration "linux"
-			linkoptions "-Wl,--rpath=."
+        
+        configuration "linux"
+            linkoptions "-Wl,--rpath=."
