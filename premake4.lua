@@ -36,14 +36,14 @@ if os.get() == "windows" then
     _OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or os.getenv("AMDAPPSDKROOT") .. "lib/x86"
     _OPTIONS["cllib64dir"] = _OPTIONS["cllib64dir"] or os.getenv("AMDAPPSDKROOT") .. "lib/x86_64"
 elseif os.get() == "linux" then
-    _OPTIONS["clincdir"] = _OPTIONS["clincdir"] or "usr/include"
+    _OPTIONS["clincdir"] = _OPTIONS["clincdir"] or "/usr/include"
     if os.is64bit ~= nil and os.is64bit() == false then
-        _OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "usr/lib"
-        _OPTIONS["cllib64dir"] = _OPTIONS["cllib64dir"] or "usr/lib64"
+        _OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "/usr/lib"
+        _OPTIONS["cllib64dir"] = _OPTIONS["cllib64dir"] or "/usr/lib64"
     else
         -- assume it's 64-bit
-        _OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "usr/lib32"
-        _OPTIONS["cllib64dir"] = _OPTIONS["cllib64dir"] or "usr/lib"
+        _OPTIONS["cllibdir"] = _OPTIONS["cllibdir"] or "/usr/lib32"
+        _OPTIONS["cllib64dir"] = _OPTIONS["cllib64dir"] or "/usr/lib"
     end
 end
 
@@ -135,9 +135,12 @@ solution "clw"
         -- copy CL directory
         configuration "windows"
             postbuildcommands {
-                [[xcopy "]] .. _OPTIONS["clincdir"] .. [[" ..\ /S /Y]]
+                [[xcopy "]] .. _OPTIONS["clincdir"] .. [[\CL" ..\CL /S /Y /I]]
             }
-        -- TODO: linux
+        configuration "linux"
+            postbuildcommands {
+                [[cp -R "]] .. _OPTIONS["clincdir"] .. [[/CL" ../]]
+        }
 
     --
     -- Simple tool to query basic platform and its devices attributes
@@ -176,3 +179,4 @@ solution "clw"
         
         configuration "linux"
             linkoptions "-Wl,--rpath=."
+            links "OpenCL"
