@@ -42,9 +42,8 @@ namespace clw
     {
         Read                      = 1 << 0,
         Write                     = 1 << 1,
-#if defined(HAVE_OPENCL_1_2)
+        // Requires +OpenCL 1.2, cause error if used otherwise
         InvalidateRegion          = 1 << 2
-#endif
     };
     typedef EnumFlags<EMapAccess> MapAccessFlags;
     CLW_DEFINE_ENUMFLAGS_OPERATORS(MapAccessFlags)

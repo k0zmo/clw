@@ -527,7 +527,11 @@ namespace clw
 
     bool CommandQueue::runKernel(const Kernel& kernel)
     {
+#if defined(HAVE_OPENCL_1_1)
         const Grid& offset = kernel.globalWorkOffset();
+#else
+        const size_t* offset = nullptr;
+#endif
         const Grid& global = kernel.globalWorkSize();		
         const Grid& local = kernel.localWorkSize();
         size_t dims = global.dimensions();
@@ -557,7 +561,11 @@ namespace clw
         const Kernel& kernel,
         const EventList& after)
     {
+#if defined(HAVE_OPENCL_1_1)
         const Grid& offset = kernel.globalWorkOffset();
+#else
+        const size_t* offset = nullptr;
+#endif
         const Grid& global = kernel.globalWorkSize();		
         const Grid& local = kernel.localWorkSize();
         size_t dims = global.dimensions();

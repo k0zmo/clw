@@ -179,4 +179,3 @@ solution "clw"
         
         configuration "linux"
             linkoptions "-Wl,--rpath=."
-            links "OpenCL"

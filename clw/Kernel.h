@@ -136,6 +136,7 @@ namespace clw
         void setLocalWorkSize(size_t width, size_t height);
         void setLocalWorkSize(size_t width, size_t height, size_t depth);
 
+        // Requires +OpenCL 1.1, ignored otherwise
         Grid globalWorkOffset() const;
         void setGlobalWorkOffset(const Grid& range);
         void setGlobalWorkOffset(size_t width);
@@ -286,9 +287,7 @@ namespace clw
 
     inline void Kernel::setGlobalWorkOffset(const Grid& range)
     {
-#if defined(HAVE_OPENCL_1_1)
         _globalWorkOffset = range;
-#endif        
     }
 
     inline void Kernel::setGlobalWorkOffset(size_t width)
