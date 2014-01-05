@@ -28,11 +28,11 @@ namespace clw
     namespace detail
     {
         template<typename Value>
-        Value imageInfo(cl_mem _id, cl_image_info info)
+        Value imageInfo(cl_mem id, cl_image_info info)
         {
             Value value;
             cl_int error;
-            if((error = clGetImageInfo(_id, info, sizeof(Value),
+            if((error = clGetImageInfo(id, info, sizeof(Value),
                     &value, nullptr)) != CL_SUCCESS)
             {
                 reportError("imageInfo(): ", error);

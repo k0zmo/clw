@@ -137,19 +137,19 @@ namespace clw
         }
 
         vector<ImageFormat> supportedImageFormats(
-            cl_context _id,
+            cl_context id,
             cl_mem_object_type image_type)
         {
             cl_uint num;
             cl_int error;
-            if((error = clGetSupportedImageFormats(_id, CL_MEM_READ_WRITE,
+            if((error = clGetSupportedImageFormats(id, CL_MEM_READ_WRITE,
                     image_type, 0, nullptr, &num)) != CL_SUCCESS || !num)
             {
                 reportError("supportedImageFormats() ", error);
                 return vector<ImageFormat>();
             }
             vector<cl_image_format> buf(num);
-            if((error = clGetSupportedImageFormats(_id, CL_MEM_READ_WRITE,
+            if((error = clGetSupportedImageFormats(id, CL_MEM_READ_WRITE,
                     image_type, num, buf.data(), nullptr)) != CL_SUCCESS)
             {
                 reportError("supportedImageFormats() ", error);

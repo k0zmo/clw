@@ -31,11 +31,11 @@ namespace clw
 {
     namespace detail
     {
-        bool commandQueueInfo(cl_command_queue _id, cl_ulong prop)
+        bool commandQueueInfo(cl_command_queue id, cl_ulong prop)
         {
             cl_command_queue_properties props;
             cl_int error = CL_SUCCESS;
-            if(!_id || (error = clGetCommandQueueInfo(_id, CL_QUEUE_PROPERTIES, 
+            if(!id || (error = clGetCommandQueueInfo(id, CL_QUEUE_PROPERTIES, 
                     sizeof(cl_command_queue_properties), &props, nullptr))
                         != CL_SUCCESS)
             {

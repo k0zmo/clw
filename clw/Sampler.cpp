@@ -28,11 +28,11 @@ namespace clw
     namespace detail
     {
         template<typename Value>
-        Value samplerInfo(cl_sampler _id, cl_sampler_info info)
+        Value samplerInfo(cl_sampler id, cl_sampler_info info)
         {
             Value value;
             cl_int error = CL_SUCCESS;
-            if(!_id || (error = clGetSamplerInfo(_id, info, 
+            if(!id || (error = clGetSamplerInfo(id, info, 
                 sizeof(Value), &value, nullptr)) != CL_SUCCESS)
             {
                 reportError("samplerInfo(): ", error);

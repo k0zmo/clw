@@ -29,11 +29,11 @@ namespace clw
     namespace detail
     {
         template<typename Value>
-        Value eventInfo(cl_event _id, cl_event_info info)
+        Value eventInfo(cl_event id, cl_event_info info)
         {
             Value value;
             cl_int error = CL_SUCCESS;			
-            if(!_id || (error = clGetEventInfo(_id, info, 
+            if(!id || (error = clGetEventInfo(id, info, 
                     sizeof(Value), &value, nullptr)) != CL_SUCCESS)
             {
                 reportError("eventInfo(): ", error);
@@ -42,11 +42,11 @@ namespace clw
             return value;
         }
 
-        cl_ulong eventProfilingInfo(cl_event _id, cl_profiling_info info)
+        cl_ulong eventProfilingInfo(cl_event id, cl_profiling_info info)
         {
             cl_ulong value;
             cl_int error = CL_SUCCESS;
-            if(!_id || (error = clGetEventProfilingInfo(_id, info, 
+            if(!id || (error = clGetEventProfilingInfo(id, info, 
                     sizeof(cl_ulong), &value, nullptr)) != CL_SUCCESS)
             {
                 reportError("eventInfo(): ", error);

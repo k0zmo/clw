@@ -32,11 +32,11 @@ namespace clw
     namespace detail
     {
         template<typename Value>
-        Value deviceInfo(cl_device_id _id, cl_device_info info)
+        Value deviceInfo(cl_device_id id, cl_device_info info)
         {
             Value value;
             cl_int error = CL_SUCCESS;
-            if(!_id || (error = clGetDeviceInfo(_id, info, 
+            if(!id || (error = clGetDeviceInfo(id, info, 
                     sizeof(Value), &value, nullptr)) != CL_SUCCESS)
             {
                 reportError("deviceInfo(): ", error);
@@ -46,18 +46,18 @@ namespace clw
         }
 
         template<>
-        bool deviceInfo(cl_device_id _id, cl_device_info info)
+        bool deviceInfo(cl_device_id id, cl_device_info info)
         {
-            cl_bool value = deviceInfo<cl_bool>(_id, info);
+            cl_bool value = deviceInfo<cl_bool>(id, info);
             return value != 0;
         }
 
         template<typename Value>
-        vector<Value> deviceInfoVector(cl_device_id _id, cl_device_info info)
+        vector<Value> deviceInfoVector(cl_device_id id, cl_device_info info)
         {
             size_t size;
             cl_int error = CL_SUCCESS;
-            if(!_id || (error = clGetDeviceInfo(_id, info, 0, nullptr, &size))
+            if(!id || (error = clGetDeviceInfo(id, info, 0, nullptr, &size))
                     != CL_SUCCESS)
             {
                 reportError("deviceInfoVector(): ", error);
@@ -65,7 +65,7 @@ namespace clw
             }
             size_t num(size / sizeof(Value));
             vector<Value> buf(num);
-            if((error = clGetDeviceInfo(_id, info, size, buf.data(), nullptr))
+            if((error = clGetDeviceInfo(id, info, size, buf.data(), nullptr))
                     != CL_SUCCESS)
             {
                 reportError("deviceInfoVector(): ", error);	
@@ -75,9 +75,9 @@ namespace clw
         }
 
         template<>
-        string deviceInfo(cl_device_id _id, cl_device_info info)
+        string deviceInfo(cl_device_id id, cl_device_info info)
         {
-            return string(deviceInfoVector<char>(_id, info).data());
+            return string(deviceInfoVector<char>(id, info).data());
         }
     }
 

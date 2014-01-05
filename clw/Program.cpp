@@ -29,18 +29,18 @@ namespace clw
 {
     namespace detail
     {
-        extern "C" void CL_API_CALL buildNotify(cl_program _id, void* userData)
+        extern "C" void CL_API_CALL buildNotify(cl_program id, void* userData)
         {
-            (void) _id;
+            (void) id;
             (void) userData;
         }
 
         template<typename Value>
-        Value programInfo(cl_program _id, cl_program_info info)
+        Value programInfo(cl_program id, cl_program_info info)
         {
             Value value;
             cl_int error = 0;
-            if((error = clGetProgramInfo(_id, info, 
+            if((error = clGetProgramInfo(id, info, 
                     sizeof(Value), &value, nullptr)) != CL_SUCCESS)
             {
                 reportError("programInfo(): ", error);
@@ -50,10 +50,10 @@ namespace clw
         }
 
         template<typename Value>
-        bool programInfo(cl_program _id, cl_program_info info, Value* buf, size_t length)
+        bool programInfo(cl_program id, cl_program_info info, Value* buf, size_t length)
         {
             cl_int error = 0;
-            if((error = clGetProgramInfo(_id, info, 
+            if((error = clGetProgramInfo(id, info, 
                     sizeof(Value) * length, buf, nullptr)) != CL_SUCCESS)
             {
                 reportError("programInfo(): ", error);
