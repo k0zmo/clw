@@ -29,18 +29,6 @@ namespace clw
 {
     namespace detail
     {
-        template<bool cond, typename T, typename U>
-        struct if_
-        {
-            typedef U type;
-        };
-
-        template<typename T, typename U>
-        struct if_<true, T, U>
-        {
-            typedef T type;
-        };
-
         template<typename T>
         struct not_
             : public std::integral_constant<bool,
@@ -101,9 +89,6 @@ namespace clw
 
         namespace test
         {
-            static_assert(std::is_same<if_<true, int, double>::type, int>::value, "Ooops");
-            static_assert(std::is_same<if_<false, int, double>::type, double>::value, "Ooops");
-
             static_assert(std::is_integral<int>::value, "Ooops");
             static_assert(!not_<std::is_integral<int>>::value, "Ooops");
             static_assert(!std::is_integral<nullptr_t>::value, "Ooops");

@@ -33,9 +33,9 @@ namespace clw
         static_assert(sizeof(Enum) <= 8, "Enum is too big");
 
     public:
-        typedef typename detail::if_<(sizeof(Enum) > 4), 
-            typename detail::if_<detail::is_enum_signed<Enum>::value, int64_t, uint64_t>::type,
-            typename detail::if_<detail::is_enum_signed<Enum>::value, int32_t, uint64_t>::type
+        typedef typename std::conditional<(sizeof(Enum) > 4), 
+            typename std::conditional<detail::is_enum_signed<Enum>::value, int64_t, uint64_t>::type,
+            typename std::conditional<detail::is_enum_signed<Enum>::value, int32_t, uint64_t>::type
         >::type underlying_type;
         //typedef typename std::underlying_type<Enum>::type underlying_type;
         typedef Enum enum_type;
