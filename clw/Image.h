@@ -79,6 +79,17 @@ namespace clw
             return order == EChannelOrder(0) ||
                 type == EChannelType(0);
         }
+
+        bool operator==(const ImageFormat& other) const 
+        {
+            return order == other.order &&
+                type == other.type;
+        }
+
+        bool operator!=(const ImageFormat& other) const
+        {
+            return !operator==(other);
+        }
     };
 
     class CLW_EXPORT Image2D : public MemoryObject
