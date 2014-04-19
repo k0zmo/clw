@@ -131,6 +131,33 @@ namespace clw
         return *this;
     }
 
+    Kernel::Kernel(Kernel&& other)
+        : _ctx(nullptr)
+        , _id(0)
+        , _globalWorkOffset(0)
+        , _globalWorkSize(1)
+        , _localWorkSize(0)
+    {
+        *this = std::move(other);
+    }
+
+    Kernel& Kernel::operator=(Kernel&& other)
+    {
+        if(&other != this)
+        {
+            if(_id)
+                clReleaseKernel(_id);
+            _ctx = other._ctx;
+            _id = other._id;
+            _globalWorkOffset = std::move(other._globalWorkOffset);
+            _globalWorkSize = std::move(other._globalWorkSize);
+            _localWorkSize = std::move(other._localWorkSize);
+            other._ctx = nullptr;
+            other._id = 0;
+        }
+        return *this;
+    }
+
     Program Kernel::program() const
     {
         if(isNull())

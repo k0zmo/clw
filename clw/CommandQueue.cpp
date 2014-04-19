@@ -70,6 +70,26 @@ namespace clw
         return *this;
     }
 
+    CommandQueue::CommandQueue(CommandQueue&& other)
+        : _ctx(nullptr), _id(0)
+    {
+        *this = std::move(other);
+    }
+
+    CommandQueue& CommandQueue::operator=(CommandQueue&& other)
+    {
+        if (&other != this)
+        {
+            if(_id)
+                clReleaseCommandQueue(_id);
+            _ctx = other._ctx;
+            _id = other._id;
+            other._ctx = nullptr;
+            other._id = 0;
+        }
+        return *this;
+    }
+
     bool CommandQueue::isProfilingEnabled() const
     {
         return detail::commandQueueInfo(_id, CL_QUEUE_PROFILING_ENABLE);

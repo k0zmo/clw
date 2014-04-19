@@ -54,6 +54,26 @@ namespace clw
         return *this;
     }
 
+    Buffer::Buffer(Buffer&& other)
+        : MemoryObject()
+    {
+        *this = std::move(other);
+    }
+
+    Buffer& Buffer::operator=(Buffer&& other)
+    {
+        if(&other != this)
+        {
+            if(_id)
+                clReleaseMemObject(_id);
+            _ctx = other._ctx;
+            _id = other._id;
+            other._ctx = nullptr;
+            other._id = 0;
+        }
+        return *this;
+    }
+
     Buffer Buffer::createSubBuffer(size_t offset, size_t size, EAccess access)
     {
 #if defined(HAVE_OPENCL_1_1)

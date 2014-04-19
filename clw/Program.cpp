@@ -89,8 +89,30 @@ namespace clw
         return *this;
     }
 
+    Program::Program(Program&& other)
+        : _ctx(nullptr), _id(0), _built(false)
+    {
+        *this = std::move(other);
+    }
+
+    Program& Program::operator=(Program&& other)
+    {
+        if(&other != this)
+        {
+            if(_id)
+                clReleaseProgram(_id);
+            _ctx = other._ctx;
+            _id = other._id;
+            _options = std::move(other._options);
+            _built = other._built;
+            other._ctx = nullptr;
+            other._id = 0;
+        }
+        return *this;
+    }
+
     // Build program for all devices associated with program for which a source or binary has been loaded
-    bool Program::build(const string& options)
+    bool Program::build(string options)
     {
         if(!_ctx)
             return false;
@@ -100,7 +122,7 @@ namespace clw
                                       nullptr, nullptr);
         detail::reportError("Program::build(): ", error);
         _built = error == CL_SUCCESS;
-        _options = options;
+        _options = std::move(options);
         return _built;
     }
 

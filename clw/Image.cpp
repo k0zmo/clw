@@ -56,6 +56,26 @@ namespace clw
         return *this;
     }
 
+    Image2D::Image2D(Image2D&& other)
+        : MemoryObject()
+    {
+        *this = std::move(other);
+    }
+
+    Image2D& Image2D::operator=(Image2D&& other)
+    {
+        if (&other != this)
+        {
+            if (_id)
+                clReleaseMemObject(_id);
+            _ctx = other._ctx;
+            _id = other._id;
+            other._ctx = nullptr;
+            other._id = 0;
+        }
+        return *this;
+    }
+
     ImageFormat Image2D::format() const
     {
         if(fmt.isNull())
@@ -98,6 +118,26 @@ namespace clw
     {
         fmt = other.fmt;
         setMemoryId(other._ctx, other._id);
+        return *this;
+    }
+
+    Image3D::Image3D(Image3D&& other)
+        : MemoryObject()
+    {
+        *this = std::move(other);
+    }
+
+    Image3D& Image3D::operator=(Image3D&& other)
+    {
+        if(&other != this)
+        {
+            if(_id)
+                clReleaseMemObject(_id);
+            _ctx = other._ctx;
+            _id = other._id;
+            other._ctx = nullptr;
+            other._id = 0;
+        }
         return *this;
     }
 

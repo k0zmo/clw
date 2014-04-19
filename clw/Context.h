@@ -40,6 +40,9 @@ namespace clw
         Context(const Context& other);		
         Context& operator=(const Context& other);
 
+        Context(Context&& other);
+        Context& operator=(Context&& other);
+
         bool create(EDeviceType type = EDeviceType::Default);
         bool create(const vector<Device>& devices);
         bool createOffline(const Platform& platform = Platform());

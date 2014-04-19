@@ -89,6 +89,24 @@ namespace clw
         return *this;
     }
 
+    Event::Event(Event&& other)
+        : _id(0)
+    {
+        *this = std::move(other);
+    }
+
+    Event& Event::operator=(Event&& other)
+    {
+        if (&other != this)
+        {
+            if (_id)
+                clReleaseEvent(_id);
+            _id = other._id;
+            other._id = 0;
+        }
+        return *this;
+    }
+
     EEventStatus Event::status() const
     {
         return EEventStatus(detail::eventInfo<cl_int>
@@ -103,7 +121,7 @@ namespace clw
 
     void Event::setCallback(EEventStatus status, EventCallback cb)
     {
-        _callback = cb;
+        _callback = std::move(cb);
         clSetEventCallback(_id, cl_int(status), 
             &detail::callback_priv, &_callback);
     }
@@ -159,6 +177,24 @@ namespace clw
         return *this;
     }
 
+    UserEvent::UserEvent(UserEvent&& other)
+        : Event()
+    {
+        *this = std::move(other);
+    }
+
+    UserEvent& UserEvent::operator=(UserEvent&& other)
+    {
+        if(&other != this)
+        {
+            if (_id)
+                clReleaseEvent(_id);
+            _id = other._id;
+            other._id = 0;
+        }
+        return *this;
+    }
+
     void UserEvent::setStatus(EEventStatus status)
     {
 #if defined(HAVE_OPENCL_1_1)
@@ -198,6 +234,20 @@ namespace clw
         _events = other._events;
         for(size_t i = 0; i < _events.size(); ++i)
             clRetainEvent(_events[i]);
+        return *this;
+    }
+
+    EventList::EventList(EventList&& other)
+    {
+        *this = std::move(other);
+    }
+
+    EventList& EventList::operator=(EventList&& other)
+    {
+        if(&other != this)
+        {
+            _events = std::move(other._events);
+        }
         return *this;
     }
 

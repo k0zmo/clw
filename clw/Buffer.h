@@ -37,6 +37,9 @@ namespace clw
         Buffer(const Buffer& other);
         Buffer& operator=(const Buffer& other);
 
+        Buffer(Buffer&& other);
+        Buffer& operator=(Buffer&& other);
+
         Buffer createSubBuffer(size_t offset, size_t size, EAccess access);
         Buffer parentBuffer() const;
         size_t offset() const;

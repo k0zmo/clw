@@ -98,6 +98,9 @@ namespace clw
         Kernel(const Kernel& other);
         Kernel& operator=(const Kernel& other);
 
+        Kernel(Kernel&& other);
+        Kernel& operator=(Kernel&& other);
+
         bool isNull() const { return _id == 0; }
 
         Context* context() const { return _ctx; }

@@ -78,6 +78,9 @@ namespace clw
         Event(const Event& other);
         Event& operator=(const Event& other);
 
+        Event(Event&& other);
+        Event& operator=(Event&& other);
+
         bool isNull() const { return _id == 0; }
 
         cl_event eventId() const { return _id; }
@@ -108,6 +111,9 @@ namespace clw
         UserEvent(const UserEvent& other);
         UserEvent& operator=(const UserEvent& other);
 
+        UserEvent(UserEvent&& other);
+        UserEvent& operator=(UserEvent&& other);
+
         void setStatus(EEventStatus status);
     };
 
@@ -120,6 +126,9 @@ namespace clw
 
         EventList(const EventList& other);
         EventList& operator=(const EventList& other);
+
+        EventList(EventList&& other);
+        EventList& operator=(EventList&& other);
 
         void waitForFinished();
 

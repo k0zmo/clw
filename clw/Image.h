@@ -102,6 +102,9 @@ namespace clw
         Image2D(const Image2D& other);
         Image2D& operator=(const Image2D& other);
 
+        Image2D(Image2D&& other);
+        Image2D& operator=(Image2D&& other);
+
         ImageFormat format() const;
 
         int width() const;
@@ -123,6 +126,9 @@ namespace clw
 
         Image3D(const Image3D& other);
         Image3D& operator=(const Image3D& other);
+
+        Image3D(Image3D&& other);
+        Image3D& operator=(Image3D&& other);
 
         ImageFormat format() const;
 

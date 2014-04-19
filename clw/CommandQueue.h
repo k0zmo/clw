@@ -56,8 +56,11 @@ namespace clw
             : _ctx(ctx), _id(id) {}
         ~CommandQueue();
 
-        CommandQueue(const CommandQueue& other);		
+        CommandQueue(const CommandQueue& other);
         CommandQueue& operator=(const CommandQueue& other);
+
+        CommandQueue(CommandQueue&& other);
+        CommandQueue& operator=(CommandQueue&& other);
 
         bool isNull() const { return _id == 0; }
         bool isProfilingEnabled() const;

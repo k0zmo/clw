@@ -38,6 +38,9 @@ namespace clw
         
         Program(const Program& other);
         Program& operator=(const Program& other);
+
+        Program(Program&& other);
+        Program& operator=(Program&& other);
         
         bool isNull() const { return _id == 0; }
         
@@ -45,7 +48,7 @@ namespace clw
         cl_program programId() const { return _id; }
         
         bool isBuilt() const { return _built; }
-        bool build(const string& options = string());
+        bool build(string options = string());
         // !TODO:
         //bool build(const vector<Device> devices, const string& options = string());
         

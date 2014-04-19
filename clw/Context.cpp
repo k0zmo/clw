@@ -203,6 +203,29 @@ namespace clw
         return *this;
     }
 
+    Context::Context(Context&& other)
+        : _id(0)
+        , _isCreated(false)
+        , _eid(CL_SUCCESS)
+    {
+        *this = std::move(other);
+    }
+
+    Context& Context::operator=(Context&& other)
+    {
+        if (&other != this)
+        {
+            if(_isCreated && _id != 0)
+                clReleaseContext(_id);
+            _id = other._id;
+            _isCreated = other._isCreated;
+            _eid = other._eid;
+            _devs = std::move(other._devs);
+            other._id = 0;
+        }
+        return *this;
+    }
+
     bool Context::create(EDeviceType type)
     {
         if(_isCreated)

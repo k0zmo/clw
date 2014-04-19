@@ -52,6 +52,9 @@ namespace clw
         Sampler(const Sampler& other);
         Sampler& operator=(const Sampler& other);
 
+        Sampler(Sampler&& other);
+        Sampler& operator=(Sampler&& other);
+
         bool isNull() const { return _id == 0; }
         
         Context* context() const { return _ctx; }

@@ -73,6 +73,26 @@ namespace clw
         return *this;
     }
 
+    Sampler::Sampler(Sampler&& other)
+        : _ctx(nullptr), _id(0)
+    {
+        *this = std::move(other);
+    }
+
+    Sampler& Sampler::operator=(Sampler&& other)
+    {
+        if(this != &other)
+        {
+            if(_id)
+                clReleaseSampler(_id);
+            _ctx = other._ctx;
+            _id = other._id;
+            other._ctx = nullptr;
+            other._id = 0;
+        }
+        return *this;
+    }
+
     EFilterMode Sampler::filterMode() const
     {
         return EFilterMode(detail::samplerInfo<cl_filter_mode>
