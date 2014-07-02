@@ -43,6 +43,8 @@ namespace clw
     class Context;
     class CommandQueue;
     class Program;
+    class LocalMemorySize;
+    template <class> class TypedLocalMemorySize;
     class Kernel;
     class MemoryObject;
     class Buffer;

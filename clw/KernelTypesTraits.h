@@ -55,10 +55,19 @@ namespace clw
         };
 
         template <typename T>
+        struct is_local_mem_size
+            : public std::integral_constant < bool,
+                std::is_base_of<LocalMemorySize, T>::value
+            >
+        {
+        };
+
+        template <typename T>
         struct is_kernel_custom_arg
             : public std::integral_constant<bool,
                 !is_kernel_value_type<T>::value && 
-                !is_kernel_memory_object<T>::value
+                !is_kernel_memory_object<T>::value &&
+                !is_local_mem_size<T>::value
             >
         {
         };
