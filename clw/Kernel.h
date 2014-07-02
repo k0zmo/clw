@@ -58,7 +58,7 @@ namespace clw
         None     =        0,
         Const    = (1 << 0),
         Restrict = (1 << 1),
-        Volatile = (1 << 2)		
+        Volatile = (1 << 2)
     };
     typedef EnumFlags<EKernelArgumentTypeQualifier> KernelArgumentTypeQualifierFlags;
     CLW_DEFINE_ENUMFLAGS_OPERATORS(KernelArgumentTypeQualifierFlags)
@@ -74,6 +74,15 @@ namespace clw
         operator size_t() const { return _size; }
     private:
         size_t _size;
+    };
+
+    template <typename T>
+    class TypedLocalMemorySize : public clw::LocalMemorySize
+    {
+    public:
+        TypedLocalMemorySize(size_t numElems)
+            : LocalMemorySize(numElems * sizeof(T))
+        {}
     };
 
     class CLW_EXPORT Kernel
