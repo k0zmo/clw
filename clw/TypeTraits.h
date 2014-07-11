@@ -91,8 +91,8 @@ namespace clw
         {
             static_assert(std::is_integral<int>::value, "Ooops");
             static_assert(!not_<std::is_integral<int>>::value, "Ooops");
-            static_assert(!std::is_integral<nullptr_t>::value, "Ooops");
-            static_assert(not_<std::is_integral<nullptr_t>>::value, "Ooops");
+            static_assert(!std::is_integral<std::nullptr_t>::value, "Ooops");
+            static_assert(not_<std::is_integral<std::nullptr_t>>::value, "Ooops");
 
             static_assert(!not_bool<true>::value, "Ooops");
             static_assert(not_bool<false>::value, "Ooops");
