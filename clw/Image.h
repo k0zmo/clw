@@ -114,7 +114,7 @@ namespace clw
         int bytesPerLine() const;
 
     private:
-        mutable ImageFormat fmt;
+        mutable ImageFormat _fmt;
     };
 
     class CLW_EXPORT Image3D : public MemoryObject
@@ -141,7 +141,7 @@ namespace clw
         int bytesPerSlice() const;
 
     private:
-        mutable ImageFormat fmt;
+        mutable ImageFormat _fmt;
     };
 
 #define CASE(X) case X: return string(#X);

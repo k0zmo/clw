@@ -44,14 +44,14 @@ namespace clw
     }
 
     Image2D::Image2D(const Image2D& other)
-        : MemoryObject(), fmt(other.fmt)
+        : MemoryObject(), _fmt(other._fmt)
     {
         setMemoryId(other._ctx, other._id);
     }
 
     Image2D& Image2D::operator=(const Image2D& other)
     {
-        fmt = other.fmt;
+        _fmt = other._fmt;
         setMemoryId(other._ctx, other._id);
         return *this;
     }
@@ -70,6 +70,7 @@ namespace clw
                 clReleaseMemObject(_id);
             _ctx = other._ctx;
             _id = other._id;
+            _fmt = other._fmt;
             other._ctx = nullptr;
             other._id = 0;
         }
@@ -78,14 +79,14 @@ namespace clw
 
     ImageFormat Image2D::format() const
     {
-        if(fmt.isNull())
+        if(_fmt.isNull())
         {
             cl_image_format iformat = detail::imageInfo<cl_image_format>
                 (memoryId(), CL_IMAGE_FORMAT);
-            fmt.order = EChannelOrder(iformat.image_channel_order);
-            fmt.type = EChannelType(iformat.image_channel_data_type);
+            _fmt.order = EChannelOrder(iformat.image_channel_order);
+            _fmt.type = EChannelType(iformat.image_channel_data_type);
         }
-        return fmt;
+        return _fmt;
     }
 
     int Image2D::width() const
@@ -109,14 +110,14 @@ namespace clw
     }
 
     Image3D::Image3D(const Image3D& other)
-        : MemoryObject(), fmt(other.fmt)
+        : MemoryObject(), _fmt(other._fmt)
     {
         setMemoryId(other._ctx, other._id);
     }
 
     Image3D& Image3D::operator=(const Image3D& other)
     {
-        fmt = other.fmt;
+        _fmt = other._fmt;
         setMemoryId(other._ctx, other._id);
         return *this;
     }
@@ -135,6 +136,7 @@ namespace clw
                 clReleaseMemObject(_id);
             _ctx = other._ctx;
             _id = other._id;
+            _fmt = other._fmt;
             other._ctx = nullptr;
             other._id = 0;
         }
@@ -143,14 +145,14 @@ namespace clw
 
     ImageFormat Image3D::format() const
     {
-        if(fmt.isNull())
+        if(_fmt.isNull())
         {
             cl_image_format iformat = detail::imageInfo<cl_image_format>
                 (memoryId(), CL_IMAGE_FORMAT);
-            fmt.order = EChannelOrder(iformat.image_channel_order);
-            fmt.type = EChannelType(iformat.image_channel_data_type);
+            _fmt.order = EChannelOrder(iformat.image_channel_order);
+            _fmt.type = EChannelType(iformat.image_channel_data_type);
         }
-        return fmt;
+        return _fmt;
     }
 
     int Image3D::width() const

@@ -102,6 +102,7 @@ namespace clw
             if (_id)
                 clReleaseEvent(_id);
             _id = other._id;
+            _callback = std::move(other._callback);
             other._id = 0;
         }
         return *this;
@@ -174,6 +175,7 @@ namespace clw
         if(_id)
             clReleaseEvent(_id);
         _id = other._id;
+        _callback = other._callback;
         return *this;
     }
 
@@ -190,6 +192,7 @@ namespace clw
             if (_id)
                 clReleaseEvent(_id);
             _id = other._id;
+            _callback = std::move(other._callback);
             other._id = 0;
         }
         return *this;
