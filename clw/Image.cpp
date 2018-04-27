@@ -36,8 +36,7 @@ namespace clw
                     &value, nullptr)) != CL_SUCCESS)
             {
                 reportError("imageInfo(): ", error);
-                Value value = {0};
-                return value;
+                return Value{};
             }
             return value;
         }

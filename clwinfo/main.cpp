@@ -79,20 +79,12 @@ std::string floatCapabilitiesName(clw::FloatCapsFlags caps)
 
 std::string memorySizeName(uint64_t memSize)
 {
-#if CLW_COMPILER == CLW_COMPILER_MSVC
-#  define snprintf _snprintf
-#  pragma warning(push)
-#  pragma warning(disable : 4996)
-#endif
     char buf[64];
     if(memSize >= 1024 * 1024)
         snprintf(buf, sizeof(buf)/sizeof(char), "%d MB", int(memSize / (1024 * 1024)));
     else
         snprintf(buf, sizeof(buf)/sizeof(char), "%d kB", int(memSize / 1024));
     return std::string(buf);
-#if CLW_COMPILER == CLW_COMPILER_MSVC
-#  pragma warning(pop)
-#endif
 }
 
 int main()

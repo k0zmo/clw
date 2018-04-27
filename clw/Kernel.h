@@ -25,10 +25,7 @@
 #include "Prerequisites.h"
 #include "Grid.h"
 #include "Device.h"
-
-#if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
-#  include "Event.h"
-#endif
+#include "Event.h"
 
 #include "KernelTypesTraits.h"
 #include "EnumFlags.h"
@@ -174,7 +171,7 @@ namespace clw
         void setArg(unsigned index, const void* data, size_t size);
 
         clw::Event operator()(CommandQueue& queue);
-#if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
+
         // Variadic version with arguments
         template <class... Args>
         clw::Event operator()(CommandQueue& queue, const Args&... args);
@@ -182,7 +179,6 @@ namespace clw
         template <class... Args>
         clw::Event operator()(CommandQueue& queue, const Grid& local,
             const Grid& global, const Args&... args);
-#endif
 
     private:
         Context* _ctx;
@@ -191,11 +187,10 @@ namespace clw
         Grid _globalWorkOffset;
         Grid _globalWorkSize;
         Grid _localWorkSize;
-#if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
+
         template <class Head, class... Tail>
         void setArgVariadic(unsigned& pos, const Head& head, const Tail&... tail);
         void setArgVariadic(unsigned& pos) { (void) pos; }; // terminator
-#endif
     };
 
     template <typename T> 
@@ -321,7 +316,7 @@ namespace clw
     {
         setGlobalWorkOffset(Grid(width, height, depth));
     }
-#if defined(CLW_VARIADIC_TEMPLATES_SUPPORTED)
+
     template <class Head, class... Tail>
     void Kernel::setArgVariadic(unsigned& pos, const Head& head, const Tail&... tail)
     {
@@ -348,5 +343,4 @@ namespace clw
         setRoundedGlobalWorkSize(global);
         return (*this)(queue);
     }
-#endif
 }

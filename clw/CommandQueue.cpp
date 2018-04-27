@@ -609,7 +609,7 @@ namespace clw
     bool CommandQueue::runTask(const Kernel& kernel)
     {
         cl_event event;
-        cl_int error = clEnqueueTask(_id, kernel.kernelId(), 
+        cl_int error = clEnqueueTask(_id, kernel.kernelId(),
             0, nullptr, &event);
         if(error != CL_SUCCESS)
         {
@@ -627,7 +627,7 @@ namespace clw
                                      const EventList& after)
     {
         cl_event event;
-        cl_int error = clEnqueueTask(_id, kernel.kernelId(), 
+        cl_int error = clEnqueueTask(_id, kernel.kernelId(),
             cl_uint(after.size()), after, &event);
         if(error != CL_SUCCESS)
         {
