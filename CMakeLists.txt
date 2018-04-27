@@ -5,5 +5,5 @@ find_package(OpenCL REQUIRED)
 
 option(CLW_ENABLE_OPENCL_1_2 "Enable OpenCL 1.2 features" OFF)
 
-add_subdirectory(clw)
-add_subdirectory(clwinfo)
+add_subdirectory(src/clw)
+add_subdirectory(src/clwinfo)

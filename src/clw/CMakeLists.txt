@@ -43,7 +43,7 @@ add_library(clw::clw ALIAS clw)
 target_link_libraries(clw PUBLIC OpenCL::OpenCL)
 target_include_directories(clw 
     INTERFACE 
-        $<BUILD_INTERFACE:${clw_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${clw_SOURCE_DIR}/src>
         $<INSTALL_INTERFACE:include>
 )
 target_compile_definitions(clw
