@@ -50,27 +50,15 @@ set_target_properties(clw PROPERTIES DEBUG_POSTFIX "d")
 
 if(BUILD_SHARED_LIBS)
     target_compile_definitions(clw PRIVATE CLW_BUILD_SHARED)
+    if(MSVC)
+        # Disable warning: 'X' needs to have dll-interface to be used by clients of class
+        target_compile_options(clw PUBLIC /wd4251)
+    endif()
 else()
     target_compile_definitions(clw PUBLIC CLW_STATIC_LIB)
 endif()
 
 target_compile_features(clw PUBLIC cxx_std_11)
-
-if(MSVC)
-    target_compile_options(clw 
-        PRIVATE
-            /W4
-        PUBLIC
-            $<$<BOOL:${BUILD_SHARED_LIBS}>:/wd4251>
-    )
-elseif(CMAKE_COMPILER_IS_GNUCXX OR (CMAKE_CXX_COMPILER_ID STREQUAL "Clang"))
-    target_compile_options(clw 
-        PRIVATE 
-            -Wall
-            -pedantic
-            -Wextra
-    )
-endif()
 
 install(TARGETS clw EXPORT clwTarget
     RUNTIME DESTINATION ${clw_RUNTIME_INSTALL_DIR}
