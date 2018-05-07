@@ -1,6 +1,5 @@
 add_library(clw
     ${clw_SOURCE_DIR}/include/clw/clw.h
-    ${clw_SOURCE_DIR}/include/clw/config.h
     ${clw_SOURCE_DIR}/include/clw/Buffer.h
     ${clw_SOURCE_DIR}/include/clw/CommandQueue.h
     ${clw_SOURCE_DIR}/include/clw/Context.h
@@ -34,11 +33,16 @@ add_library(clw
     details.h
 )
 
+include(GenerateExportHeader)
+generate_export_header(clw)
+target_sources(clw PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/clw_export.h)
+
 add_library(clw::clw ALIAS clw)
 target_link_libraries(clw PUBLIC OpenCL::OpenCL)
 target_include_directories(clw 
     PUBLIC 
         $<BUILD_INTERFACE:${clw_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
         $<INSTALL_INTERFACE:${clw_INCLUDE_INSTALL_DIR}>
 )
 target_compile_definitions(clw
@@ -49,13 +53,11 @@ target_compile_definitions(clw
 set_target_properties(clw PROPERTIES DEBUG_POSTFIX "d")
 
 if(BUILD_SHARED_LIBS)
-    target_compile_definitions(clw PRIVATE CLW_BUILD_SHARED)
+    target_compile_definitions(clw PRIVATE clw_EXPORTS)
     if(MSVC)
         # Disable warning: 'X' needs to have dll-interface to be used by clients of class
         target_compile_options(clw PUBLIC /wd4251)
     endif()
-else()
-    target_compile_definitions(clw PUBLIC CLW_STATIC_LIB)
 endif()
 
 target_compile_features(clw PUBLIC cxx_std_11)
@@ -67,4 +69,7 @@ install(TARGETS clw EXPORT clwTarget
 )
 install(DIRECTORY ${clw_SOURCE_DIR}/include/clw
     DESTINATION ${clw_INCLUDE_INSTALL_DIR}
+)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/clw_export.h
+    DESTINATION ${clw_INCLUDE_INSTALL_DIR}/clw
 )

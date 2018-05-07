@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include "clw/config.h"
+#include "clw_export.h"
 
 #include <CL/cl.h>
 #include <CL/cl_ext.h>
