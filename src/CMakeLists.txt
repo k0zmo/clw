@@ -43,7 +43,7 @@ target_include_directories(clw
     PUBLIC 
         $<BUILD_INTERFACE:${clw_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<INSTALL_INTERFACE:${clw_INCLUDE_INSTALL_DIR}>
+        $<INSTALL_INTERFACE:include>
 )
 target_compile_definitions(clw
     PRIVATE 
@@ -53,7 +53,6 @@ target_compile_definitions(clw
 set_target_properties(clw PROPERTIES DEBUG_POSTFIX "d")
 
 if(BUILD_SHARED_LIBS)
-    target_compile_definitions(clw PRIVATE clw_EXPORTS)
     if(MSVC)
         # Disable warning: 'X' needs to have dll-interface to be used by clients of class
         target_compile_options(clw PUBLIC /wd4251)
@@ -63,13 +62,13 @@ endif()
 target_compile_features(clw PUBLIC cxx_std_11)
 
 install(TARGETS clw EXPORT clwTarget
-    RUNTIME DESTINATION ${clw_RUNTIME_INSTALL_DIR}
-    LIBRARY DESTINATION ${clw_LIBRARY_INSTALL_DIR}
-    ARCHIVE DESTINATION ${clw_ARCHIVE_INSTALL_DIR}
+    RUNTIME DESTINATION ${CLW_RUNTIME_INSTALL_DIR}
+    LIBRARY DESTINATION ${CLW_LIBRARY_INSTALL_DIR}
+    ARCHIVE DESTINATION ${CLW_ARCHIVE_INSTALL_DIR}
 )
 install(DIRECTORY ${clw_SOURCE_DIR}/include/clw
-    DESTINATION ${clw_INCLUDE_INSTALL_DIR}
+    DESTINATION include
 )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/clw_export.h
-    DESTINATION ${clw_INCLUDE_INSTALL_DIR}/clw
+    DESTINATION include/clw
 )
