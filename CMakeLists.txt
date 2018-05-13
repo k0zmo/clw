@@ -5,17 +5,6 @@ find_package(OpenCL REQUIRED)
 
 option(CLW_ENABLE_OPENCL_1_2 "Enable OpenCL 1.2 features" ON)
 
-if(UNIX)
-    include(GNUInstallDirs)
-    set(CLW_RUNTIME_INSTALL_DIR ${CMAKE_INSTALL_BINDIR})
-    set(CLW_LIBRARY_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
-    set(CLW_ARCHIVE_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR})
-elseif(WIN32)
-    set(CLW_RUNTIME_INSTALL_DIR bin)
-    set(CLW_LIBRARY_INSTALL_DIR bin)
-    set(CLW_ARCHIVE_INSTALL_DIR lib)
-endif()
-
 add_subdirectory(src)
 add_subdirectory(tool)
 

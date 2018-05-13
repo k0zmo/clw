@@ -3,8 +3,8 @@ target_link_libraries(clwinfo PRIVATE clw::clw)
 set_target_properties(clwinfo
     PROPERTIES
         DEBUG_POSTFIX d
-        INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/${CLW_LIBRARY_INSTALL_DIR})
+        INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib)
 
 install(TARGETS clwinfo EXPORT clwTargets 
-    RUNTIME DESTINATION ${CLW_RUNTIME_INSTALL_DIR}
+    RUNTIME DESTINATION bin
 )
