@@ -50,7 +50,6 @@ target_compile_definitions(clw
         HAVE_OPENCL_1_1
         $<$<BOOL:{CLW_ENABLE_OPENCL_1_2}>:HAVE_OPENCL_1_2>
 )
-set_target_properties(clw PROPERTIES DEBUG_POSTFIX "d")
 
 if(BUILD_SHARED_LIBS)
     if(MSVC)
@@ -62,9 +61,9 @@ endif()
 target_compile_features(clw PUBLIC cxx_std_11)
 
 install(TARGETS clw EXPORT clwTarget
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin/$<CONFIG>
+    LIBRARY DESTINATION lib/$<CONFIG>
+    ARCHIVE DESTINATION lib/$<CONFIG>
 )
 install(DIRECTORY ${clw_SOURCE_DIR}/include/clw
     DESTINATION include
