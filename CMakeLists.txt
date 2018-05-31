@@ -20,7 +20,9 @@ write_basic_package_version_file(${config_version_file}
 file(WRITE ${config_file}
 "include(CMakeFindDependencyMacro)
 find_dependency(OpenCL)
-include(\"\${CMAKE_CURRENT_LIST_DIR}/clwTarget.cmake\")
+if(NOT TARGET clw::clw)
+  include(\"\${CMAKE_CURRENT_LIST_DIR}/clwTarget.cmake\")
+endif()
 ")
 
 install(FILES ${config_file} ${config_version_file}

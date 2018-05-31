@@ -15,3 +15,4 @@ ipch/
 *.ilk
 *.pdb
 /build*
+/_build*
