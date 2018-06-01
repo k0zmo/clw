@@ -49,6 +49,8 @@ target_compile_definitions(clw
     PRIVATE 
         HAVE_OPENCL_1_1
         $<$<BOOL:${CLW_ENABLE_OPENCL_1_2}>:HAVE_OPENCL_1_2>
+        $<$<NOT:$<BOOL:${CLW_ENABLE_OPENCL_1_2}>>:CL_USE_DEPRECATED_OPENCL_1_1_APIS>
+        CL_USE_DEPRECATED_OPENCL_2_0_APIS
 )
 
 if(BUILD_SHARED_LIBS)
