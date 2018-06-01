@@ -48,7 +48,7 @@ target_include_directories(clw
 target_compile_definitions(clw
     PRIVATE 
         HAVE_OPENCL_1_1
-        $<$<BOOL:{CLW_ENABLE_OPENCL_1_2}>:HAVE_OPENCL_1_2>
+        $<$<BOOL:${CLW_ENABLE_OPENCL_1_2}>:HAVE_OPENCL_1_2>
 )
 
 if(BUILD_SHARED_LIBS)
