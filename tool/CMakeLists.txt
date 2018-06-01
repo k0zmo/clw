@@ -5,6 +5,4 @@ set_target_properties(clwinfo
         # Can't use $<CONFIG> here.
         INSTALL_RPATH ${CMAKE_INSTALL_PREFIX}/lib/${CMAKE_BUILD_TYPE})
 
-install(TARGETS clwinfo EXPORT clwTargets 
-    RUNTIME DESTINATION bin/$<CONFIG>
-)
+install(TARGETS clwinfo RUNTIME DESTINATION bin/$<CONFIG>)
