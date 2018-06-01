@@ -50,6 +50,11 @@ target_compile_definitions(clw
         HAVE_OPENCL_1_1
         $<$<BOOL:${CLW_ENABLE_OPENCL_1_2}>:HAVE_OPENCL_1_2>
         $<$<NOT:$<BOOL:${CLW_ENABLE_OPENCL_1_2}>>:CL_USE_DEPRECATED_OPENCL_1_1_APIS>
+
+        # Some OpenCL implementations use 2_0 for functions deprecated in 2.0 (Windows, AMD APP SDK)
+        # but some other implementaions use 1_2 for functions deprecated in 2.0 (Linux) ;/
+        # In former the 1_2 is not even defined
+        CL_USE_DEPRECATED_OPENCL_1_2_APIS
         CL_USE_DEPRECATED_OPENCL_2_0_APIS
 )
 
