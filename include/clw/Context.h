@@ -98,6 +98,6 @@ namespace clw
         vector<Device> _devs;
     };
 
-    typedef function<void(cl_int errId, const string& message)> ErrorHandler;
+    typedef function<void(int errId, const string& message)> ErrorHandler;
     void CLW_EXPORT installErrorHandler(const ErrorHandler& handler);
 }
