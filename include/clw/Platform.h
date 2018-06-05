@@ -30,7 +30,10 @@ namespace clw
     {
         v1_0 = 1,
         v1_1 = 2,
-        v1_2 = 3
+        v1_2 = 3,
+        v2_0 = 4,
+        v2_1 = 5,
+        v2_2 = 6
     };
 
     enum class EPlatformVendor
