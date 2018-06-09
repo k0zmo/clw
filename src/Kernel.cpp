@@ -183,6 +183,8 @@ namespace clw
         if((error = clGetKernelInfo(_id, CL_KERNEL_FUNCTION_NAME,
                 size, const_cast<char*>(n.data()), nullptr)) != CL_SUCCESS)
             return string();
+        while(n.back() == 0)
+            n.pop_back();
         return n;
     }
 
