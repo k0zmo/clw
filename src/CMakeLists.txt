@@ -43,7 +43,6 @@ target_include_directories(clw
     PUBLIC 
         $<BUILD_INTERFACE:${clw_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<INSTALL_INTERFACE:include>
 )
 target_compile_definitions(clw
     PRIVATE 
@@ -68,6 +67,7 @@ endif()
 target_compile_features(clw PUBLIC cxx_std_11)
 
 install(TARGETS clw EXPORT clwTarget
+    INCLUDES DESTINATION include
     RUNTIME DESTINATION bin/$<CONFIG>
     LIBRARY DESTINATION lib/$<CONFIG>
     ARCHIVE DESTINATION lib/$<CONFIG>
