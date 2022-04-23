@@ -73,7 +73,11 @@ void testBandwidth(clw::Context& ctx, clw::CommandQueue& queue, unsigned nElemen
 {
     const unsigned bytes = nElements * sizeof(float);
 
-    std::cout << "  Transfer size (MB): " << bytes / (1024 * 1024) << '\n';
+    std::cout << "  Transfer size: ";
+    if (bytes < 1024 * 1024)
+        std::cout << bytes / 1024 << " KB\n";
+    else
+        std::cout << bytes / (1024 * 1024) << " MB\n";
 
     auto host1Buf = std::make_unique<float[]>(nElements);
     auto host2Buf = std::make_unique<float[]>(nElements);
@@ -106,6 +110,7 @@ void testBandwidth(clw::Context& ctx, clw::CommandQueue& queue, unsigned nElemen
 
     queue.unmap(hostPinned1Buf, hostPinned1);
     queue.unmap(hostPinned2Buf, hostPinned2);
+    queue.finish();
 }
 
 int main()
@@ -123,7 +128,11 @@ int main()
             {
                 auto queue = ctx.createCommandQueue(
                     device, clw::ECommandQueueProperty::ProfilingEnabled);
-                testBandwidth(ctx, queue, 4 * 1024 * 1024);
+
+                const unsigned K = 1024;
+                const unsigned M = 1024 * 1024;
+                for (unsigned nElems : {1*K, 16*K, 128*K, 256*K, 1*M, 4*M, 16*M, 64*M})
+                    testBandwidth(ctx, queue, nElems);
             }
         }
     }
