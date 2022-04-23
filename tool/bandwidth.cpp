@@ -22,34 +22,50 @@
 
 #include <clw/clw.h>
 
+#include <chrono>
 #include <iostream>
 #include <memory>
 
 void profileCopies(clw::CommandQueue& queue, float* hostA, float* hostB,
                    clw::Buffer& device, unsigned nElems, const char* desc)
 {
-    std::cout << "  " << desc << " transfers\n";
+    std::cout << "    " << desc << " transfers\n";
     const auto bytes = sizeof(float) * nElems;
 
     clw::Event evt = queue.asyncWriteBuffer(device, hostA);
     evt.waitForFinished();
     uint64_t timeNs = evt.finishTime() - evt.startTime();
-    std::cout << "  Host to device bandwidth (GB/s): "
+    std::cout << "      Host to device bandwidth (GB/s): "
               << (bytes * 1e-9) / (timeNs * 1e-9) << '\n';
 
     evt = queue.asyncReadBuffer(device, hostB);
     evt.waitForFinished();
     timeNs = evt.finishTime() - evt.startTime();
-    std::cout << "  Device to host bandwidth (GB/s): "
+    std::cout << "      Device to host bandwidth (GB/s): "
               << (bytes * 1e-9) / (timeNs * 1e-9) << '\n';
 
-    for (unsigned i = 0; i < nElems; ++i)
+    using namespace std::chrono;
+    const auto t1 = high_resolution_clock::now();
+    unsigned i = 0;
+    for (; i < nElems; ++i)
     {
         if (hostA[i] != hostB[i])
         {
-            std::cout << "*** " << desc << " transfers failed ***\n";
+            std::cout << "      *** " << desc << " transfers failed ***\n";
             break;
         }
+    }
+
+    const auto t2 = high_resolution_clock::now();
+    if (i == nElems)
+    {
+        std::cout << "      Reading from host memory took ";
+        const auto duration = t2 - t1;
+        const auto ms = duration_cast<milliseconds>(duration).count();
+        if (ms > 0)
+            std::cout << ms << " ms\n";
+        else
+            std::cout << duration_cast<microseconds>(duration).count() << " us\n";
     }
 }
 
